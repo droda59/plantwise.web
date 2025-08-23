@@ -42,6 +42,7 @@ const STARTER_PLANTS = [
         // bloom: ['été'],
         isNative: true,
         saltTolerance: 'moyenne',
+        droughtTolerant: true,
         height: 0.6,
         spread: 0.45,
         nurseries: [NURSERIES[0], NURSERIES[1]],
@@ -63,6 +64,7 @@ const STARTER_PLANTS = [
         isNative: false,
         height: 6,
         spread: 5,
+        droughtTolerant: true,
         nurseries: [NURSERIES[0]],
     },
     {
@@ -83,6 +85,7 @@ const STARTER_PLANTS = [
         saltTolerance: 'haute',
         height: 0.3,
         spread: 1,
+        floodTolerant: true,
         nurseries: [NURSERIES[1]],
     },
     {
@@ -163,6 +166,8 @@ const DEFAULT_FILTERS = {
     soil: undefined,
     sun: undefined,
     saltConditions: '',
+    droughtTolerant: undefined,
+    floodTolerant: undefined,
 
     // Conditions de la plante
     type: undefined,
@@ -173,6 +178,35 @@ const DEFAULT_FILTERS = {
     spread: undefined,
 };
 
+function filterPlant(plant: Plant, filters): boolean {
+    if (filters.q) {
+        const q = filters.q.toLowerCase();
+        if (!(plant.name.toLowerCase().includes(q) || plant.latin.toLowerCase().includes(q))) return false;
+    }
+    if (filters.type && plant.type.value !== filters.type) return false;
+    if (filters.soil && !plant.soil.includes(filters.soil)) return false;
+    if (filters.sun && !plant.sun.includes(filters.sun)) return false;
+    switch (filters.saltConditions) {
+        case 'haute': if (plant.saltTolerance !== 'haute') return false;
+        case 'moyenne': if (plant.saltTolerance !== 'haute' && plant.saltTolerance !== 'moyenne') return false;
+        case 'faible': if (plant.saltTolerance !== 'haute' && plant.saltTolerance !== 'moyenne' && plant.saltTolerance !== 'faible') return false;
+        default: break;
+    }
+    const plantHeight = plant.height * 100; // Convert to cm for comparison
+    if (filters.height && (Array.isArray(filters.height) ? (plantHeight < filters.height[0] || plantHeight > filters.height[1]) : plantHeight !== filters.height)) return false;
+
+    const plantSpread = plant.spread * 100; // Convert to cm for comparison
+    if (filters.spread && (Array.isArray(filters.spread) ? (plantSpread < filters.spread[0] || plantSpread > filters.spread[1]) : plantSpread !== filters.spread)) return false;
+    // if (filters.color && !plant.colors.includes(filters.color)) return false;
+    // if (filters.bloom && !plant.bloom.includes(filters.bloom)) return false;
+    if (filters.native && !plant.isNative) return false;
+    if (filters.droughtTolerant && !plant.droughtTolerant) return false;
+    if (filters.floodTolerant && !plant.floodTolerant) return false;
+    // if (filters.zoneMin && plant.zone[1] < filters.zoneMin) return false;
+    // if (filters.zoneMax && plant.zone[0] > filters.zoneMax) return false;
+    return true;
+}
+
 export default function Home() {
     const [filters, setFilters] = useState(DEFAULT_FILTERS);
     const [filteredPlants, setFilteredPlants] = useState([]);
@@ -182,37 +216,12 @@ export default function Home() {
     const resetFilters = () => setFilters(DEFAULT_FILTERS);
 
     const applyFilters = () => {
-        const filteredPlants = allPlants.filter(plant => {
-            if (filters.q) {
-                const q = filters.q.toLowerCase();
-                if (!(plant.name.toLowerCase().includes(q) || plant.latin.toLowerCase().includes(q))) return false;
-            }
-            if (filters.type && plant.type.value !== filters.type) return false;
-            if (filters.soil && !plant.soil.includes(filters.soil)) return false;
-            if (filters.sun && !plant.sun.includes(filters.sun)) return false;
-            switch (filters.saltConditions) {
-                case 'haute': if (plant.saltTolerance !== 'haute') return false;
-                case 'moyenne': if (plant.saltTolerance !== 'haute' && plant.saltTolerance !== 'moyenne') return false;
-                case 'faible': if (plant.saltTolerance !== 'haute' && plant.saltTolerance !== 'moyenne' && plant.saltTolerance !== 'faible') return false;
-                default: break;
-            }
-            const plantHeight = plant.height * 100; // Convert to cm for comparison
-            if (filters.height && (Array.isArray(filters.height) ? (plantHeight < filters.height[0] || plantHeight > filters.height[1]) : plantHeight !== filters.height)) return false;
-
-            const plantSpread = plant.spread * 100; // Convert to cm for comparison
-            if (filters.spread && (Array.isArray(filters.spread) ? (plantSpread < filters.spread[0] || plantSpread > filters.spread[1]) : plantSpread !== filters.spread)) return false;
-            // if (filters.color && !plant.colors.includes(filters.color)) return false;
-            // if (filters.bloom && !plant.bloom.includes(filters.bloom)) return false;
-            if (filters.native && !plant.isNative) return false;
-            // if (filters.zoneMin && plant.zone[1] < filters.zoneMin) return false;
-            // if (filters.zoneMax && plant.zone[0] > filters.zoneMax) return false;
-            return true;
-        });
+        const filteredPlants = allPlants.filter(plant => filterPlant(plant, filters));
 
         setFilteredPlants(filteredPlants);
     };
 
-    const filtered = useMemo(applyFilters, [allPlants]);
+    useMemo(applyFilters, [allPlants]);
 
     return (
         <div className='font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20'>

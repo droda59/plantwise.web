@@ -34,6 +34,8 @@ export interface Plant {
     soil: Array<"sableux" | "limoneux" | "argileux" | "riche" | "pauvre" | "acide" | "alcalin">;
     sun: Array<"plein-soleil" | "mi-ombre" | "ombre">;
     isNative: boolean;
+    droughtTolerant?: boolean;
+    floodTolerant?: boolean;
     height: number; // m (approx)
     spread: number; // m (approx)
     saltTolerance?: "haute" | "moyenne" | "faible";

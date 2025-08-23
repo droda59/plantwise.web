@@ -196,6 +196,16 @@ export function Filters({ filters, setFilters, onReset, onApplyFilters }) {
                                 </SelectContent>
                             </Select>
                         </div>
+
+                        <div className="flex items-center gap-3">
+                            <Switch checked={!!filters.droughtTolerant} onCheckedChange={(v) => setFilters(f => ({ ...f, droughtTolerant: v || undefined }))} id="droughtTolerant" />
+                            <label htmlFor="droughtTolerant" className="text-sm">Sujet à la sécheresse</label>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                            <Switch checked={!!filters.floodTolerant} onCheckedChange={(v) => setFilters(f => ({ ...f, floodTolerant: v || undefined }))} id="floodTolerant" />
+                            <label htmlFor="floodTolerant" className="text-sm">Sujet à l'excès d'eau</label>
+                        </div>
                     </div>
 
                     <div className="grid gap-2">
