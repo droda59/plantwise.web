@@ -10,6 +10,7 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { SectionTitle } from "@/components/SectionTitle";
 import { PlantType } from "@/types/plant";
+import { Filters } from "@/types/filters";
 
 const PLANTTYPES: Array<PlantType> = [
     {
@@ -62,7 +63,7 @@ const SUNS = ["plein-soleil", "mi-ombre", "ombre"];
 const COLORS = ["blanc", "jaune", "orange", "rouge", "rose", "mauve", "bleu", "vert", "rouge automnal"];
 const SALTS = ["haute", "moyenne", "faible"];
 const BLOOMS = ["printemps", "été", "automne"];
-const prettySun = (s) => ({ "plein-soleil": "Plein soleil", "mi-ombre": "Mi-ombre", "ombre": "Ombre" }[s] || s);
+const prettySun = s => ({ "plein-soleil": "Plein soleil", "mi-ombre": "Mi-ombre", "ombre": "Ombre" }[s] || s);
 
 function readCSV(file) {
     return new Promise((resolve, reject) => {
@@ -133,7 +134,13 @@ const SizeChip = ({ size }: { size: number[] }) => {
     );
 }
 
-export function Filters({ filters, setFilters, onReset, onApplyFilters }) {
+export function PlantFilters({ filters, setFilters, onReset, onApplyFilters }:
+    {
+        filters: Filters,
+        setFilters: React.Dispatch<React.SetStateAction<Filters>>,
+        onReset: () => void,
+        onApplyFilters: () => void
+    }) {
     const fileRef = useRef(null);
     return (
         <Card className="">
@@ -153,22 +160,17 @@ export function Filters({ filters, setFilters, onReset, onApplyFilters }) {
 
                     <div className="grid md:grid-cols-3 gap-3">
                         <div className="grid gap-2">
-                            <label className="text-sm font-medium">Zone (min)</label>
-                            <Select value={filters.zoneMin ?? ""} onValueChange={(v) => setFilters(f => ({ ...f, zoneMin: v ? Number(v) : undefined }))}>
-                                <SelectTrigger><SelectValue placeholder="min" /></SelectTrigger>
-                                <SelectContent>{ZONES.map(z => (<SelectItem key={z} value={z}>{z}</SelectItem>))}</SelectContent>
-                            </Select>
-                        </div>
-                        <div className="grid gap-2">
-                            <label className="text-sm font-medium">Zone (max)</label>
-                            <Select value={filters.zoneMax ?? ""} onValueChange={(v) => setFilters(f => ({ ...f, zoneMax: v ? Number(v) : undefined }))}>
-                                <SelectTrigger><SelectValue placeholder="max" /></SelectTrigger>
-                                <SelectContent>{ZONES.map(z => (<SelectItem key={z} value={z}>{z}</SelectItem>))}</SelectContent>
+                            <label className="text-sm font-medium">Zone</label>
+                            <Select value={filters.zone ?? ""} onValueChange={v => setFilters(f => ({ ...f, zone: v || undefined }))}>
+                                <SelectTrigger><SelectValue placeholder="Toutes" /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value=".">Toutes</SelectItem>
+                                    {ZONES.map(z => (<SelectItem key={z} value={z}>{z}</SelectItem>))}</SelectContent>
                             </Select>
                         </div>
                         <div className="grid gap-2">
                             <label className="text-sm font-medium">Sol</label>
-                            <Select value={filters.soil || ""} onValueChange={(v) => setFilters(f => ({ ...f, soil: v || undefined }))}>
+                            <Select value={filters.soil || ""} onValueChange={v => setFilters(f => ({ ...f, soil: v || undefined }))}>
                                 <SelectTrigger><SelectValue placeholder="Tous" /></SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value=".">Tous</SelectItem>
@@ -178,7 +180,7 @@ export function Filters({ filters, setFilters, onReset, onApplyFilters }) {
                         </div>
                         <div className="grid gap-2">
                             <label className="text-sm font-medium">Ensoleillement</label>
-                            <Select value={filters.sun || ""} onValueChange={(v) => setFilters(f => ({ ...f, sun: v || undefined }))}>
+                            <Select value={filters.sun || ""} onValueChange={v => setFilters(f => ({ ...f, sun: v || undefined }))}>
                                 <SelectTrigger><SelectValue placeholder="Tous" /></SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value=".">Tous</SelectItem>
@@ -188,7 +190,7 @@ export function Filters({ filters, setFilters, onReset, onApplyFilters }) {
                         </div>
                         <div className="grid gap-2">
                             <label className="text-sm font-medium">Présence de sels</label>
-                            <Select value={filters.saltConditions || ""} onValueChange={(v) => setFilters(f => ({ ...f, saltConditions: v || undefined }))}>
+                            <Select value={filters.saltConditions || ""} onValueChange={v => setFilters(f => ({ ...f, saltConditions: v || undefined }))}>
                                 <SelectTrigger><SelectValue placeholder="Toutes" /></SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value=".">Toutes</SelectItem>
@@ -198,12 +200,12 @@ export function Filters({ filters, setFilters, onReset, onApplyFilters }) {
                         </div>
 
                         <div className="flex items-center gap-3">
-                            <Switch checked={!!filters.droughtTolerant} onCheckedChange={(v) => setFilters(f => ({ ...f, droughtTolerant: v || undefined }))} id="droughtTolerant" />
+                            <Switch checked={!!filters.droughtTolerant} onCheckedChange={v => setFilters(f => ({ ...f, droughtTolerant: v || undefined }))} id="droughtTolerant" />
                             <label htmlFor="droughtTolerant" className="text-sm">Sujet à la sécheresse</label>
                         </div>
 
                         <div className="flex items-center gap-3">
-                            <Switch checked={!!filters.floodTolerant} onCheckedChange={(v) => setFilters(f => ({ ...f, floodTolerant: v || undefined }))} id="floodTolerant" />
+                            <Switch checked={!!filters.floodTolerant} onCheckedChange={v => setFilters(f => ({ ...f, floodTolerant: v || undefined }))} id="floodTolerant" />
                             <label htmlFor="floodTolerant" className="text-sm">Sujet à l'excès d'eau</label>
                         </div>
                     </div>
@@ -213,7 +215,7 @@ export function Filters({ filters, setFilters, onReset, onApplyFilters }) {
 
                         <div className="grid gap-2">
                             <label className="text-sm font-medium">Type</label>
-                            <Select value={filters.type || ""} onValueChange={(v) => setFilters(f => ({ ...f, type: v || undefined }))}>
+                            <Select value={filters.type || ""} onValueChange={v => setFilters(f => ({ ...f, type: v || undefined }))}>
                                 <SelectTrigger><SelectValue placeholder="Tous" /></SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value=".">Tous</SelectItem>
@@ -223,7 +225,7 @@ export function Filters({ filters, setFilters, onReset, onApplyFilters }) {
                         </div>
                         <div className="grid gap-2">
                             <label className="text-sm font-medium">Couleur</label>
-                            <Select value={filters.color || ""} onValueChange={(v) => setFilters(f => ({ ...f, color: v || undefined }))}>
+                            <Select value={filters.color || ""} onValueChange={v => setFilters(f => ({ ...f, color: v || undefined }))}>
                                 <SelectTrigger><SelectValue placeholder="Toutes" /></SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value=".">Toutes</SelectItem>
@@ -233,7 +235,7 @@ export function Filters({ filters, setFilters, onReset, onApplyFilters }) {
                         </div>
                         <div className="grid gap-2">
                             <label className="text-sm font-medium">Floraison</label>
-                            <Select value={filters.bloom || ""} onValueChange={(v) => setFilters(f => ({ ...f, bloom: v || undefined }))}>
+                            <Select value={filters.bloom || ""} onValueChange={v => setFilters(f => ({ ...f, bloom: v || undefined }))}>
                                 <SelectTrigger><SelectValue placeholder="Toutes" /></SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value=".">Toutes</SelectItem>
@@ -243,7 +245,6 @@ export function Filters({ filters, setFilters, onReset, onApplyFilters }) {
                         </div>
 
                         {/* Ajouter text fields pour la recherche */}
-                        {/* Granulariser la slider, genre 0-2m en cm, 2-10m en 0.1m, 10+m en 1m */}
                         <div className="grid gap-2">
                             <label className="text-sm font-medium">Hauteur <SizeChip size={filters.height} /></label>
                             <Slider
@@ -251,7 +252,7 @@ export function Filters({ filters, setFilters, onReset, onApplyFilters }) {
                                 max={3000}
                                 step={10}
                                 defaultValue={[0, 3000]}
-                                onValueChange={(v) => setFilters(f => ({ ...f, height: v || undefined }))}
+                                onValueChange={v => setFilters(f => ({ ...f, height: v || undefined }))}
                             />
                         </div>
 
@@ -262,12 +263,12 @@ export function Filters({ filters, setFilters, onReset, onApplyFilters }) {
                                 max={3000}
                                 step={10}
                                 defaultValue={[0, 3000]}
-                                onValueChange={(v) => setFilters(f => ({ ...f, spread: v || undefined }))}
+                                onValueChange={v => setFilters(f => ({ ...f, spread: v || undefined }))}
                             />
                         </div>
 
                         <div className="flex items-center gap-3">
-                            <Switch checked={!!filters.native} onCheckedChange={(v) => setFilters(f => ({ ...f, native: v || undefined }))} id="native" />
+                            <Switch checked={!!filters.native} onCheckedChange={v => setFilters(f => ({ ...f, native: v || undefined }))} id="native" />
                             <label htmlFor="native" className="text-sm">Espèce indigène</label>
                         </div>
                     </div>
