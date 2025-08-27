@@ -9,6 +9,7 @@ import { PlantFilters } from '@/components/PlantFilters';
 import { Separator } from '@/components/ui/separator';
 import { getPlants } from '@/api/plantApi';
 import { Filters } from '@/types/filters';
+import { Plant } from '@/types/plant';
 
 /* function importRows(rows: CSVPlant[]) {
     // Attendu: colonnes similaires à exportRows ci-dessus. Les champs non conformes seront ignorés.
@@ -60,7 +61,7 @@ const DEFAULT_FILTERS: Filters = {
 
 export default function Home() {
     const [filters, setFilters] = useState(DEFAULT_FILTERS);
-    const [filteredPlants, setFilteredPlants] = useState([]);
+    const [filteredPlants, setFilteredPlants] = useState<Plant[]>([]);
     const [loading, setLoading] = useState(false);
 
     const fetchPlants = async (filters?: Filters) => {

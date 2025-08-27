@@ -9,55 +9,10 @@ import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { SectionTitle } from "@/components/SectionTitle";
-import { PlantType } from "@/types/plant";
 import { Filters } from "@/types/filters";
+import { PLANTTYPES, getPlantType } from "@/types/plantType";
 
-const PLANTTYPES: Array<PlantType> = [
-    {
-        value: "1 AR",
-        label: "Arbre"
-    }, {
-        value: "1b ARB",
-        label: "Arbrisseau feuillu"
-    }, {
-        value: "2 CON",
-        label: "Conifère"
-    }, {
-        value: "3 ARBU",
-        label: "Arbuste"
-    }, {
-        value: "4 VIV",
-        label: "Vivace"
-    }, {
-        value: "5 GRAM",
-        label: "Graminée"
-    }, {
-        value: "6 GRMP",
-        label: "Grimpante"
-    }, {
-        value: "7 FOU",
-        label: "Fougère"
-    }, {
-        value: "8 AQUA",
-        label: "Aquatique"
-    }, {
-        value: "9 ANU",
-        label: "Annuelle"
-    }, {
-        value: "10 FH",
-        label: "Fines herbes"
-    }, {
-        value: "11 ENS",
-        label: "Ensemencement"
-    }, {
-        value: "12 BUL",
-        label: "Bulbe"
-    }, {
-        value: "13 MOU",
-        label: "Mousse"
-    }];
-
-const ZONES = ["1", "2", "3", "4", "5", "6", "7", "8"];
+const ZONES = ['0a', '0b', '1a', '1b', '2a', '2b', '3a', '3b', '4a', '4b', '5a', '5b', '6a', '6b', '7a', '7b', '8a', '8b', '9a'];
 const SOILS = ["sableux", "limoneux", "argileux", "riche", "pauvre", "acide", "alcalin"];
 const SUNS = ["plein-soleil", "mi-ombre", "ombre"];
 const COLORS = ["blanc", "jaune", "orange", "rouge", "rose", "mauve", "bleu", "vert", "rouge automnal"];

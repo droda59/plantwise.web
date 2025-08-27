@@ -1,9 +1,10 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { Search, Filter, Leaf, Heart, HeartOff, ExternalLink, Download, Upload, Sun, Moon, MapPin, Settings2 } from "lucide-react";
+import { motion } from "framer-motion";
+import { ExternalLink, MapPin } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Nursery, Plant } from "@/types/plant";
+import { getPlantType } from "@/types/plantType";
 
 const prettySun = (s) => ({ "plein-soleil": "Plein soleil", "mi-ombre": "Mi-ombre", "ombre": "Ombre" }[s] || s);
 
@@ -27,7 +28,7 @@ export const PlantCard = ({ plant }: { plant: Plant; }) => {
                 <CardHeader className="pb-2">
                     <div className="flex items-start justify-between gap-2">
                         <div>
-                            <Badge variant="secondary">{plant.type.label}</Badge>
+                            <Badge variant="secondary">{getPlantType(plant.type).label}</Badge>
                             <CardTitle className="text-lg italic leading-tight">{plant.latin}</CardTitle>
                             <p className="text-sm text-muted-foreground">{plant.name}</p>
                             <p className="text-sm text-muted-foreground">{plant.code}</p>
@@ -36,7 +37,7 @@ export const PlantCard = ({ plant }: { plant: Plant; }) => {
                 </CardHeader>
                 <CardContent className="grid gap-3">
                     <div className="flex flex-wrap gap-2">
-                        <Badge variant="secondary">Zones {plant.zone}</Badge>
+                        <Badge variant="secondary">Zone {plant.zone}</Badge>
                         {/* {plant.sun.map(s => <Badge key={s}>{prettySun(s)}</Badge>)} */}
                         {/* {plant.colors.slice(0, 3).map(c => <Badge key={c} variant="outline">{c}</Badge>)} */}
                         {plant.isNative && <Badge className="bg-emerald-100 text-emerald-700">Indigène</Badge>}

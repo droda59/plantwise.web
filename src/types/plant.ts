@@ -1,3 +1,5 @@
+import { PlantTypeValue } from "./plantType";
+
 export interface CSVPlant {
     code: string;
     quantity: string;
@@ -29,7 +31,7 @@ export interface Plant {
     code: string;
     latin: string;
     name: string;
-    type: PlantType;
+    type: PlantTypeValue;
     zone: number;
     soil: Array<"sableux" | "limoneux" | "argileux" | "riche" | "pauvre" | "acide" | "alcalin">;
     sun: Array<"plein-soleil" | "mi-ombre" | "ombre">;
@@ -39,16 +41,8 @@ export interface Plant {
     height: number; // m (approx)
     spread: number; // m (approx)
     saltTolerance?: "haute" | "moyenne" | "faible";
-    nurseries: Nursery[];
+    nurseries?: Nursery[];
 }
-
-type PlantTypeValue = "1 AR" | "1b ARB" | "2 CON" | "3 ARBU" | "4 VIV" | "5 GRAM" | "6 GRMP" | "7 FOU" | "8 AQUA" | "9 ANU" | "10 FH" | "11 ENS" | "12 BUL" | "13 MOU";
-type PlantTypeLabel = "Arbre" | "Arbrisseau feuillu" | "Conifère" | "Arbuste" | "Vivace" | "Graminée" | "Grimpante" | "Fougère" | "Aquatique" | "Annuelle" | "Fines herbes" | "Ensemencement" | "Bulbe" | "Mousse";
-
-export interface PlantType {
-    value: PlantTypeValue,
-    label: PlantTypeLabel
-};
 
 export interface Nursery {
     name: string;

@@ -1,6 +1,8 @@
+import { PlantFactory } from "@/lib/plantFactory";
 import { Filters } from "@/types/filters";
+import { Plant } from "@/types/plant";
 
-export async function getPlants(filters?: Filters) {
+export async function getPlants(filters?: Filters): Promise<Plant[]> {
     const params = new URLSearchParams();
     if (filters) {
         filters.q && params.append('q', filters.q.toLowerCase());
@@ -31,5 +33,6 @@ export async function getPlants(filters?: Filters) {
     });
 
     const data = await response.json();
-    return data;
+
+    return data.map(d => PlantFactory.create(d));
 }
