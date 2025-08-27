@@ -2,42 +2,15 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search } from 'lucide-react';
+import { Search, Upload } from 'lucide-react';
 import { PlantCard } from '@/components/PlantCard';
 import { SectionTitle } from '@/components/SectionTitle';
 import { PlantFilters } from '@/components/PlantFilters';
 import { Separator } from '@/components/ui/separator';
-import { getPlants } from '@/api/plantApi';
 import { Filters } from '@/types/filters';
 import { Plant } from '@/types/plant';
-
-/* function importRows(rows: CSVPlant[]) {
-    // Attendu: colonnes similaires à exportRows ci-dessus. Les champs non conformes seront ignorés.
-    const toPlant = (r, i) => {
-        const cleanup = (x) => typeof x === 'string' ? x.trim() : x;
-        const plantId = cleanup(r['CODE']) && cleanup(r['CODE']).concat(`import-${Date.now()}-${i}`);
-        const isNative = String(r['indig/nat'] || '');
-        // const arr = (x) => typeof x === 'string' ? x.split('|').map(s => s.trim()).filter(Boolean) : [];
-        const p: Plant = {
-            id: plantId,
-            code: plantId,
-            name: cleanup(r['Nom commun']) || `Plante importée ${i + 1}`,
-            latin: cleanup(r['Nom BOTANIQUE']) || '',
-            type: PlantTypes.find(v => v.value === cleanup(r['Type'])) || PlantTypes[0],
-            zone: cleanup(r['Zone']) || 0,
-            soil: [], // arr(r.soil),
-            sun: [], // (arr(r.soleil)),
-            // colors: arr(r.couleurs),
-            // bloom: (arr(r.floraison)),
-            isNative: isNative.startsWith('n') || isNative.startsWith('i'),
-            height: cleanup(r['H']) || 0, //Number(r.height),
-            spread: cleanup(r['L']) || 0,
-            // nurseries: NURSERIES.slice(0, 1),
-        };
-        return p;
-    };
-    setAllPlants(prev => [...prev, ...rows.map(toPlant)]);
-} */
+import { Button } from '@/components/ui/button';
+import { plantApiInstance } from '@/api/plantApi';
 
 const DEFAULT_FILTERS: Filters = {
     q: '',
@@ -68,9 +41,20 @@ export default function Home() {
         setFilteredPlants([]);
         setLoading(true);
 
-        const data = await getPlants(filters);
+        const data = await plantApiInstance.getPlants(filters);
 
         setFilteredPlants(data);
+        setLoading(false);
+    };
+
+    const importPlantsInDB = async () => {
+        setLoading(true);
+
+        await plantApiInstance.importPlants();
+
+        const data = await plantApiInstance.getPlants(filters);
+        setFilteredPlants(data);
+
         setLoading(false);
     };
 
@@ -80,6 +64,7 @@ export default function Home() {
 
     const resetFilters = () => setFilters(DEFAULT_FILTERS);
     const applyFilters = () => fetchPlants(filters);
+    const importPlants = () => importPlantsInDB();
 
     return (
         <div className='font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20'>
@@ -104,6 +89,10 @@ export default function Home() {
                             color: '#1180be',
                         }}>FINDER</span>
                     </span>
+                </div>
+
+                <div className='flex gap-4 items-center flex-col sm:flex-row'>
+                    <Button variant="outline" onClick={importPlants}><Upload className="w-4 h-4 mr-1" />Importer CSV</Button> */
                 </div>
 
                 <div className='flex gap-4 items-center flex-col sm:flex-row'>

@@ -1,6 +1,5 @@
-import React, { useMemo, useState, useEffect, useRef } from "react";
+import React from "react";
 import { Search, Filter, Leaf, Heart, HeartOff, ExternalLink, Download, Upload, Sun, Moon, MapPin, Settings2, SearchIcon, XCircleIcon } from "lucide-react";
-import { parse } from "csv-parse";
 
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -10,7 +9,7 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { SectionTitle } from "@/components/SectionTitle";
 import { Filters } from "@/types/filters";
-import { PLANTTYPES, getPlantType } from "@/types/plantType";
+import { PLANTTYPES } from "@/types/plantType";
 
 const ZONES = ['0a', '0b', '1a', '1b', '2a', '2b', '3a', '3b', '4a', '4b', '5a', '5b', '6a', '6b', '7a', '7b', '8a', '8b', '9a'];
 const SOILS = ["sableux", "limoneux", "argileux", "riche", "pauvre", "acide", "alcalin"];
@@ -19,61 +18,6 @@ const COLORS = ["blanc", "jaune", "orange", "rouge", "rose", "mauve", "bleu", "v
 const SALTS = ["haute", "moyenne", "faible"];
 const BLOOMS = ["printemps", "été", "automne"];
 const prettySun = s => ({ "plein-soleil": "Plein soleil", "mi-ombre": "Mi-ombre", "ombre": "Ombre" }[s] || s);
-
-function readCSV(file) {
-    return new Promise((resolve, reject) => {
-        const processFile = async () => {
-            const records = [];
-            const parser = fs.createReadStream(file).pipe(
-                parse({
-                    // CSV options if any
-                }),
-            );
-            for await (const record of parser) {
-                // Work with each record
-                records.push(record);
-            }
-            return records;
-        };
-
-        (async () => {
-            const records = await processFile();
-            console.info(records);
-        })();
-
-
-
-        /*  const reader = new FileReader();
-         reader.onload = () => {
-             try {
-                 const text = (reader.result);
-                 const rows = parse(
-                     text,
-                     {
-                         skip_records_with_empty_values: true,
-                     }
-                 );
-                 const [headerLine, ...lines] = text.trim().split(/\r?\n/);
-                 const headers = headerLine.split(",").map(h => h.replace(/^"|"$/g, ""));
-                 const rows = lines.map(l => {
-                     // very simple CSV, assumes no embedded commas except within quotes
-                     // const cols = l.match(/((?:\"[^\"]*\")|[^,])+/g)?.map(x => x.replace(/^"|"$/g, "").replaceAll("\\\"", "\"")) || [];
-                     const o = {};
-                     const data = l.split(',');
-                     if (data.length == headers.length) {
-                         headers.forEach((h, i) => o[h] = data[i]);
-                     }
-                     //                     headers.forEach((h, i) => o[h] = l[i]);
-                     return o;
-                 });
- 
-                 resolve(rows.slice(0, 500));
-             } catch (e) { reject(e); }
-         };
-         reader.onerror = reject;
-         reader.readAsText(file); */
-    });
-}
 
 const SizeLabel = ({ size }: { size: number }) => {
     if (size > 100) return <span>{size / 100} m</span>;
@@ -96,7 +40,6 @@ export function PlantFilters({ filters, setFilters, onReset, onApplyFilters }:
         onReset: () => void,
         onApplyFilters: () => void
     }) {
-    const fileRef = useRef(null);
     return (
         <Card className="">
             <CardHeader>
@@ -239,33 +182,6 @@ export function PlantFilters({ filters, setFilters, onReset, onApplyFilters }:
                     <XCircleIcon className="w-4 h-4 mr-1" />
                     Réinitialiser
                 </Button>
-                {/* <input ref={fileRef} type="file" accept=".csv" className="hidden" onChange={async (e) => {
-                        const file = e.target.files?.[0];
-                        if (!file) return;
-                        const rows = await readCSV(file);
-                        filters.__onImport && filters.__onImport(rows);
-                        // e.currentTarget && e.currentTarget.value = ""; // reset
-                    }} />
-                    <Button variant="outline" onClick={() => fileRef.current?.click()}><Upload className="w-4 h-4 mr-1" />Importer CSV</Button> */}
-
-                {/*                     <div className="flex flex-wrap items-center pt-1">
-                        <a
-                            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-                            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <SearchIcon className="w-4 h-4 mr-1" />
-                            <img
-                                className="dark:invert"
-                                src="/vercel.svg"
-                                alt="Vercel logomark"
-                                width={20}
-                                height={20}
-                            />
-                            Rechercher
-                        </a>
-                    </div> */}
             </CardFooter>
         </Card>
     );

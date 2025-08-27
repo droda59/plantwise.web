@@ -1,4 +1,4 @@
-import { PlantTypeValue } from "./plantType";
+import { PlantTypeValue } from './plantType';
 
 export interface CSVPlant {
     code: string;
@@ -10,13 +10,13 @@ export interface CSVPlant {
     ctocDistance: string;
     comment: string;
     zone: string; // hardiness zone (e.g., 3)
-    sunFull: string; // "oui" or "non"
-    sunFullPartial: string; // "oui" or "non"
-    sunPartial: string; // "oui" or "non"
-    sunShade: string; // "oui" or "non"
-    humidity1: string; // "oui" or "non"
-    humidity2: string; // "oui" or "non"
-    humidity3: string; // "oui" or "non"
+    sunFull: string; // 'oui' or 'non'
+    sunFullPartial: string; // 'oui' or 'non'
+    sunPartial: string; // 'oui' or 'non'
+    sunShade: string; // 'oui' or 'non'
+    humidity1: string; // 'oui' or 'non'
+    humidity2: string; // 'oui' or 'non'
+    humidity3: string; // 'oui' or 'non'
     soil: string;
     ph: string;
     height: number; // cm (approx)
@@ -32,15 +32,15 @@ export interface Plant {
     latin: string;
     name: string;
     type: PlantTypeValue;
-    zone: number;
-    soil: Array<"sableux" | "limoneux" | "argileux" | "riche" | "pauvre" | "acide" | "alcalin">;
-    sun: Array<"plein-soleil" | "mi-ombre" | "ombre">;
+    zone?: string;
+    soil: Array<'sablonneux' | 'limoneux' | 'argileux' | 'riche' | 'pauvre' | 'acide' | 'alcalin' | 'organique' | 'tourbeux' | 'loam argileux' | 'loam sablonneux' | 'humifère' | 'graveleux'>;
+    sun: Array<'plein-soleil' | 'mi-ombre' | 'ombre'>;
     isNative: boolean;
     droughtTolerant?: boolean;
     floodTolerant?: boolean;
-    height: number; // m (approx)
-    spread: number; // m (approx)
-    saltTolerance?: "haute" | "moyenne" | "faible";
+    height?: number; // m (approx)
+    spread?: number; // m (approx)
+    saltTolerance?: 'haute' | 'moyenne' | 'faible';
     nurseries?: Nursery[];
 }
 
