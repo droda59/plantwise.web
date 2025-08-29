@@ -8,7 +8,7 @@ export class PlantFactory {
             latin: data.latin,
             name: data.name,
             type: data.type,
-            zone: Number(data.zone) || 0,
+            zone: data.zone,
             soil: Array.isArray(data.soil) ? data.soil : (data.soil ? [data.soil] : []),
             sun: Array.isArray(data.sun) ? data.sun : (data.sun ? [data.sun] : []),
             isNative: Boolean(data.isNative),

@@ -94,7 +94,7 @@ export default function Home() {
                 </div>
 
                 <div className='flex gap-4 items-center flex-col sm:flex-row'>
-                    <Button variant="outline" onClick={importPlants}><Upload className="w-4 h-4 mr-1" />Importer CSV</Button> */
+                    <Button variant="outline" onClick={importPlants}><Upload className="w-4 h-4 mr-1" />Importer CSV</Button>
                 </div>
 
                 <div className='flex gap-4 items-center flex-col sm:flex-row'>
