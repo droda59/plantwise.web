@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Search, Filter, Leaf, Heart, HeartOff, ExternalLink, Download, Upload, Sun, Moon, MapPin, Settings2, SearchIcon, XCircleIcon } from "lucide-react";
 
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -33,13 +33,34 @@ const SizeChip = ({ size }: { size: number[] }) => {
     );
 }
 
-export function PlantFilters({ filters, setFilters, onReset, onApplyFilters }:
+const DEFAULT_FILTERS: Filters = {
+    q: '',
+
+    // Conditions du site
+    zone: undefined,
+    soil: undefined,
+    sun: undefined,
+    saltConditions: undefined,
+    droughtTolerant: undefined,
+    floodTolerant: undefined,
+
+    // Conditions de la plante
+    type: undefined,
+    color: undefined,
+    bloom: undefined,
+    native: undefined,
+    height: [0, 3000],
+    spread: [0, 3000],
+};
+
+export function PlantFilters({ onApplyFilters }:
     {
-        filters: Filters,
-        setFilters: React.Dispatch<React.SetStateAction<Filters>>,
-        onReset: () => void,
-        onApplyFilters: () => void
+        onApplyFilters: (filters: Filters) => void
     }) {
+    const [filters, setFilters] = useState(DEFAULT_FILTERS);
+
+    const resetFilters = () => setFilters(DEFAULT_FILTERS);
+
     return (
         <Card className="">
             <CardHeader>
@@ -174,11 +195,11 @@ export function PlantFilters({ filters, setFilters, onReset, onApplyFilters }:
 
             </CardContent>
             <CardFooter className="flex-col gap-2">
-                <Button className="w-full" type="submit" onClick={onApplyFilters}>
+                <Button className="w-full" type="submit" onClick={() => onApplyFilters(filters)}>
                     <SearchIcon className="w-4 h-4 mr-1" />
                     Rechercher
                 </Button>
-                <Button className="w-full" variant="outline" onClick={onReset}>
+                <Button className="w-full" variant="outline" onClick={() => resetFilters()}>
                     <XCircleIcon className="w-4 h-4 mr-1" />
                     Réinitialiser
                 </Button>
