@@ -48,7 +48,7 @@ export default function Home() {
             <AppSidebar variant="inset" onApplyFilters={applyFilters} />
             <SidebarInset>
                 <SiteHeader />
-                <main className="@container/main flex gap-2 flex  items-center px-6">
+                <div className="@container/main flex gap-2 flex  items-center px-6">
                     <div className="flex flex-col gap-6 py-6 w-full">
                         <SectionTitle title='Résultats' icon={IconSearch} subtitle={loading
                             ? 'Chargement des plantes...'
@@ -70,7 +70,7 @@ export default function Home() {
                             </AnimatePresence>
                         }
                     </div>
-                </main>
+                </div>
             </SidebarInset>
         </SidebarProvider>
     );
