@@ -31,6 +31,8 @@ export interface Plant {
     code: string;
     latin: string;
     name: string;
+    genus?: string;
+    species?: string;
     type: PlantTypeValue;
     zone?: string;
     soil: Array<'sablonneux' | 'limoneux' | 'argileux' | 'riche' | 'pauvre' | 'acide' | 'alcalin' | 'organique' | 'tourbeux' | 'loam argileux' | 'loam sablonneux' | 'humifère' | 'graveleux'>;

@@ -146,10 +146,24 @@ export const PlantCard = ({ plant }: { plant: Plant; }) => {
                                 <IconArrowsHorizontal />
                                 &nbsp;
                                 <span className='flex w-full'>
-                                    <span className="text-sm font-medium"><b>Hauteur</b>&nbsp;<SizeChip size={plant.spread} /></span>
+                                    <span className="text-sm font-medium"><b>Largeur</b>&nbsp;<SizeChip size={plant.spread} /></span>
                                 </span>
                             </div>
                         )}
+                        {/*                         {!!plant.genus && (
+                            <div className='flex items-center overflow-hidden [&>svg]:size-4 [&>svg]:shrink-0'>
+                                <span className='flex w-full'>
+                                    <span className="text-sm font-medium"><b>Genre</b>&nbsp;{plant.genus}</span>
+                                </span>
+                            </div>
+                        )}
+                        {!!plant.species && (
+                            <div className='flex items-center overflow-hidden [&>svg]:size-4 [&>svg]:shrink-0'>
+                                <span className='flex w-full'>
+                                    <span className="text-sm font-medium"><b>Espèce</b>&nbsp;{plant.species}</span>
+                                </span>
+                            </div>
+                        )} */}
                     </div>
                     <div className="flex flex-wrap gap-2">
                         {/* {plant.nurseries.map((n, i) => <NurseryChip key={n.name + i} n={n} />)} */}
