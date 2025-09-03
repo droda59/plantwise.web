@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { Search, Filter, Leaf, Heart, HeartOff, ExternalLink, Download, Upload, Sun, Moon, MapPin, Settings2, SearchIcon, XCircleIcon } from "lucide-react";
+import { Search } from "lucide-react";
+import { IconArrowsHorizontal, IconArrowsVertical, IconDroplet, IconDropletFilled, IconFeather, IconFlower, IconPalette, IconPlant, IconSalt, IconSandbox, IconSearch, IconSun, IconWorld, IconX } from "@tabler/icons-react";
 
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
-import { SectionTitle } from "@/components/SectionTitle";
 import { Filters } from "@/types/filters";
 import { PLANTTYPES } from "@/types/plantType";
 
@@ -18,20 +18,6 @@ const COLORS = ["blanc", "jaune", "orange", "rouge", "rose", "mauve", "bleu", "v
 const SALTS = ["haute", "moyenne", "faible"];
 const BLOOMS = ["printemps", "été", "automne"];
 const prettySun = s => ({ "plein-soleil": "Plein soleil", "mi-ombre": "Mi-ombre", "ombre": "Ombre" }[s] || s);
-
-const SizeLabel = ({ size }: { size: number }) => {
-    if (size > 100) return <span>{size / 100} m</span>;
-    return <span>{size} cm</span>;
-}
-
-const SizeChip = ({ size }: { size: number[] }) => {
-    if (!size || !size.length) return false;
-    return (
-        <span>
-            <SizeLabel size={size[0]} /> - <SizeLabel size={size[1]} />
-        </span>
-    );
-}
 
 const DEFAULT_FILTERS: Filters = {
     q: '',
@@ -53,6 +39,44 @@ const DEFAULT_FILTERS: Filters = {
     spread: [0, 3000],
 };
 
+const SidebarMenuFilterItem = ({
+    icon: Icon,
+    title = '',
+    label = '',
+    target = '',
+    ...props
+}) => (
+    <SidebarMenuItem>
+        <div className='flex items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-hidden ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground group-has-data-[sidebar=menu-action]/menu-item:pr-8 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0'>
+            <Icon />
+            {title && <span>{title}</span>}
+            {label && <label className='grow' htmlFor={target}>{label}</label>}
+            {props.children}
+        </div>
+    </SidebarMenuItem>
+);
+
+const SizeLabel = ({ size }: { size: number }) => {
+    if (size > 100) return <span>{size / 100} m</span>;
+    return <span>{size} cm</span>;
+}
+
+const SizeChip = (
+    {
+        size,
+        ...props
+    }: React.ComponentProps<'span'> & {
+        size: number[]
+    }
+) => {
+    if (!size || !size.length) return false;
+    return (
+        <span {...props}>
+            <SizeLabel size={size[0]} /> - <SizeLabel size={size[1]} />
+        </span>
+    );
+}
+
 export function PlantFilters({ onApplyFilters }:
     {
         onApplyFilters: (filters: Filters) => void
@@ -62,110 +86,111 @@ export function PlantFilters({ onApplyFilters }:
     const resetFilters = () => setFilters(DEFAULT_FILTERS);
 
     return (
-        <Card className="">
-            <CardHeader>
-                <SectionTitle icon={Filter} title="Filtres" />
-            </CardHeader>
-            <CardContent className="grid gap-6">
-                <div className="grid">
-                    <div className="relative">
+        <SidebarGroup>
+            <SidebarGroupContent className="flex flex-col gap-2 p-2">
+                <SidebarMenu>
+                    <SidebarMenuItem>
                         <Search className="w-4 h-4 absolute left-2 top-1/2 -translate-y-1/2 opacity-60" />
                         <Input className="pl-8" placeholder="nom commun, latin..." value={filters.q || ""} onChange={(e) => setFilters(f => ({ ...f, q: e.target.value }))} />
-                    </div>
-                </div>
+                    </SidebarMenuItem>
+                </SidebarMenu>
+            </SidebarGroupContent>
 
-                <div className="grid gap-2">
-                    Conditions du site
+            <SidebarGroupContent className="flex flex-col gap-2 p-2">
+                <SidebarMenu>
+                    <SidebarGroupLabel>Conditions du site</SidebarGroupLabel>
+                    <SidebarMenuFilterItem icon={IconWorld} title='Zone'>
+                        <Select value={filters.zone ?? ""} onValueChange={v => setFilters(f => ({ ...f, zone: v || undefined }))}>
+                            <SelectTrigger className="grow"><SelectValue placeholder="Toutes" /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value=".">Toutes</SelectItem>
+                                {ZONES.map(z => (<SelectItem key={z} value={z}>{z}</SelectItem>))}
+                            </SelectContent>
+                        </Select>
+                    </SidebarMenuFilterItem>
 
-                    <div className="grid md:grid-cols-3 gap-3">
-                        <div className="grid gap-2">
-                            <label className="text-sm font-medium">Zone</label>
-                            <Select value={filters.zone ?? ""} onValueChange={v => setFilters(f => ({ ...f, zone: v || undefined }))}>
-                                <SelectTrigger><SelectValue placeholder="Toutes" /></SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value=".">Toutes</SelectItem>
-                                    {ZONES.map(z => (<SelectItem key={z} value={z}>{z}</SelectItem>))}</SelectContent>
-                            </Select>
-                        </div>
-                        <div className="grid gap-2">
-                            <label className="text-sm font-medium">Sol</label>
-                            <Select value={filters.soil || ""} onValueChange={v => setFilters(f => ({ ...f, soil: v || undefined }))}>
-                                <SelectTrigger><SelectValue placeholder="Tous" /></SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value=".">Tous</SelectItem>
-                                    {SOILS.map(s => (<SelectItem key={s} value={s}>{s}</SelectItem>))}
-                                </SelectContent>
-                            </Select>
-                        </div>
-                        <div className="grid gap-2">
-                            <label className="text-sm font-medium">Ensoleillement</label>
-                            <Select value={filters.sun || ""} onValueChange={v => setFilters(f => ({ ...f, sun: v || undefined }))}>
-                                <SelectTrigger><SelectValue placeholder="Tous" /></SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value=".">Tous</SelectItem>
-                                    {SUNS.map(s => (<SelectItem key={s} value={s}>{prettySun(s)}</SelectItem>))}
-                                </SelectContent>
-                            </Select>
-                        </div>
-                        <div className="grid gap-2">
-                            <label className="text-sm font-medium">Présence de sels</label>
-                            <Select value={filters.saltConditions || ""} onValueChange={v => setFilters(f => ({ ...f, saltConditions: v || undefined }))}>
-                                <SelectTrigger><SelectValue placeholder="Toutes" /></SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value=".">Toutes</SelectItem>
-                                    {SALTS.map(c => (<SelectItem key={c} value={c}>{c}</SelectItem>))}
-                                </SelectContent>
-                            </Select>
-                        </div>
+                    <SidebarMenuFilterItem icon={IconSandbox} title='Sol'>
+                        <Select value={filters.soil || ""} onValueChange={v => setFilters(f => ({ ...f, soil: v || undefined }))}>
+                            <SelectTrigger className="grow"><SelectValue placeholder="Tous" /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value=".">Tous</SelectItem>
+                                {SOILS.map(s => (<SelectItem key={s} value={s}>{s}</SelectItem>))}
+                            </SelectContent>
+                        </Select>
+                    </SidebarMenuFilterItem>
 
-                        <div className="flex items-center gap-3">
-                            <Switch checked={!!filters.droughtTolerant} onCheckedChange={v => setFilters(f => ({ ...f, droughtTolerant: v || undefined }))} id="droughtTolerant" />
-                            <label htmlFor="droughtTolerant" className="text-sm">Sujet à la sécheresse</label>
-                        </div>
+                    <SidebarMenuFilterItem icon={IconSun} title='Ensoleillement'>
+                        <Select value={filters.sun || ""} onValueChange={v => setFilters(f => ({ ...f, sun: v || undefined }))}>
+                            <SelectTrigger className="grow"><SelectValue placeholder="Tous" /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value=".">Tous</SelectItem>
+                                {SUNS.map(s => (<SelectItem key={s} value={s}>{prettySun(s)}</SelectItem>))}
+                            </SelectContent>
+                        </Select>
+                    </SidebarMenuFilterItem>
 
-                        <div className="flex items-center gap-3">
-                            <Switch checked={!!filters.floodTolerant} onCheckedChange={v => setFilters(f => ({ ...f, floodTolerant: v || undefined }))} id="floodTolerant" />
-                            <label htmlFor="floodTolerant" className="text-sm">Sujet à l'excès d'eau</label>
-                        </div>
-                    </div>
+                    <SidebarMenuFilterItem icon={IconSalt} title='Présence de sels'>
+                        <Select value={filters.saltConditions || ""} onValueChange={v => setFilters(f => ({ ...f, saltConditions: v || undefined }))}>
+                            <SelectTrigger className="grow"><SelectValue placeholder="Toutes" /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value=".">Toutes</SelectItem>
+                                {SALTS.map(c => (<SelectItem key={c} value={c}>{c}</SelectItem>))}
+                            </SelectContent>
+                        </Select>
+                    </SidebarMenuFilterItem>
 
-                    <div className="grid gap-2">
-                        Conditions de la plante
+                    <SidebarMenuFilterItem icon={IconDroplet} label='Sujet à la sécheresse' target='droughtTolerant'>
+                        <Switch checked={!!filters.droughtTolerant} onCheckedChange={v => setFilters(f => ({ ...f, droughtTolerant: v || undefined }))} id="droughtTolerant" />
+                    </SidebarMenuFilterItem>
 
-                        <div className="grid gap-2">
-                            <label className="text-sm font-medium">Type</label>
-                            <Select value={filters.type || ""} onValueChange={v => setFilters(f => ({ ...f, type: v || undefined }))}>
-                                <SelectTrigger><SelectValue placeholder="Tous" /></SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value=".">Tous</SelectItem>
-                                    {PLANTTYPES.map((t, i) => (<SelectItem key={i} value={t.value}>{t.label}</SelectItem>))}
-                                </SelectContent>
-                            </Select>
-                        </div>
-                        <div className="grid gap-2">
-                            <label className="text-sm font-medium">Couleur</label>
-                            <Select value={filters.color || ""} onValueChange={v => setFilters(f => ({ ...f, color: v || undefined }))}>
-                                <SelectTrigger><SelectValue placeholder="Toutes" /></SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value=".">Toutes</SelectItem>
-                                    {COLORS.map(c => (<SelectItem key={c} value={c}>{c}</SelectItem>))}
-                                </SelectContent>
-                            </Select>
-                        </div>
-                        <div className="grid gap-2">
-                            <label className="text-sm font-medium">Floraison</label>
-                            <Select value={filters.bloom || ""} onValueChange={v => setFilters(f => ({ ...f, bloom: v || undefined }))}>
-                                <SelectTrigger><SelectValue placeholder="Toutes" /></SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value=".">Toutes</SelectItem>
-                                    {BLOOMS.map(b => (<SelectItem key={b} value={b}>{b}</SelectItem>))}
-                                </SelectContent>
-                            </Select>
-                        </div>
+                    <SidebarMenuFilterItem icon={IconDropletFilled} label="Sujet à l'excès d'eau" target='floodTolerant'>
+                        <Switch checked={!!filters.floodTolerant} onCheckedChange={v => setFilters(f => ({ ...f, floodTolerant: v || undefined }))} id="floodTolerant" />
+                    </SidebarMenuFilterItem>
+                </SidebarMenu>
+            </SidebarGroupContent>
+            <SidebarGroupContent className="flex flex-col gap-2 p-2">
+                <SidebarMenu>
+                    <SidebarGroupLabel>Conditions de la plante</SidebarGroupLabel>
+                    <SidebarMenuFilterItem icon={IconPlant} title='Type'>
+                        <Select value={filters.type || ""} onValueChange={v => setFilters(f => ({ ...f, type: v || undefined }))}>
+                            <SelectTrigger className="grow"><SelectValue placeholder="Tous" /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value=".">Tous</SelectItem>
+                                {PLANTTYPES.map((t, i) => (<SelectItem key={i} value={t.value}>{t.label}</SelectItem>))}
+                            </SelectContent>
+                        </Select>
+                    </SidebarMenuFilterItem>
 
-                        {/* Ajouter text fields pour la recherche */}
-                        <div className="grid gap-2">
-                            <label className="text-sm font-medium">Hauteur <SizeChip size={filters.height} /></label>
+                    <SidebarMenuFilterItem icon={IconPalette} title='Couleur'>
+                        <Select value={filters.color || ""} onValueChange={v => setFilters(f => ({ ...f, color: v || undefined }))}>
+                            <SelectTrigger className="grow"><SelectValue placeholder="Toutes" /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value=".">Toutes</SelectItem>
+                                {COLORS.map(c => (<SelectItem key={c} value={c}>{c}</SelectItem>))}
+                            </SelectContent>
+                        </Select>
+                    </SidebarMenuFilterItem>
+
+                    <SidebarMenuFilterItem icon={IconFlower} title='Floraison'>
+                        <Select value={filters.bloom || ""} onValueChange={v => setFilters(f => ({ ...f, bloom: v || undefined }))}>
+                            <SelectTrigger className="grow"><SelectValue placeholder="Toutes" /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value=".">Toutes</SelectItem>
+                                {BLOOMS.map(b => (<SelectItem key={b} value={b}>{b}</SelectItem>))}
+                            </SelectContent>
+                        </Select>
+                    </SidebarMenuFilterItem>
+
+                    {/* Ajouter text fields pour la recherche */}
+                    <SidebarMenuItem>
+                        <div className='flex items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-hidden ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground group-has-data-[sidebar=menu-action]/menu-item:pr-8 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0'>
+                            <IconArrowsVertical />
+                            <span className='flex w-full'>
+                                <label className="grow text-sm font-medium">Hauteur</label>
+                                <SizeChip size={filters.height} />
+                            </span>
+                        </div>
+                        <div className='flex items-center gap-2 rounded-md p-2 text-left text-sm outline-hidden ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground group-has-data-[sidebar=menu-action]/menu-item:pr-8 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&>svg]:size-4 [&>svg]:shrink-0'>
                             <Slider
                                 min={0}
                                 max={3000}
@@ -174,9 +199,17 @@ export function PlantFilters({ onApplyFilters }:
                                 onValueChange={v => setFilters(f => ({ ...f, height: v || undefined }))}
                             />
                         </div>
+                    </SidebarMenuItem>
 
-                        <div className="grid gap-2">
-                            <label className="text-sm font-medium">Largeur <SizeChip size={filters.spread} /></label>
+                    <SidebarMenuItem>
+                        <div className='flex items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-hidden ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground group-has-data-[sidebar=menu-action]/menu-item:pr-8 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0'>
+                            <IconArrowsHorizontal />
+                            <span className='flex w-full'>
+                                <label className="grow text-sm font-medium">Largeur</label>
+                                <SizeChip size={filters.spread} />
+                            </span>
+                        </div>
+                        <div className='flex items-center gap-2 rounded-md p-2 text-left text-sm outline-hidden ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground group-has-data-[sidebar=menu-action]/menu-item:pr-8 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&>svg]:size-4 [&>svg]:shrink-0'>
                             <Slider
                                 min={0}
                                 max={3000}
@@ -185,25 +218,24 @@ export function PlantFilters({ onApplyFilters }:
                                 onValueChange={v => setFilters(f => ({ ...f, spread: v || undefined }))}
                             />
                         </div>
+                    </SidebarMenuItem>
 
-                        <div className="flex items-center gap-3">
-                            <Switch checked={!!filters.native} onCheckedChange={v => setFilters(f => ({ ...f, native: v || undefined }))} id="native" />
-                            <label htmlFor="native" className="text-sm">Espèce indigène</label>
-                        </div>
-                    </div>
-                </div>
+                    <SidebarMenuFilterItem icon={IconFeather} label='Espèce indigène' target='native'>
+                        <Switch checked={!!filters.native} onCheckedChange={v => setFilters(f => ({ ...f, native: v || undefined }))} id="native" />
+                    </SidebarMenuFilterItem>
+                </SidebarMenu>
+            </SidebarGroupContent>
 
-            </CardContent>
-            <CardFooter className="flex-col gap-2">
-                <Button className="w-full" type="submit" onClick={() => onApplyFilters(filters)}>
-                    <SearchIcon className="w-4 h-4 mr-1" />
+            <SidebarGroupContent className="flex gap-2 p-2">
+                <Button style={{ display: 'initial' }} className="flex-col grow" variant="outline" onClick={resetFilters}>
+                    <IconX style={{ display: 'initial' }} className="w-4 h-4 mr-1" />
+                    Reset
+                </Button>
+                <Button style={{ display: 'initial' }} className="flex-col grow" type="submit" onClick={() => onApplyFilters(filters)}>
+                    <IconSearch style={{ display: 'initial' }} className="w-4 h-4 mr-1" />
                     Rechercher
                 </Button>
-                <Button className="w-full" variant="outline" onClick={() => resetFilters()}>
-                    <XCircleIcon className="w-4 h-4 mr-1" />
-                    Réinitialiser
-                </Button>
-            </CardFooter>
-        </Card>
+            </SidebarGroupContent>
+        </SidebarGroup >
     );
 }

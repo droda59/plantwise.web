@@ -9,8 +9,7 @@ import { PlantFilters } from '@/components/plant-filters';
 import { Separator } from '@/components/ui/separator';
 import { Filters } from '@/types/filters';
 import { Plant } from '@/types/plant';
-import { plantApiInstance } from '@/api/plantApi';
-import { NavigationMenuDemo } from '@/components/NavMenu';
+import { plantApiInstance } from '@/api/plant-api';
 
 export default function Home() {
     const [filteredPlants, setFilteredPlants] = useState<Plant[]>([]);
@@ -34,7 +33,6 @@ export default function Home() {
 
     return (
         <div className='font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20'>
-            <NavigationMenuDemo />
             <main className='flex flex-col gap-[32px] row-start-2 items-center '>
                 <div className='flex items-center flex-col sm:flex-row'>
                     <img

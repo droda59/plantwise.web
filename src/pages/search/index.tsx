@@ -3,20 +3,21 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PlantCard } from '@/components/plant-card';
-import { Plant } from '@/types/plant';
-import { plantApiInstance } from '@/api/plantApi';
+import { IconSearch } from '@tabler/icons-react';
 
-import { AppSidebar } from "@/components/app-sidebar"
+import { plantApiInstance } from '@/api/plant-api';
+import { Plant } from '@/types/plant';
+import { Filters } from '@/types/filters';
+import { FilterSidebar } from "@/components/filter-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import {
     SidebarInset,
     SidebarProvider,
 } from "@/components/ui/sidebar"
-import { IconSearch } from '@tabler/icons-react';
 import { SectionTitle } from '@/components/section-title';
-import { Filters } from '@/types/filters';
+import "@/styles/globals.css";
 
-export default function Home() {
+export default function Page() {
     const [filteredPlants, setFilteredPlants] = useState<Plant[]>([]);
     const [loading, setLoading] = useState(false);
 
@@ -45,7 +46,7 @@ export default function Home() {
                 } as React.CSSProperties
             }
         >
-            <AppSidebar variant="inset" onApplyFilters={applyFilters} />
+            <FilterSidebar variant="inset" onApplyFilters={applyFilters} />
             <SidebarInset>
                 <SiteHeader />
                 <div className="@container/main flex gap-2 flex  items-center px-6">

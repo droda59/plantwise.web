@@ -34,6 +34,7 @@ export interface Plant {
     genus?: string;
     species?: string;
     type: PlantTypeValue;
+    functionalGroup?: string;
     zone?: string;
     soil: Array<'sablonneux' | 'limoneux' | 'argileux' | 'riche' | 'pauvre' | 'acide' | 'alcalin' | 'organique' | 'tourbeux' | 'loam argileux' | 'loam sablonneux' | 'humifère' | 'graveleux'>;
     sun: Array<'plein-soleil' | 'mi-ombre' | 'ombre'>;

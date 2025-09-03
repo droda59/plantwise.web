@@ -13,7 +13,7 @@ import { Filters } from "@/types/filters"
 import { NavPlantFilters } from "./nav-plant-filters"
 import { SectionTitle } from "./section-title"
 
-export function AppSidebar({
+export function FilterSidebar({
     onApplyFilters,
     ...props
 }: React.ComponentProps<typeof Sidebar> & {

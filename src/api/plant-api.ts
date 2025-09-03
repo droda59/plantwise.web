@@ -38,6 +38,21 @@ export class plantApi {
         return data.map(d => PlantFactory.create(d));
     }
 
+    async getPlant(code: string): Promise<Plant> {
+        const response = await fetch(`http://localhost:3000/api/plants/${code}`, {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
+
+        const data = await response.json();
+        const plant = PlantFactory.create(data);
+
+        return plant;
+    }
+
     async importPlants(): Promise<void> {
         await fetch(`http://localhost:3000/api/plants/import`, {
             method: 'POST',

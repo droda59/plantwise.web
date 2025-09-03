@@ -1,11 +1,12 @@
 import { motion } from "framer-motion";
 import { ExternalLink, MapPin } from "lucide-react";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Nursery, Plant } from "@/types/plant";
 import { getPlantType, PlantType, PLANTTYPES, PlantTypeValue } from "@/types/plantType";
 import { IconArrowsHorizontal, IconArrowsVertical, IconWorld } from "@tabler/icons-react";
+import Link from "next/link";
 
 const prettySun = (s) => ({ "plein-soleil": "Plein soleil", "mi-ombre": "Mi-ombre", "ombre": "Ombre" }[s] || s);
 
@@ -96,7 +97,6 @@ export const PlantCard = ({ plant }: { plant: Plant; }) => {
                 <CardHeader className="pb-2">
                     <div className="flex items-start justify-between gap-2">
                         <div>
-                            <Badge variant="secondary" className='rounded-xs'>{getPlantType(plant.type).label}</Badge>
                             <CardTitle className="text-lg">
                                 <span className="italic">{latin}</span>
                                 {cultivar && <span> '{cultivar}'</span>}
@@ -115,11 +115,12 @@ export const PlantCard = ({ plant }: { plant: Plant; }) => {
                     </div>
                 </CardHeader>
                 <CardContent className="grid">
-                    {plant.isNative && (
-                        <div className="text-sm">
-                            <Badge className="bg-emerald-100 text-emerald-700">Indigène</Badge>
-                        </div>
-                    )}
+                    <div className="flex mb-2">
+                        <Badge variant="secondary" className='rounded-xs'>{getPlantType(plant.type).label}</Badge>
+                        {plant.isNative && (
+                            <Badge className="ml-1 bg-emerald-100 text-emerald-700 rounded-xs">Indigène</Badge>
+                        )}
+                    </div>
                     {plant.zone && (
                         <div className="text-sm text-muted-foreground">
                             <div className='flex items-center overflow-hidden [&>svg]:size-4 [&>svg]:shrink-0'>
@@ -150,6 +151,14 @@ export const PlantCard = ({ plant }: { plant: Plant; }) => {
                                 </span>
                             </div>
                         )}
+                        {/*                         {!!plant.functionalGroup && (
+                            <div className='flex items-center overflow-hidden [&>svg]:size-4 [&>svg]:shrink-0'>
+                                &nbsp;
+                                <span className='flex w-full'>
+                                    <span className="text-sm font-medium"><b>Groupe fonctionnel</b>&nbsp;{plant.functionalGroup}</span>
+                                </span>
+                            </div>
+                        )} */}
                         {/*                         {!!plant.genus && (
                             <div className='flex items-center overflow-hidden [&>svg]:size-4 [&>svg]:shrink-0'>
                                 <span className='flex w-full'>
@@ -169,6 +178,9 @@ export const PlantCard = ({ plant }: { plant: Plant; }) => {
                         {/* {plant.nurseries.map((n, i) => <NurseryChip key={n.name + i} n={n} />)} */}
                     </div>
                 </CardContent>
+                <CardFooter>
+                    <Link href={`/plant/${plant.code}`}>Go</Link>
+                </CardFooter>
             </Card>
         </motion.div>
     )
