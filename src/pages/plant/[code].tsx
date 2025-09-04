@@ -139,6 +139,9 @@ export default function Page({ params }) {
                             {plant.isNative && (
                                 <Badge className="ml-1 bg-emerald-100 text-emerald-700 rounded-xs">Indigène</Badge>
                             )}
+                            {plant.isNaturalized && (
+                                <Badge className="ml-1 bg-amber-100 text-amber-700 rounded-xs">Naturalisé</Badge>
+                            )}
                         </div>
                         <div className='text-sm text-muted-foreground grid grid-cols-2 mt-2'>
                             <div className='flex-col'>

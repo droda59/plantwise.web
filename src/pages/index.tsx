@@ -3,11 +3,12 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 
-import { createSearchParams } from '@/api/plant-api';
+import { createSearchParams, plantApiInstance } from '@/api/plant-api';
 import { SiteHeader } from "@/components/site-header"
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { PlantFilters } from '@/components/plant-filters';
 import { Filters } from '@/types/filters';
+import { Button } from '@/components/ui/button';
 
 export default function Home() {
     const router = useRouter();
@@ -30,6 +31,9 @@ export default function Home() {
                         <PlantFilters onApplyFilters={applyFilters} />
                     </CardContent>
                 </Card>
+                <Button style={{ display: 'initial' }} className="flex-col grow" type="submit" onClick={() => plantApiInstance.importPlants()}>
+import
+                </Button>
             </main>
         </div>
     );

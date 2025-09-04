@@ -14,6 +14,7 @@ export interface Plant {
     soil: Array<'sablonneux' | 'limoneux' | 'argileux' | 'riche' | 'pauvre' | 'acide' | 'alcalin' | 'organique' | 'tourbeux' | 'loam argileux' | 'loam sablonneux' | 'humifère' | 'graveleux'>;
     sun: Array<'plein-soleil' | 'mi-ombre' | 'ombre'>;
     isNative: boolean;
+    isNaturalized: boolean;
     droughtTolerant?: boolean;
     floodTolerant?: boolean;
     height?: number; // m (approx)
