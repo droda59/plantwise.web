@@ -17,6 +17,10 @@ export class PlantFactory {
             height: Number(data.height) || 0,
             spread: Number(data.spread) || 0,
             saltTolerance: data.saltTolerance || undefined,
+            family: data.family,
+            genus: data.genus,
+            species: data.species,
+            functionalGroup: data.functionalGroup,
             // nurseries: Array.isArray(data.nurseries) ? data.nurseries : [],
         };
     }

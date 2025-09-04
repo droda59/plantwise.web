@@ -7,6 +7,7 @@ import { Nursery, Plant } from "@/types/plant";
 import { getPlantType, PlantType, PLANTTYPES, PlantTypeValue } from "@/types/plantType";
 import { IconArrowsHorizontal, IconArrowsVertical, IconWorld } from "@tabler/icons-react";
 import Link from "next/link";
+import { Button } from "./ui/button";
 
 const prettySun = (s) => ({ "plein-soleil": "Plein soleil", "mi-ombre": "Mi-ombre", "ombre": "Ombre" }[s] || s);
 
@@ -18,7 +19,8 @@ const NurseryChip = ({ n }: { n: Nursery }) => (
     </a>
 );
 
-const SizeChip = ({ size }: { size: number }) => {
+const SizeChip = ({ size }: { size?: number }) => {
+    if (!size) return <span>Inconnue</span>;
     if (size < 1) return <span>{size * 100} cm</span>;
     return <span>{size} m</span>;
 }
@@ -29,6 +31,8 @@ export const PlantCard = ({ plant }: { plant: Plant; }) => {
 
     var regExp = /\(([^)]+)\)/;
     var matches = regExp.exec(plant.latin);
+
+    const type = getPlantType(plant.type);
 
     var latin = originalName;
     var cultivar = undefined;
@@ -64,16 +68,13 @@ export const PlantCard = ({ plant }: { plant: Plant; }) => {
     };
 
     const CodeChip = () => (
-        <div className='flex items-center w-full' style={{ position: 'relative', width: '44px' }}>
-            <div style={{
-                position: 'absolute',
-                height: '40px',
+        <div className='flex items-center relative'>
+            <div className='h-10 bg-primary' style={{
                 aspectRatio: '1 / cos(30deg)',
-                background: 'blue',
                 '--b': '2px',
                 clipPath: 'polygon(0 50%, 50% -50%, 100% 50%, 50% 150%, 0 50%, var(--b) 50%, calc(25% + var(--b) * cos(60deg)) calc(100% - var(--b) * sin(60deg)), calc(75% - var(--b) * cos(60deg)) calc(100% - var(--b) * sin(60deg)), calc(100% - var(--b)) 50%, calc(75% - var(--b) * cos(60deg)) calc(var(--b) * sin(60deg)), calc(25% + var(--b) * cos(60deg)) calc(var(--b) * sin(60deg)), var(--b) 50%)',
             }} />
-            <span className='flex w-full text-xs justify-center'>
+            <span className='text-xs w-full absolute text-center'>
                 {plant.code}
             </span>
         </div>
@@ -95,94 +96,71 @@ export const PlantCard = ({ plant }: { plant: Plant; }) => {
                     <TypeChip chipType='8 AQUA' />
                 </div>
                 <CardHeader className="pb-2">
-                    <div className="flex items-start justify-between gap-2">
-                        <div>
+                    <div className='flex'>
+                        <div className="grow">
                             <CardTitle className="text-lg">
-                                <span className="italic">{latin}</span>
-                                {cultivar && <span> '{cultivar}'</span>}
-                                {comment && <span> ({comment})</span>}
+                                <Link href={`/plant/${plant.code}`}>
+                                    <span className='italic'>{latin}</span>
+                                    {cultivar && <span>&nbsp;'{cultivar}'</span>}
+                                </Link>
+                                {/*{comment && <span> ({comment})</span>}*/}
                             </CardTitle>
-                            <p className="text-sm text-muted-foreground">{plant.name}</p>
+                            <div className="text-sm text-muted-foreground">{plant.name}</div>
                             {/*<p className="text-sm text-muted-foreground">{plant.code}</p>*/}
-                            <div style={{
-                                position: 'absolute',
-                                top: '21px',
-                                right: '6px',
-                            }}>
-                                <CodeChip />
-                            </div>
                         </div>
+
+                        <CodeChip />
                     </div>
                 </CardHeader>
                 <CardContent className="grid">
                     <div className="flex mb-2">
-                        <Badge variant="secondary" className='rounded-xs'>{getPlantType(plant.type).label}</Badge>
+                        {type && <Badge variant="secondary" className='rounded-xs'>{type.label}</Badge>}
+                        {!!plant.functionalGroup && (
+                            <Badge variant="secondary" className="ml-1 rounded-xs">Groupe&nbsp;{plant.functionalGroup}</Badge>
+                        )}
                         {plant.isNative && (
                             <Badge className="ml-1 bg-emerald-100 text-emerald-700 rounded-xs">Indigène</Badge>
                         )}
                     </div>
-                    {plant.zone && (
-                        <div className="text-sm text-muted-foreground">
+                    <div className='text-sm text-muted-foreground grid grid-cols-2 mt-2'>
+                        <div className='flex-col'>
                             <div className='flex items-center overflow-hidden [&>svg]:size-4 [&>svg]:shrink-0'>
-                                <IconWorld />
-                                &nbsp;
-                                <span className='flex w-full'>
-                                    <span className="text-sm font-medium"><b>Zone</b>&nbsp;{plant.zone}</span>
-                                </span>
+                                <IconWorld />&nbsp;
+                                <span className="font-light">Zone</span>&nbsp;
+                                <span className="font-medium">{plant.zone || 'Inconnue'}</span>
+                            </div>
+                            <div className='flex items-center overflow-hidden [&>svg]:size-4 [&>svg]:shrink-0'>
+                                <IconArrowsVertical />&nbsp;
+                                <span className="font-light">Haut.</span>&nbsp;
+                                <span className="font-medium"><SizeChip size={plant.height} /></span>
+                            </div>
+                            <div className='flex items-center overflow-hidden [&>svg]:size-4 [&>svg]:shrink-0'>
+                                <IconArrowsHorizontal />&nbsp;
+                                <span className="font-light">Larg.</span>&nbsp;
+                                <span className="font-medium"><SizeChip size={plant.spread} /></span>
                             </div>
                         </div>
-                    )}
-                    <div className="text-sm text-muted-foreground">
-                        {!!plant.height && plant.height > 0 && (
-                            <div className='flex items-center overflow-hidden [&>svg]:size-4 [&>svg]:shrink-0'>
-                                <IconArrowsVertical />
-                                &nbsp;
-                                <span className='flex w-full'>
-                                    <span className="text-sm font-medium"><b>Hauteur</b>&nbsp;<SizeChip size={plant.height} /></span>
-                                </span>
+                        <div className='flex-col'>
+                            <div className='flex'>
+                                <div className='flex-col'>
+                                    {!!plant.family && <div className="font-light">Fam.</div>}
+                                    {!!plant.genus && <div className="font-light">Genre</div>}
+                                    {!!plant.species && <div className="font-light">Esp.</div>}
+                                </div>
+                                <div className='flex-col grow ml-4'>
+                                    {!!plant.family && <div className="font-medium italic">{plant.family}</div>}
+                                    {!!plant.genus && <div className="font-medium italic">{plant.genus}</div>}
+                                    {!!plant.species && <div className="font-medium italic">{plant.species}</div>}
+                                </div>
                             </div>
-                        )}
-                        {!!plant.spread && plant.spread > 0 && (
-                            <div className='flex items-center overflow-hidden [&>svg]:size-4 [&>svg]:shrink-0'>
-                                <IconArrowsHorizontal />
-                                &nbsp;
-                                <span className='flex w-full'>
-                                    <span className="text-sm font-medium"><b>Largeur</b>&nbsp;<SizeChip size={plant.spread} /></span>
-                                </span>
-                            </div>
-                        )}
-                        {/*                         {!!plant.functionalGroup && (
-                            <div className='flex items-center overflow-hidden [&>svg]:size-4 [&>svg]:shrink-0'>
-                                &nbsp;
-                                <span className='flex w-full'>
-                                    <span className="text-sm font-medium"><b>Groupe fonctionnel</b>&nbsp;{plant.functionalGroup}</span>
-                                </span>
-                            </div>
-                        )} */}
-                        {/*                         {!!plant.genus && (
-                            <div className='flex items-center overflow-hidden [&>svg]:size-4 [&>svg]:shrink-0'>
-                                <span className='flex w-full'>
-                                    <span className="text-sm font-medium"><b>Genre</b>&nbsp;{plant.genus}</span>
-                                </span>
-                            </div>
-                        )}
-                        {!!plant.species && (
-                            <div className='flex items-center overflow-hidden [&>svg]:size-4 [&>svg]:shrink-0'>
-                                <span className='flex w-full'>
-                                    <span className="text-sm font-medium"><b>Espèce</b>&nbsp;{plant.species}</span>
-                                </span>
-                            </div>
-                        )} */}
+                        </div>
                     </div>
                     <div className="flex flex-wrap gap-2">
                         {/* {plant.nurseries.map((n, i) => <NurseryChip key={n.name + i} n={n} />)} */}
                     </div>
                 </CardContent>
-                <CardFooter>
-                    <Link href={`/plant/${plant.code}`}>Go</Link>
-                </CardFooter>
             </Card>
-        </motion.div>
+        </motion.div >
     )
 };
 
