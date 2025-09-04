@@ -7,7 +7,6 @@ import { Nursery, Plant } from "@/types/plant";
 import { getPlantType, PlantType, PLANTTYPES, PlantTypeValue } from "@/types/plantType";
 import { IconArrowsHorizontal, IconArrowsVertical, IconWorld } from "@tabler/icons-react";
 import Link from "next/link";
-import { Button } from "./ui/button";
 
 const prettySun = (s) => ({ "plein-soleil": "Plein soleil", "mi-ombre": "Mi-ombre", "ombre": "Ombre" }[s] || s);
 
@@ -36,7 +35,6 @@ export const PlantCard = ({ plant }: { plant: Plant; }) => {
 
     var latin = originalName;
     var cultivar = undefined;
-    var comment = matches && matches[1];
     if (nameWithCultivar.length > 1) {
         cultivar = nameWithCultivar[1];
         latin = nameWithCultivar[0].trim();
@@ -106,7 +104,6 @@ export const PlantCard = ({ plant }: { plant: Plant; }) => {
                                 {/*{comment && <span> ({comment})</span>}*/}
                             </CardTitle>
                             <div className="text-sm text-muted-foreground">{plant.name}</div>
-                            {/*<p className="text-sm text-muted-foreground">{plant.code}</p>*/}
                         </div>
 
                         <CodeChip />
