@@ -10,6 +10,7 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Filters } from "@/types/filters";
 import { PLANTTYPES } from "@/types/plantType";
+import { FUNCTIONALGROUPS } from "@/types/functional-groups";
 
 const ZONES = ['0a', '0b', '1a', '1b', '2a', '2b', '3a', '3b', '4a', '4b', '5a', '5b', '6a', '6b', '7a', '7b', '8a', '8b', '9a'];
 const SOILS = ["sableux", "limoneux", "argileux", "riche", "pauvre", "acide", "alcalin"];
@@ -177,6 +178,16 @@ export function NavPlantFilters({ onApplyFilters }:
                             <SelectContent>
                                 <SelectItem value=".">Toutes</SelectItem>
                                 {BLOOMS.map(b => (<SelectItem key={b} value={b}>{b}</SelectItem>))}
+                            </SelectContent>
+                        </Select>
+                    </SidebarMenuFilterItem>
+
+                    <SidebarMenuFilterItem icon={IconFlower} title='Groupe fonct.'>
+                        <Select value={filters.functionalGroup || ""} onValueChange={v => setFilters(f => ({ ...f, functionalGroup: v || undefined }))}>
+                            <SelectTrigger className="grow"><SelectValue placeholder="Tous" /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value=".">Tous</SelectItem>
+                                {FUNCTIONALGROUPS.map(b => (<SelectItem key={b.value} value={b.value}>{`${b.value} - ${b.label}`}</SelectItem>))}
                             </SelectContent>
                         </Select>
                     </SidebarMenuFilterItem>

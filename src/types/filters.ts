@@ -16,4 +16,5 @@ export interface Filters {
     native?: boolean;
     height?: [number, number];
     spread?: [number, number];
+    functionalGroup?: string;
 }

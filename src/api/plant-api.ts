@@ -22,6 +22,7 @@ export class plantApi {
             filters.height && filters.height.length && params.append('heightMax', filters.height[1].toString());
             filters.spread && filters.spread.length && params.append('spreadMin', filters.spread[0].toString());
             filters.spread && filters.spread.length && params.append('spreadMax', filters.spread[1].toString());
+            filters.functionalGroup && filters.functionalGroup !== '.' && params.append('functionalGroup', filters.functionalGroup);
         }
 
         const query = filters && `?${params.toString()}` || '';
