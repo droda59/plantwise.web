@@ -56,7 +56,6 @@ const SizeChip = ({ size }: { size?: number }) => {
 export default function Page({ params }) {
     const router = useRouter();
 
-    console.log(router);
     const { code } = router.query;
     if (!code) return;
 

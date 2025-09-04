@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import { IconArrowsHorizontal, IconArrowsVertical, IconDroplet, IconDropletFilled, IconFeather, IconFlower, IconPalette, IconPlant, IconSalt, IconSandbox, IconSearch, IconSun, IconWorld, IconX } from "@tabler/icons-react";
 
@@ -19,26 +19,6 @@ const COLORS = ["blanc", "jaune", "orange", "rouge", "rose", "mauve", "bleu", "v
 const SALTS = ["haute", "moyenne", "faible"];
 const BLOOMS = ["printemps", "été", "automne"];
 const prettySun = s => ({ "plein-soleil": "Plein soleil", "mi-ombre": "Mi-ombre", "ombre": "Ombre" }[s] || s);
-
-const DEFAULT_FILTERS: Filters = {
-    q: '',
-
-    // Conditions du site
-    zone: undefined,
-    soil: undefined,
-    sun: undefined,
-    saltConditions: undefined,
-    droughtTolerant: undefined,
-    floodTolerant: undefined,
-
-    // Conditions de la plante
-    type: undefined,
-    color: undefined,
-    bloom: undefined,
-    native: undefined,
-    height: [0, 3000],
-    spread: [0, 3000],
-};
 
 const SidebarMenuFilterItem = ({
     icon: Icon,
@@ -78,13 +58,20 @@ const SizeChip = (
     );
 }
 
-export function NavPlantFilters({ onApplyFilters }:
+export function NavPlantFilters({ filters: DEFAULT_FILTERS, onApplyFilters }:
     {
-        onApplyFilters: (filters: Filters) => void
+        filters?: Filters,
+        onApplyFilters: (filters: Filters) => void,
     }) {
     const [filters, setFilters] = useState(DEFAULT_FILTERS);
+    const [searchDisabled, setSearchDisabled] = useState(false);
 
     const resetFilters = () => setFilters(DEFAULT_FILTERS);
+
+    useEffect(() => {
+        const isDefaultFilters = JSON.stringify(filters) === JSON.stringify(DEFAULT_FILTERS);
+        setSearchDisabled(isDefaultFilters);
+    }, [filters]);
 
     return (
         <SidebarGroup>
@@ -242,7 +229,7 @@ export function NavPlantFilters({ onApplyFilters }:
                     <IconX style={{ display: 'initial' }} className="w-4 h-4 mr-1" />
                     Reset
                 </Button>
-                <Button style={{ display: 'initial' }} className="flex-col grow" type="submit" onClick={() => onApplyFilters(filters)}>
+                <Button style={{ display: 'initial' }} className="flex-col grow" type="submit" onClick={() => onApplyFilters(filters)} disabled={searchDisabled}>
                     <IconSearch style={{ display: 'initial' }} className="w-4 h-4 mr-1" />
                     Rechercher
                 </Button>

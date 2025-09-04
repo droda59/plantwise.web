@@ -2,12 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSearchParams } from 'next/navigation';
+
 import { PlantCard } from '@/components/plant-card';
 import { IconSearch } from '@tabler/icons-react';
 
 import { plantApiInstance } from '@/api/plant-api';
 import { Plant } from '@/types/plant';
-import { Filters } from '@/types/filters';
+import { DEFAULT_FILTERS, Filters } from '@/types/filters';
 import { FilterSidebar } from "@/components/filter-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import {
@@ -18,8 +20,30 @@ import { SectionTitle } from '@/components/section-title';
 import "@/styles/globals.css";
 
 export default function Page() {
+    const searchParams = useSearchParams();
     const [filteredPlants, setFilteredPlants] = useState<Plant[]>([]);
     const [loading, setLoading] = useState(false);
+    const [filters, setFilters] = useState(DEFAULT_FILTERS);
+    
+    useEffect(() => {
+        if (!searchParams) return;
+
+        setFilters({
+            q: searchParams.get('q') || DEFAULT_FILTERS.q,
+            type: searchParams.get('type') || DEFAULT_FILTERS.type,
+            zone: searchParams.get('zone') || DEFAULT_FILTERS.zone,
+            native: searchParams.get('native') ? true : DEFAULT_FILTERS.native,
+            droughtTolerant: searchParams.get('droughtTolerant') ? true : DEFAULT_FILTERS.droughtTolerant,
+            floodTolerant: searchParams.get('floodTolerant') ? true : DEFAULT_FILTERS.floodTolerant,
+            functionalGroup: searchParams.get('functionalGroup') || DEFAULT_FILTERS.functionalGroup,
+            height: searchParams.get('heightMin') && searchParams.get('heightMax')
+                ? [parseInt(searchParams.get('heightMax') as string, 10) / 100, parseInt(searchParams.get('heightMax') as string, 10) / 100]
+                : DEFAULT_FILTERS.height,
+            spread: searchParams.get('spreadMin') && searchParams.get('spreadMax')
+                ? [parseInt(searchParams.get('spreadMax') as string, 10) / 100, parseInt(searchParams.get('spreadMax') as string, 10) / 100]
+                : DEFAULT_FILTERS.height,
+        });
+    }, [searchParams]);
 
     const fetchPlants = async (filters?: Filters) => {
         setFilteredPlants([]);
@@ -32,8 +56,12 @@ export default function Page() {
     };
 
     useEffect(() => {
-        fetchPlants();
-    }, []);
+        const isDefaultFilters = JSON.stringify(filters) === JSON.stringify(DEFAULT_FILTERS);
+
+        if (!isDefaultFilters) {
+            fetchPlants(filters);
+        }
+    }, [filters]);
 
     const applyFilters = (filters: Filters) => fetchPlants(filters);
 
@@ -41,12 +69,12 @@ export default function Page() {
         <SidebarProvider
             style={
                 {
-                    "--sidebar-width": "calc(var(--spacing) * 72)",
+                    "--sidebar-width": "calc(var(--spacing) * 80)",
                     "--header-height": "calc(var(--spacing) * 12)",
                 } as React.CSSProperties
             }
         >
-            <FilterSidebar variant="inset" onApplyFilters={applyFilters} />
+            <FilterSidebar filters={filters} variant="inset" onApplyFilters={applyFilters} />
             <SidebarInset>
                 <SiteHeader />
                 <div className="@container/main flex gap-2 flex  items-center px-6">

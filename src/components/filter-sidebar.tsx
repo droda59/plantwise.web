@@ -14,9 +14,11 @@ import { NavPlantFilters } from "./nav-plant-filters"
 import { SectionTitle } from "./section-title"
 
 export function FilterSidebar({
+    filters,
     onApplyFilters,
     ...props
 }: React.ComponentProps<typeof Sidebar> & {
+    filters?: Filters,
     onApplyFilters: (filters: Filters) => void
 }) {
     return (
@@ -32,7 +34,7 @@ export function FilterSidebar({
             </SidebarHeader>
             <SidebarContent>
                 {/* add quick access to plant code */}
-                <NavPlantFilters onApplyFilters={onApplyFilters} />
+                <NavPlantFilters filters={filters} onApplyFilters={onApplyFilters} />
             </SidebarContent>
         </Sidebar >
     )

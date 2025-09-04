@@ -2,29 +2,38 @@ import { PlantFactory } from "@/lib/plantFactory";
 import { Filters } from "@/types/filters";
 import { Plant } from "@/types/plant";
 
+export function createSearchParams(filters?: Filters) {
+    const params = new URLSearchParams();
+    if (filters) {
+        filters.q && params.set('q', filters.q.toLowerCase());
+        filters.zone && filters.zone !== '.' && params.set('zone', filters.zone.toString());
+        filters.soil && filters.soil !== '.' && params.set('soil', filters.soil);
+        filters.sun && filters.sun !== '.' && params.set('sun', filters.sun);
+        filters.saltConditions && params.set('saltConditions', filters.saltConditions);
+        filters.droughtTolerant && params.set('droughtTolerant', 'true');
+        filters.floodTolerant && params.set('floodTolerant', 'true');
+
+        filters.type && filters.type !== '.' && params.set('type', filters.type);
+        filters.color && filters.color !== '.' && params.set('color', filters.color);
+        filters.bloom && filters.bloom !== '.' && params.set('bloom', filters.bloom);
+        filters.native && params.set('native', 'true');
+        if (filters.height && filters.height.length === 2) {
+            filters.height[0] > 0 && params.set('heightMin', filters.height[0].toString());
+            filters.height[1] < 3000 && params.set('heightMax', filters.height[1].toString());
+        }
+        if (filters.spread && filters.spread.length === 2) {
+            filters.spread[0] > 0 && params.set('spreadMin', filters.spread[0].toString());
+            filters.spread[1] < 3000 && params.set('spreadMax', filters.spread[1].toString());
+        }
+        filters.functionalGroup && filters.functionalGroup !== '.' && params.set('functionalGroup', filters.functionalGroup);
+    }
+
+    return params;
+}
+
 export class plantApi {
     async getPlants(filters?: Filters): Promise<Plant[]> {
-        const params = new URLSearchParams();
-        if (filters) {
-            filters.q && params.append('q', filters.q.toLowerCase());
-            filters.zone && filters.zone !== '.' && params.append('zone', filters.zone.toString());
-            filters.soil && filters.soil !== '.' && params.append('soil', filters.soil);
-            filters.sun && filters.sun !== '.' && params.append('sun', filters.sun);
-            filters.saltConditions && params.append('saltConditions', filters.saltConditions);
-            filters.droughtTolerant && params.append('droughtTolerant', 'true');
-            filters.floodTolerant && params.append('floodTolerant', 'true');
-
-            filters.type && filters.type !== '.' && params.append('type', filters.type);
-            filters.color && filters.color !== '.' && params.append('color', filters.color);
-            filters.bloom && filters.bloom !== '.' && params.append('bloom', filters.bloom);
-            filters.native && params.append('native', 'true');
-            filters.height && filters.height.length && params.append('heightMin', filters.height[0].toString());
-            filters.height && filters.height.length && params.append('heightMax', filters.height[1].toString());
-            filters.spread && filters.spread.length && params.append('spreadMin', filters.spread[0].toString());
-            filters.spread && filters.spread.length && params.append('spreadMax', filters.spread[1].toString());
-            filters.functionalGroup && filters.functionalGroup !== '.' && params.append('functionalGroup', filters.functionalGroup);
-        }
-
+        const params = createSearchParams(filters);
         const query = filters && `?${params.toString()}` || '';
         const response = await fetch(`http://localhost:3000/api/plants${query}`, {
             method: 'GET',

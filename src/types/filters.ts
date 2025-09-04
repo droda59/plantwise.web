@@ -18,3 +18,23 @@ export interface Filters {
     spread?: [number, number];
     functionalGroup?: string;
 }
+export const DEFAULT_FILTERS: Filters = {
+    q: '',
+
+    // Conditions du site
+    zone: undefined,
+    soil: undefined,
+    sun: undefined,
+    saltConditions: undefined,
+    droughtTolerant: undefined,
+    floodTolerant: undefined,
+
+    // Conditions de la plante
+    type: undefined,
+    color: undefined,
+    bloom: undefined,
+    native: undefined,
+    height: [0, 3000],
+    spread: [0, 3000],
+    functionalGroup: undefined,
+};

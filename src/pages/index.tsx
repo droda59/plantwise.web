@@ -1,29 +1,23 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { PlantCard } from '@/components/plant-card';
-import { Plant } from '@/types/plant';
-import { plantApiInstance } from '@/api/plant-api';
-
-import { FilterSidebar } from "@/components/filter-sidebar"
-import { SiteHeader } from "@/components/site-header"
-import {
-    SidebarInset,
-    SidebarProvider,
-} from "@/components/ui/sidebar"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { IconSearch } from '@tabler/icons-react';
-import { SectionTitle } from '@/components/section-title';
-import { Filters } from '@/types/filters';
-import Link from 'next/link';
-import { PlantFilters } from '@/components/plant-filters';
+import React from 'react';
 import { useRouter } from 'next/navigation';
+
+import { createSearchParams } from '@/api/plant-api';
+import { SiteHeader } from "@/components/site-header"
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { PlantFilters } from '@/components/plant-filters';
+import { Filters } from '@/types/filters';
 
 export default function Home() {
     const router = useRouter();
 
-    const applyFilters = (filters: Filters) => router.push('/search');
+    const applyFilters = (filters: Filters) => {
+        const params = createSearchParams(filters);
+        const query = filters && `?${params.toString()}` || '';
+            
+        router.push(`/search${query}`);
+    };
 
     return (
         <div className='font-sans grid justify-items-center p-8 gap-16'>
