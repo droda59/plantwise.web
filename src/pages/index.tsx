@@ -26,16 +26,14 @@ export default function Home() {
     const applyFilters = (filters: Filters) => router.push('/search');
 
     return (
-        <div className='font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20'>
-            <main className='flex flex-col gap-[32px] row-start-2 items-center '>
-                <Card className="shadow-sm hover:shadow-md transition rounded-xs" style={{ position: 'relative' }}>
+        <div className='font-sans grid justify-items-center p-8 gap-16'>
+            <main className='flex row-start-2 items-center '>
+                <Card className="shadow-none rounded-xs" style={{ position: 'relative' }}>
                     <CardHeader className="pb-2">
                         <SiteHeader />
                     </CardHeader>
                     <CardContent className="grid">
-                        <main className='flex items-center '>
-                            <PlantFilters onApplyFilters={applyFilters} />
-                        </main>
+                        <PlantFilters onApplyFilters={applyFilters} />
                     </CardContent>
                 </Card>
             </main>

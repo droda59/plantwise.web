@@ -3,7 +3,7 @@ import { Search } from "lucide-react";
 import { IconArrowsHorizontal, IconArrowsVertical, IconDroplet, IconDropletFilled, IconFeather, IconFlower, IconPalette, IconPlant, IconSalt, IconSandbox, IconSearch, IconSun, IconWorld, IconX } from "@tabler/icons-react";
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuItem } from "@/components/ui/sidebar";
+import { SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
@@ -88,7 +88,7 @@ export function PlantFilters({ onApplyFilters }:
 
     return (
         <SidebarGroup>
-            <SidebarGroupContent className="flex flex-col gap-2 p-2">
+            <SidebarGroupContent className="flex flex-col p-2">
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <Search className="w-4 h-4 absolute left-2 top-1/2 -translate-y-1/2 opacity-60" />
@@ -97,59 +97,58 @@ export function PlantFilters({ onApplyFilters }:
                 </SidebarMenu>
             </SidebarGroupContent>
 
-            <SidebarGroupContent className="flex flex-col gap-2 p-2">
-                <SidebarMenu>
-                    <SidebarGroupLabel>Conditions du site</SidebarGroupLabel>
-                    <SidebarMenuFilterItem icon={IconWorld} title='Zone'>
-                        <Select value={filters.zone ?? ""} onValueChange={v => setFilters(f => ({ ...f, zone: v || undefined }))}>
-                            <SelectTrigger className="grow"><SelectValue placeholder="Toutes" /></SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value=".">Toutes</SelectItem>
-                                {ZONES.map(z => (<SelectItem key={z} value={z}>{z}</SelectItem>))}
-                            </SelectContent>
-                        </Select>
-                    </SidebarMenuFilterItem>
+            <SidebarGroupContent className='grid grid-cols-2 gap-6 mt-4'>
+                    <SidebarMenu>
+                        <SidebarGroupLabel>Conditions du site</SidebarGroupLabel>
+                        <SidebarMenuFilterItem icon={IconWorld} title='Zone'>
+                            <Select value={filters.zone ?? ""} onValueChange={v => setFilters(f => ({ ...f, zone: v || undefined }))}>
+                                <SelectTrigger className="grow"><SelectValue placeholder="Toutes" /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value=".">Toutes</SelectItem>
+                                    {ZONES.map(z => (<SelectItem key={z} value={z}>{z}</SelectItem>))}
+                                </SelectContent>
+                            </Select>
+                        </SidebarMenuFilterItem>
 
-                    <SidebarMenuFilterItem icon={IconSandbox} title='Sol'>
-                        <Select value={filters.soil || ""} onValueChange={v => setFilters(f => ({ ...f, soil: v || undefined }))}>
-                            <SelectTrigger className="grow"><SelectValue placeholder="Tous" /></SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value=".">Tous</SelectItem>
-                                {SOILS.map(s => (<SelectItem key={s} value={s}>{s}</SelectItem>))}
-                            </SelectContent>
-                        </Select>
-                    </SidebarMenuFilterItem>
+                        <SidebarMenuFilterItem icon={IconSandbox} title='Sol'>
+                            <Select value={filters.soil || ""} onValueChange={v => setFilters(f => ({ ...f, soil: v || undefined }))}>
+                                <SelectTrigger className="grow"><SelectValue placeholder="Tous" /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value=".">Tous</SelectItem>
+                                    {SOILS.map(s => (<SelectItem key={s} value={s}>{s}</SelectItem>))}
+                                </SelectContent>
+                            </Select>
+                        </SidebarMenuFilterItem>
 
-                    <SidebarMenuFilterItem icon={IconSun} title='Ensoleillement'>
-                        <Select value={filters.sun || ""} onValueChange={v => setFilters(f => ({ ...f, sun: v || undefined }))}>
-                            <SelectTrigger className="grow"><SelectValue placeholder="Tous" /></SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value=".">Tous</SelectItem>
-                                {SUNS.map(s => (<SelectItem key={s} value={s}>{prettySun(s)}</SelectItem>))}
-                            </SelectContent>
-                        </Select>
-                    </SidebarMenuFilterItem>
+                        <SidebarMenuFilterItem icon={IconSun} title='Ensoleillement'>
+                            <Select value={filters.sun || ""} onValueChange={v => setFilters(f => ({ ...f, sun: v || undefined }))}>
+                                <SelectTrigger className="grow"><SelectValue placeholder="Tous" /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value=".">Tous</SelectItem>
+                                    {SUNS.map(s => (<SelectItem key={s} value={s}>{prettySun(s)}</SelectItem>))}
+                                </SelectContent>
+                            </Select>
+                        </SidebarMenuFilterItem>
 
-                    <SidebarMenuFilterItem icon={IconSalt} title='Présence de sels'>
-                        <Select value={filters.saltConditions || ""} onValueChange={v => setFilters(f => ({ ...f, saltConditions: v || undefined }))}>
-                            <SelectTrigger className="grow"><SelectValue placeholder="Toutes" /></SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value=".">Toutes</SelectItem>
-                                {SALTS.map(c => (<SelectItem key={c} value={c}>{c}</SelectItem>))}
-                            </SelectContent>
-                        </Select>
-                    </SidebarMenuFilterItem>
+                        <SidebarMenuFilterItem icon={IconSalt} title='Présence de sels'>
+                            <Select value={filters.saltConditions || ""} onValueChange={v => setFilters(f => ({ ...f, saltConditions: v || undefined }))}>
+                                <SelectTrigger className="grow"><SelectValue placeholder="Toutes" /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value=".">Toutes</SelectItem>
+                                    {SALTS.map(c => (<SelectItem key={c} value={c}>{c}</SelectItem>))}
+                                </SelectContent>
+                            </Select>
+                        </SidebarMenuFilterItem>
 
-                    <SidebarMenuFilterItem icon={IconDroplet} label='Sujet à la sécheresse' target='droughtTolerant'>
-                        <Switch checked={!!filters.droughtTolerant} onCheckedChange={v => setFilters(f => ({ ...f, droughtTolerant: v || undefined }))} id="droughtTolerant" />
-                    </SidebarMenuFilterItem>
+                        <SidebarMenuFilterItem icon={IconDroplet} label='Sujet à la sécheresse' target='droughtTolerant'>
+                            <Switch checked={!!filters.droughtTolerant} onCheckedChange={v => setFilters(f => ({ ...f, droughtTolerant: v || undefined }))} id="droughtTolerant" />
+                        </SidebarMenuFilterItem>
 
-                    <SidebarMenuFilterItem icon={IconDropletFilled} label="Sujet à l'excès d'eau" target='floodTolerant'>
-                        <Switch checked={!!filters.floodTolerant} onCheckedChange={v => setFilters(f => ({ ...f, floodTolerant: v || undefined }))} id="floodTolerant" />
-                    </SidebarMenuFilterItem>
-                </SidebarMenu>
-            </SidebarGroupContent>
-            <SidebarGroupContent className="flex flex-col gap-2 p-2">
+                        <SidebarMenuFilterItem icon={IconDropletFilled} label="Sujet à l'excès d'eau" target='floodTolerant'>
+                            <Switch checked={!!filters.floodTolerant} onCheckedChange={v => setFilters(f => ({ ...f, floodTolerant: v || undefined }))} id="floodTolerant" />
+                        </SidebarMenuFilterItem>
+                    </SidebarMenu>
+
                 <SidebarMenu>
                     <SidebarGroupLabel>Conditions de la plante</SidebarGroupLabel>
                     <SidebarMenuFilterItem icon={IconPlant} title='Type'>
@@ -237,16 +236,19 @@ export function PlantFilters({ onApplyFilters }:
                 </SidebarMenu>
             </SidebarGroupContent>
 
-            <SidebarGroupContent className="flex gap-2 p-2">
-                <Button style={{ display: 'initial' }} className="flex-col grow" variant="outline" onClick={resetFilters}>
+            <SidebarGroupContent >
+            </SidebarGroupContent>
+
+            <SidebarFooter className="grid grid-cols-2 gap-6 mt-4">
+                <Button variant="outline" onClick={resetFilters}>
                     <IconX style={{ display: 'initial' }} className="w-4 h-4 mr-1" />
                     Reset
                 </Button>
-                <Button style={{ display: 'initial' }} className="flex-col grow" type="submit" onClick={() => onApplyFilters(filters)}>
+                <Button type="submit" onClick={() => onApplyFilters(filters)}>
                     <IconSearch style={{ display: 'initial' }} className="w-4 h-4 mr-1" />
                     Rechercher
                 </Button>
-            </SidebarGroupContent>
+            </SidebarFooter>
         </SidebarGroup >
     );
 }
