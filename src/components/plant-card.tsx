@@ -80,7 +80,7 @@ export const PlantCard = ({ plant }: { plant: Plant; }) => {
 
     return (
         <motion.div layout initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}>
-            <Card className="shadow-sm hover:shadow-md transition rounded-xs" style={{ position: 'relative' }}>
+            <Card className="shadow-sm hover:shadow-lg transition rounded-xs" style={{ position: 'relative' }}>
                 <div className="flex w-full" style={{
                     position: 'absolute',
                     top: 0
