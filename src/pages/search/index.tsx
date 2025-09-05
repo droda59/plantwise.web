@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import { PlantCard } from '@/components/plant-card';
 import { IconSearch } from '@tabler/icons-react';
 
-import { plantApiInstance } from '@/api/plant-api';
+import { createSearchParams, plantApiInstance } from '@/api/plant-api';
 import { Plant } from '@/types/plant';
 import { DEFAULT_FILTERS, Filters } from '@/types/filters';
 import { FilterSidebar } from "@/components/filter-sidebar"
@@ -20,13 +20,25 @@ import { SectionTitle } from '@/components/section-title';
 import "@/styles/globals.css";
 
 export default function Page() {
+    const router = useRouter();
     const searchParams = useSearchParams();
     const [filteredPlants, setFilteredPlants] = useState<Plant[]>([]);
     const [loading, setLoading] = useState(false);
     const [filters, setFilters] = useState(DEFAULT_FILTERS);
-    
+
     useEffect(() => {
         if (!searchParams) return;
+
+        const heightMin = searchParams.get('heightMin');
+        const heightMax = searchParams.get('heightMax');
+        const spreadMin = searchParams.get('spreadMin');
+        const spreadMax = searchParams.get('spreadMax');
+        const height = [0, 3000];
+        const spread = [0, 3000];
+        if (heightMin) height[0] = parseInt(heightMin as string, 10);
+        if (heightMax) height[1] = parseInt(heightMax as string, 10);
+        if (spreadMin) spread[0] = parseInt(spreadMin as string, 10);
+        if (spreadMax) spread[1] = parseInt(spreadMax as string, 10);
 
         setFilters({
             q: searchParams.get('q') || DEFAULT_FILTERS.q,
@@ -36,12 +48,8 @@ export default function Page() {
             droughtTolerant: searchParams.get('droughtTolerant') ? true : DEFAULT_FILTERS.droughtTolerant,
             floodTolerant: searchParams.get('floodTolerant') ? true : DEFAULT_FILTERS.floodTolerant,
             functionalGroup: searchParams.get('functionalGroup') || DEFAULT_FILTERS.functionalGroup,
-            height: searchParams.get('heightMin') && searchParams.get('heightMax')
-                ? [parseInt(searchParams.get('heightMax') as string, 10) / 100, parseInt(searchParams.get('heightMax') as string, 10) / 100]
-                : DEFAULT_FILTERS.height,
-            spread: searchParams.get('spreadMin') && searchParams.get('spreadMax')
-                ? [parseInt(searchParams.get('spreadMax') as string, 10) / 100, parseInt(searchParams.get('spreadMax') as string, 10) / 100]
-                : DEFAULT_FILTERS.height,
+            height,
+            spread,
         });
     }, [searchParams]);
 
@@ -56,14 +64,23 @@ export default function Page() {
     };
 
     useEffect(() => {
+        console.log('JSON.stringify(filters)', JSON.stringify(filters));
+        console.log('JSON.stringify(DEFAULT_FILTERS)', JSON.stringify(DEFAULT_FILTERS));
         const isDefaultFilters = JSON.stringify(filters) === JSON.stringify(DEFAULT_FILTERS);
-
+        console.log('isDefaultFilters', isDefaultFilters);
         if (!isDefaultFilters) {
             fetchPlants(filters);
         }
     }, [filters]);
 
-    const applyFilters = (filters: Filters) => fetchPlants(filters);
+    const applyFilters = (filters: Filters) => {
+        // fetchPlants(filters);
+
+        const params = createSearchParams(filters);
+        const query = filters && `?${params.toString()}` || '';
+
+        router.push(`/search${query}`);
+    };
 
     return (
         <SidebarProvider

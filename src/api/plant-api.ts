@@ -17,11 +17,11 @@ export function createSearchParams(filters?: Filters) {
         filters.color && filters.color !== '.' && params.set('color', filters.color);
         filters.bloom && filters.bloom !== '.' && params.set('bloom', filters.bloom);
         filters.native && params.set('native', 'true');
-        if (filters.height && filters.height.length === 2) {
+        if (filters.height) {
             filters.height[0] > 0 && params.set('heightMin', filters.height[0].toString());
             filters.height[1] < 3000 && params.set('heightMax', filters.height[1].toString());
         }
-        if (filters.spread && filters.spread.length === 2) {
+        if (filters.spread) {
             filters.spread[0] > 0 && params.set('spreadMin', filters.spread[0].toString());
             filters.spread[1] < 3000 && params.set('spreadMax', filters.spread[1].toString());
         }

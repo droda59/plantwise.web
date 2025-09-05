@@ -18,7 +18,7 @@ export function FilterSidebar({
     onApplyFilters,
     ...props
 }: React.ComponentProps<typeof Sidebar> & {
-    filters?: Filters,
+    filters: Filters,
     onApplyFilters: (filters: Filters) => void
 }) {
     return (

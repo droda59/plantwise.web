@@ -8,7 +8,6 @@ import { SiteHeader } from "@/components/site-header"
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { PlantFilters } from '@/components/plant-filters';
 import { Filters } from '@/types/filters';
-import { Button } from '@/components/ui/button';
 
 export default function Home() {
     const router = useRouter();
@@ -16,7 +15,7 @@ export default function Home() {
     const applyFilters = (filters: Filters) => {
         const params = createSearchParams(filters);
         const query = filters && `?${params.toString()}` || '';
-            
+
         router.push(`/search${query}`);
     };
 
@@ -31,9 +30,6 @@ export default function Home() {
                         <PlantFilters onApplyFilters={applyFilters} />
                     </CardContent>
                 </Card>
-                <Button style={{ display: 'initial' }} className="flex-col grow" type="submit" onClick={() => plantApiInstance.importPlants()}>
-import
-                </Button>
             </main>
         </div>
     );

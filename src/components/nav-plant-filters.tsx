@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
-import { Filters } from "@/types/filters";
+import { DEFAULT_FILTERS, Filters } from "@/types/filters";
 import { PLANTTYPES } from "@/types/plantType";
 import { FUNCTIONALGROUPS } from "@/types/functional-groups";
 
@@ -58,15 +58,21 @@ const SizeChip = (
     );
 }
 
-export function NavPlantFilters({ filters: DEFAULT_FILTERS, onApplyFilters }:
+export function NavPlantFilters(props:
     {
-        filters?: Filters,
+        filters: Filters,
         onApplyFilters: (filters: Filters) => void,
     }) {
-    const [filters, setFilters] = useState(DEFAULT_FILTERS);
+    const [filters, setFilters] = useState(props.filters);
     const [searchDisabled, setSearchDisabled] = useState(false);
 
-    const resetFilters = () => setFilters(DEFAULT_FILTERS);
+    const resetFilters = () => {
+        setFilters(DEFAULT_FILTERS);
+    };
+
+    useEffect(() => {
+        setFilters(props.filters);
+    }, [props]);
 
     useEffect(() => {
         const isDefaultFilters = JSON.stringify(filters) === JSON.stringify(DEFAULT_FILTERS);
@@ -193,8 +199,8 @@ export function NavPlantFilters({ filters: DEFAULT_FILTERS, onApplyFilters }:
                                 min={0}
                                 max={3000}
                                 step={10}
-                                defaultValue={[0, 3000]}
-                                onValueChange={v => setFilters(f => ({ ...f, height: v || undefined }))}
+                                defaultValue={[filters.height && filters.height[0] || 0, filters.height && filters.height[1] || 3000]}
+                                onValueChange={v => setFilters(f => ({ ...f, height: v }))}
                             />
                         </div>
                     </SidebarMenuItem>
@@ -212,8 +218,8 @@ export function NavPlantFilters({ filters: DEFAULT_FILTERS, onApplyFilters }:
                                 min={0}
                                 max={3000}
                                 step={10}
-                                defaultValue={[0, 3000]}
-                                onValueChange={v => setFilters(f => ({ ...f, spread: v || undefined }))}
+                                defaultValue={[filters.spread && filters.spread[0] || 0, filters.spread && filters.spread[1] || 3000]}
+                                onValueChange={v => setFilters(f => ({ ...f, spread: v }))}
                             />
                         </div>
                     </SidebarMenuItem>
@@ -229,7 +235,7 @@ export function NavPlantFilters({ filters: DEFAULT_FILTERS, onApplyFilters }:
                     <IconX style={{ display: 'initial' }} className="w-4 h-4 mr-1" />
                     Reset
                 </Button>
-                <Button style={{ display: 'initial' }} className="flex-col grow" type="submit" onClick={() => onApplyFilters(filters)} disabled={searchDisabled}>
+                <Button style={{ display: 'initial' }} className="flex-col grow" type="submit" onClick={() => props.onApplyFilters(filters)} disabled={searchDisabled}>
                     <IconSearch style={{ display: 'initial' }} className="w-4 h-4 mr-1" />
                     Rechercher
                 </Button>

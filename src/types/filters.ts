@@ -17,7 +17,8 @@ export interface Filters {
     height?: [number, number];
     spread?: [number, number];
     functionalGroup?: string;
-}
+};
+
 export const DEFAULT_FILTERS: Filters = {
     q: '',
 
