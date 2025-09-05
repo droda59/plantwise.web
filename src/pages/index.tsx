@@ -1,16 +1,19 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { createSearchParams, plantApiInstance } from '@/api/plant-api';
 import { SiteHeader } from "@/components/site-header"
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { PlantFilters } from '@/components/plant-filters';
-import { Filters } from '@/types/filters';
+import { PlantFilters } from '@/components/features/home/plant-filters';
+import { DEFAULT_FILTERS, Filters } from '@/types/filters';
 
 export default function Home() {
     const router = useRouter();
+    const [filters, setFilters] = useState(DEFAULT_FILTERS);
+
+    const resetFilters = () => setFilters(DEFAULT_FILTERS);
 
     const applyFilters = (filters: Filters) => {
         const params = createSearchParams(filters);
@@ -27,7 +30,7 @@ export default function Home() {
                         <SiteHeader />
                     </CardHeader>
                     <CardContent className="grid">
-                        <PlantFilters onApplyFilters={applyFilters} />
+                        <PlantFilters filters={filters} onApplyFilters={applyFilters} onResetFilters={resetFilters} />
                     </CardContent>
                 </Card>
             </main>

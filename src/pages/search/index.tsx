@@ -10,7 +10,7 @@ import { IconSearch } from '@tabler/icons-react';
 import { createSearchParams, plantApiInstance } from '@/api/plant-api';
 import { Plant } from '@/types/plant';
 import { DEFAULT_FILTERS, Filters } from '@/types/filters';
-import { FilterSidebar } from "@/components/filter-sidebar"
+import { FilterSidebar } from "@/components/features/search/filter-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import {
     SidebarInset,
@@ -82,6 +82,10 @@ export default function Page() {
         router.push(`/search${query}`);
     };
 
+    const resetFilters = () => {
+        setFilters(DEFAULT_FILTERS);
+    };
+
     return (
         <SidebarProvider
             style={
@@ -91,7 +95,7 @@ export default function Page() {
                 } as React.CSSProperties
             }
         >
-            <FilterSidebar filters={filters} variant="inset" onApplyFilters={applyFilters} />
+            <FilterSidebar filters={filters} variant="inset" onApplyFilters={applyFilters} onResetFilters={resetFilters} />
             <SidebarInset>
                 <SiteHeader />
                 <div className="@container/main flex gap-2 flex  items-center px-6">

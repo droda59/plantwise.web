@@ -11,15 +11,17 @@ import {
 import { IconFilter } from "@tabler/icons-react"
 import { Filters } from "@/types/filters"
 import { NavPlantFilters } from "./nav-plant-filters"
-import { SectionTitle } from "./section-title"
+import { SectionTitle } from "@/components/section-title"
 
 export function FilterSidebar({
     filters,
     onApplyFilters,
+    onResetFilters,
     ...props
 }: React.ComponentProps<typeof Sidebar> & {
     filters: Filters,
-    onApplyFilters: (filters: Filters) => void
+    onApplyFilters: (filters: Filters) => void,
+    onResetFilters: () => void
 }) {
     return (
         <Sidebar collapsible="offcanvas" {...props}>
@@ -34,7 +36,7 @@ export function FilterSidebar({
             </SidebarHeader>
             <SidebarContent>
                 {/* add quick access to plant code */}
-                <NavPlantFilters filters={filters} onApplyFilters={onApplyFilters} />
+                <NavPlantFilters filters={filters} onApplyFilters={onApplyFilters} onResetFilters={onResetFilters} />
             </SidebarContent>
         </Sidebar >
     )
