@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Search } from "lucide-react";
-import { IconArrowsHorizontal, IconArrowsVertical, IconDroplet, IconDropletFilled, IconFeather, IconFlower, IconPalette, IconPlant, IconSalt, IconSandbox, IconSearch, IconSun, IconWorld, IconX } from "@tabler/icons-react";
+import { IconArrowsHorizontal, IconArrowsVertical, IconDroplet, IconDropletFilled, IconFeather, IconFlower, IconPalette, IconPlant, IconSalt, IconSandbox, IconSearch, IconSun, IconTrees, IconWorld, IconX } from "@tabler/icons-react";
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuItem } from "@/components/ui/sidebar";
@@ -175,7 +175,7 @@ export function NavPlantFilters(props:
                         </Select>
                     </SidebarMenuFilterItem>
 
-                    <SidebarMenuFilterItem icon={IconFlower} title='Groupe fonct.'>
+                    <SidebarMenuFilterItem icon={IconTrees} title='Groupe fonct.'>
                         <Select value={filters.functionalGroup || ""} onValueChange={v => setFilters(f => ({ ...f, functionalGroup: v || undefined }))}>
                             <SelectTrigger className="grow"><SelectValue placeholder="Tous" /></SelectTrigger>
                             <SelectContent>
