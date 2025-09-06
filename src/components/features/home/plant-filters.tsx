@@ -32,7 +32,7 @@ export function PlantFilters(props:
 
     return (
         <SidebarGroup>
-            <SidebarGroupContent className="flex flex-col p-2">
+            <SidebarGroupContent className="flex flex-col p-2 pt-0">
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <Search className="w-4 h-4 absolute left-2 top-1/2 -translate-y-1/2 opacity-60" />

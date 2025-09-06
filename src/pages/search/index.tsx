@@ -18,8 +18,9 @@ import {
 } from "@/components/ui/sidebar"
 import { SectionTitle } from '@/components/section-title';
 import "@/styles/globals.css";
+import SearchLayout from './search-layout';
 
-export default function Page() {
+function Search() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [filteredPlants, setFilteredPlants] = useState<Plant[]>([]);
@@ -74,8 +75,6 @@ export default function Page() {
     }, [filters]);
 
     const applyFilters = (filters: Filters) => {
-        // fetchPlants(filters);
-
         const params = createSearchParams(filters);
         const query = filters && `?${params.toString()}` || '';
 
@@ -125,3 +124,9 @@ export default function Page() {
         </SidebarProvider>
     );
 }
+
+Search.getLayout = (page) => {
+    return <SearchLayout>{page}</SearchLayout>
+};
+
+export default Search;

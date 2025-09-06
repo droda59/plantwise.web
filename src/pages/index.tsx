@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { createSearchParams, plantApiInstance } from '@/api/plant-api';
-import { SiteHeader } from "@/components/site-header"
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { createSearchParams } from '@/api/plant-api';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { PlantFilters } from '@/components/features/home/plant-filters';
 import { DEFAULT_FILTERS, Filters } from '@/types/filters';
 
@@ -26,10 +25,29 @@ export default function Home() {
         <div className='font-sans grid justify-items-center p-8 gap-16'>
             <main className='flex row-start-2 items-center '>
                 <Card className="shadow-none rounded-xs" style={{ position: 'relative' }}>
-                    <CardHeader className="pb-2">
-                        <SiteHeader />
+                    <CardHeader>
+                        <h1 className="text-lg">
+                            <div className='flex items-center flex-col p-4'>
+                                <span style={{
+                                    fontFamily: 'Lucida Sans Unicode, Lucida Grande, sans-serif',
+                                    fontWeight: 'normal',
+                                    fontSize: '1.5em'
+                                }}>
+                                    <span style={{
+                                        color: '#1b1b1b',
+                                    }}>PLANT</span>
+                                    <span style={{
+                                        color: '#1180be',
+                                    }}>FINDER</span>
+                                </span>
+                            </div>
+                        </h1>
+                        <CardTitle>Rechercher des plantes</CardTitle>
+                        <CardDescription>
+                            Entrer vos critères de recherche pour trouver les bons végétaux
+                        </CardDescription>
                     </CardHeader>
-                    <CardContent className="grid">
+                    <CardContent>
                         <PlantFilters filters={filters} onApplyFilters={applyFilters} onResetFilters={resetFilters} />
                     </CardContent>
                 </Card>
