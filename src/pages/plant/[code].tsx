@@ -5,10 +5,9 @@ import { useRouter } from 'next/router';
 
 import { plantApiInstance } from '@/api/plant-api';
 import { Filters } from '@/types/filters';
-import { Plant } from '@/types/plant';
+import { Nursery, Plant } from '@/types/plant';
 import { getPlantType, PlantType, PlantTypeValue } from "@/types/plantType";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { IconArrowsHorizontal, IconArrowsVertical, IconWorld } from "@tabler/icons-react";
 
 import {
@@ -16,9 +15,18 @@ import {
     HoverCardContent,
     HoverCardTrigger,
 } from "@/components/ui/hover-card"
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 import { CodeChip } from '@/components/code-chip';
+import { FunctionalGroup, getFunctionalGroup } from '@/types/functional-groups';
+import { ExternalLink, MapPin } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+
+const NurseryChip = ({ n }: { n: Nursery }) => (
+    <a href={n.website} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs rounded-full border px-2 py-1 hover:shadow-sm transition">
+        <MapPin className="w-3 h-3" />
+        <span>{n.name}</span>
+        <ExternalLink className="w-3 h-3 opacity-60" />
+    </a>
+);
 
 function HoverCardFunctionalGroup({ children, group }) {
     return (
@@ -26,18 +34,15 @@ function HoverCardFunctionalGroup({ children, group }) {
             <HoverCardTrigger asChild>
                 {children}
             </HoverCardTrigger>
-            <HoverCardContent className="w-80">
+            <HoverCardContent className={`w-80 border-${group.color} rounded-sm`}>
                 <div className="flex justify-between gap-4">
                     <div className="space-y-1">
-                        <h4 className="text-sm font-semibold">Groupe {group}</h4>
-                        <p className="text-md">
-                            Titre du groupe
-                        </p>
+                        <h4 className="text-sm font-semibold">Groupe {group.value}</h4>
                         <p className="text-sm">
-                            Explication du groupe
+                            {group.description}
                         </p>
                         <div className="text-muted-foreground text-xs">
-                            something
+                            {group.species}
                         </div>
                     </div>
                 </div>
@@ -57,10 +62,12 @@ function HoverCardNative({ children }) {
                     <div className="space-y-1">
                         <h4 className="text-sm font-semibold">Plante indigène</h4>
                         <p className="text-sm">
-                            Description de ce qu'est une plante indigène.
+                            Plante qui pousse dans une zone donnée de l’aire de répartition globale de son espèce, sans intervention humaine.
+                            <br />
+                            En Amérique du Nord, on fait référence aux espèces qui existaient sur le continent avant la colonisation européenne.
                         </p>
                         <div className="text-muted-foreground text-xs">
-                            Source
+                            Source: Aiglon Indigo
                         </div>
                     </div>
                 </div>
@@ -80,10 +87,10 @@ function HoverCardNaturalized({ children }) {
                     <div className="space-y-1">
                         <h4 className="text-sm font-semibold">Plante naturalisée</h4>
                         <p className="text-sm">
-                            Description de ce qu'est une plante naturalisée.
+                            Plante bien établie dans une zone différente de l’aire de répartition globale de son espèce après y avoir été introduite dans le cadre d’activités humaines et qui est en mesure de survivre et de se reproduire sans aide.
                         </p>
                         <div className="text-muted-foreground text-xs">
-                            Source
+                            Source: Aiglon Indigo
                         </div>
                     </div>
                 </div>
@@ -109,6 +116,7 @@ export default function Page() {
     const [type, setType] = useState<PlantType>();
     const [latin, setLatin] = useState<string>();
     const [cultivar, setCultivar] = useState<string>();
+    const [functionalGroup, setFunctionalGroup] = useState<FunctionalGroup | undefined>();
     const [loading, setLoading] = useState(false);
 
     const fetchPlant = async (filters?: Filters) => {
@@ -134,6 +142,7 @@ export default function Page() {
         var matches = regExp.exec(plant.latin);
 
         setType(getPlantType(plant.type));
+        setFunctionalGroup(getFunctionalGroup(plant.functionalGroup));
 
         if (nameWithCultivar.length > 1) {
             setCultivar(nameWithCultivar[1]);
@@ -151,74 +160,105 @@ export default function Page() {
                 {!loading && !!plant && (
                     <Card className="shadow-none rounded-xs" style={{ position: 'relative' }}>
                         <CardHeader className="pb-2">
+                            {type && <h2 className='text-lg text-muted-foreground'>{type.label}</h2>}
                             <div className='flex'>
-                                <div className="grow">
-                                    <CardTitle className="text-lg">
-                                        <span className='italic'>{latin}</span>
-                                        {cultivar && <span>&nbsp;'{cultivar}'</span>}
-                                    </CardTitle>
-                                    <CardDescription>{plant.name}</CardDescription>
-                                </div>
                                 <CodeChip plant={plant} />
+                                <div className="grow ml-4">
+                                    <CardTitle className="text-3xl">
+                                        <h1>
+                                            <span className='italic'>{latin}</span>
+                                            {cultivar && <span>&nbsp;'{cultivar}'</span>}
+                                        </h1>
+                                    </CardTitle>
+                                    <CardDescription>
+                                        <h3>
+                                            {plant.name}
+                                        </h3>
+                                    </CardDescription>
+                                </div>
                             </div>
                         </CardHeader>
                         <CardContent className="grid">
-                            <div className="flex mb-2">
-                                {type && <Badge variant="secondary" className='rounded-xs'>{type.label}</Badge>}
-                                {!!plant.functionalGroup && (
-                                    <HoverCardFunctionalGroup group={plant.functionalGroup}>
-                                        <Badge asChild variant='secondary' className='rounded-xs'>
-                                            <Link href='#' className="ml-1 rounded-xs">Groupe&nbsp;{plant.functionalGroup}</Link>
-                                        </Badge>
-                                    </HoverCardFunctionalGroup>
-                                )}
-                                {plant.isNative && (
-                                    <HoverCardNative>
-                                        <Badge asChild variant='secondary' className='ml-1 bg-emerald-100 text-emerald-700 rounded-xs'>
-                                            <Link href='#' className="ml-1 rounded-xs">Indigène</Link>
-                                        </Badge>
-                                    </HoverCardNative>
-                                )}
-                                {plant.isNaturalized && (
-                                    <HoverCardNaturalized>
-                                        <Badge asChild variant='secondary' className='ml-1 bg-amber-100 text-amber-700 rounded-xs'>
-                                            <Link href='#' className="ml-1 rounded-xs">Naturalisé</Link>
-                                        </Badge>
-                                    </HoverCardNaturalized>
-                                )}
+                            <div className='flex w-full'>
+                                <Badge className='flex grow items-center overflow-hidden p-4 m-2 rounded-sm' variant='outline'>
+                                    <div className='flex grow [&>svg]:size-8 [&>svg]:shrink-0'><IconWorld /></div>
+                                    <div className='flex-col grow'>
+                                        <div className="font-light text-xs">Zone</div>
+                                        <div className="font-medium text-lg">{plant.zone || 'Inconnue'}</div>
+                                    </div>
+                                </Badge>
+                                <Badge className='flex grow items-center overflow-hidden p-4 m-2 rounded-sm' variant='outline'>
+                                    <div className='flex grow [&>svg]:size-8 [&>svg]:shrink-0'><IconArrowsVertical /></div>
+                                    <div className='flex-col grow'>
+                                        <div className="font-light text-xs">Hauteur</div>
+                                        <div className="font-medium text-lg"><SizeChip size={plant.height} /></div>
+                                    </div>
+                                </Badge>
+                                <Badge className='flex grow items-center overflow-hidden p-4 m-2 rounded-sm' variant='outline'>
+                                    <div className='flex grow [&>svg]:size-8 [&>svg]:shrink-0'><IconArrowsHorizontal /></div>
+                                    <div className='flex-col grow'>
+                                        <div className="font-light text-xs">Largeur</div>
+                                        <div className="font-medium text-lg"><SizeChip size={plant.spread} /></div>
+                                    </div>
+                                </Badge>
                             </div>
-                            <div className='text-sm text-muted-foreground grid grid-cols-2 mt-2'>
-                                <div className='flex-col'>
-                                    <div className='flex items-center overflow-hidden [&>svg]:size-4 [&>svg]:shrink-0'>
-                                        <IconWorld />&nbsp;
-                                        <span className="font-light">Zone</span>&nbsp;
-                                        <span className="font-medium">{plant.zone || 'Inconnue'}</span>
-                                    </div>
-                                    <div className='flex items-center overflow-hidden [&>svg]:size-4 [&>svg]:shrink-0'>
-                                        <IconArrowsVertical />&nbsp;
-                                        <span className="font-light">Haut.</span>&nbsp;
-                                        <span className="font-medium"><SizeChip size={plant.height} /></span>
-                                    </div>
-                                    <div className='flex items-center overflow-hidden [&>svg]:size-4 [&>svg]:shrink-0'>
-                                        <IconArrowsHorizontal />&nbsp;
-                                        <span className="font-light">Larg.</span>&nbsp;
-                                        <span className="font-medium"><SizeChip size={plant.spread} /></span>
-                                    </div>
+                            <div className='flex-col mt-8'>
+                                <div className='text-xl font-semibold'>
+                                    Informations générales
                                 </div>
-                                <div className='flex-col'>
-                                    <div className='flex'>
-                                        <div className='flex-col'>
-                                            {!!plant.family && <div className="font-light">Fam.</div>}
-                                            {!!plant.genus && <div className="font-light">Genre</div>}
-                                            {!!plant.species && <div className="font-light">Esp.</div>}
-                                        </div>
-                                        <div className='flex-col grow ml-4'>
-                                            {!!plant.family && <div className="font-medium italic">{plant.family}</div>}
-                                            {!!plant.genus && <div className="font-medium italic">{plant.genus}</div>}
-                                            {!!plant.species && <div className="font-medium italic">{plant.species}</div>}
-                                        </div>
-                                    </div>
-                                </div>
+
+                                <table className="table-auto w-full mt-4 text-ms">
+                                    <tbody>
+                                        {plant.isNative && (
+                                            <tr>
+                                                <td className='p-1 pl-2'>Statut</td>
+                                                <td>
+                                                    <HoverCardNative>
+                                                        <span className='cursor-help'>Indigène</span>
+                                                    </HoverCardNative>
+                                                </td>
+                                            </tr>
+                                        )}
+                                        {plant.isNaturalized && (
+                                            <tr>
+                                                <td className='p-1 pl-2'>Statut</td>
+                                                <td>
+                                                    <HoverCardNative>
+                                                        <span className='cursor-help'>Naturalisé</span>
+                                                    </HoverCardNative>
+                                                </td>
+                                            </tr>
+                                        )}
+                                        {!!functionalGroup && (
+                                            <tr>
+                                                <td className='p-1 pl-2'>Groupe fonctionnel</td>
+                                                <td>
+                                                    <HoverCardFunctionalGroup group={functionalGroup}>
+                                                        <span className='cursor-help'>{functionalGroup.value} - {functionalGroup.label}</span>
+                                                    </HoverCardFunctionalGroup>
+                                                </td>
+                                            </tr>
+                                        )}
+                                        {!!plant.family && (
+                                            <tr>
+                                                <td className='p-1 pl-2'>Famille</td>
+                                                <td><i>{plant.family}</i></td>
+                                            </tr>
+                                        )}
+                                        {!!plant.genus && (
+                                            <tr>
+                                                <td className='p-1 pl-2'>Genre</td>
+                                                <td><i>{plant.genus}</i></td>
+                                            </tr>
+                                        )}
+                                        {!!plant.species && (
+                                            <tr>
+                                                <td className='p-1 pl-2'>Espèce</td>
+                                                <td><i>{plant.species}</i></td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                </table>
                             </div>
                             <div className="flex flex-wrap gap-2">
                                 {/* {plant.nurseries.map((n, i) => <NurseryChip key={n.name + i} n={n} />)} */}

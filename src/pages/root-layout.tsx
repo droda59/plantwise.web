@@ -1,4 +1,3 @@
-import "@/styles/globals.css";
 import { SiteHeader } from "@/components/site-header";
 
 export default function RootLayout({

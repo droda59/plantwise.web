@@ -1,23 +1,14 @@
 import { motion } from "framer-motion";
-import { ExternalLink, MapPin } from "lucide-react";
 
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Nursery, Plant } from "@/types/plant";
-import { getPlantType, PlantType, PLANTTYPES, PlantTypeValue } from "@/types/plantType";
+import { Plant } from "@/types/plant";
+import { getPlantType, PlantTypeValue } from "@/types/plantType";
 import { IconArrowsHorizontal, IconArrowsVertical, IconWorld } from "@tabler/icons-react";
 import Link from "next/link";
 import { CodeChip } from "./code-chip";
 
 const prettySun = (s) => ({ "plein-soleil": "Plein soleil", "mi-ombre": "Mi-ombre", "ombre": "Ombre" }[s] || s);
-
-const NurseryChip = ({ n }: { n: Nursery }) => (
-    <a href={n.website} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs rounded-full border px-2 py-1 hover:shadow-sm transition">
-        <MapPin className="w-3 h-3" />
-        <span>{n.name}</span>
-        <ExternalLink className="w-3 h-3 opacity-60" />
-    </a>
-);
 
 const SizeChip = ({ size }: { size?: number }) => {
     if (!size) return <span>Inconnue</span>;
@@ -142,9 +133,6 @@ export const PlantCard = ({ plant }: { plant: Plant; }) => {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                        {/* {plant.nurseries.map((n, i) => <NurseryChip key={n.name + i} n={n} />)} */}
                     </div>
                 </CardContent>
             </Card>
