@@ -7,45 +7,90 @@ import { plantApiInstance } from '@/api/plant-api';
 import { Filters } from '@/types/filters';
 import { Plant } from '@/types/plant';
 import { getPlantType, PlantType, PlantTypeValue } from "@/types/plantType";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { IconArrowsHorizontal, IconArrowsVertical, IconWorld } from "@tabler/icons-react";
 
-const TypeChip = ({ plant, chipType }: { plant: Plant, chipType: PlantTypeValue }) => {
-    function getChipBackgroundColor() {
-        const style = {
-            backgroundColor: 'lightgrey',
-            height: '4px',
-        };
+import {
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+} from "@/components/ui/hover-card"
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { CodeChip } from '@/components/code-chip';
 
-        if (chipType === '1 AR' && (plant.type === '1 AR' || plant.type === '1b ARB')) style.backgroundColor = 'lightgreen';
-        else if (chipType === '2 CON' && plant.type === '2 CON') style.backgroundColor = 'darkgreen';
-        else if (chipType === '3 ARBU' && plant.type === '3 ARBU') style.backgroundColor = 'green';
-        else if (chipType === '4 VIV' && (plant.type === '4 VIV' || plant.type === '10 FH')) style.backgroundColor = 'red';
-        else if (chipType === '5 GRAM' && plant.type === '5 GRAM') style.backgroundColor = 'wheat';
-        else if (chipType === '6 GRMP' && plant.type === '6 GRMP' || plant.type === '7 FOU') style.backgroundColor = 'wheat';
-        else if (chipType === '8 AQUA' && plant.type === '8 AQUA') style.backgroundColor = 'teal';
-
-        return style;
-    };
-
+function HoverCardFunctionalGroup({ children, group }) {
     return (
-        <span className="flex grow" style={getChipBackgroundColor()} />
-    );
-};
+        <HoverCard>
+            <HoverCardTrigger asChild>
+                {children}
+            </HoverCardTrigger>
+            <HoverCardContent className="w-80">
+                <div className="flex justify-between gap-4">
+                    <div className="space-y-1">
+                        <h4 className="text-sm font-semibold">Groupe {group}</h4>
+                        <p className="text-md">
+                            Titre du groupe
+                        </p>
+                        <p className="text-sm">
+                            Explication du groupe
+                        </p>
+                        <div className="text-muted-foreground text-xs">
+                            something
+                        </div>
+                    </div>
+                </div>
+            </HoverCardContent>
+        </HoverCard>
+    )
+}
 
-const CodeChip = ({ plant }: { plant: Plant }) => (
-    <div className='flex items-center relative'>
-        <div className='h-10 bg-primary' style={{
-            aspectRatio: '1 / cos(30deg)',
-            '--b': '2px',
-            clipPath: 'polygon(0 50%, 50% -50%, 100% 50%, 50% 150%, 0 50%, var(--b) 50%, calc(25% + var(--b) * cos(60deg)) calc(100% - var(--b) * sin(60deg)), calc(75% - var(--b) * cos(60deg)) calc(100% - var(--b) * sin(60deg)), calc(100% - var(--b)) 50%, calc(75% - var(--b) * cos(60deg)) calc(var(--b) * sin(60deg)), calc(25% + var(--b) * cos(60deg)) calc(var(--b) * sin(60deg)), var(--b) 50%)',
-        }} />
-        <span className='text-xs w-full absolute text-center'>
-            {plant.code}
-        </span>
-    </div>
-);
+function HoverCardNative({ children }) {
+    return (
+        <HoverCard>
+            <HoverCardTrigger asChild>
+                {children}
+            </HoverCardTrigger>
+            <HoverCardContent className="w-80">
+                <div className="flex justify-between gap-4">
+                    <div className="space-y-1">
+                        <h4 className="text-sm font-semibold">Plante indigène</h4>
+                        <p className="text-sm">
+                            Description de ce qu'est une plante indigène.
+                        </p>
+                        <div className="text-muted-foreground text-xs">
+                            Source
+                        </div>
+                    </div>
+                </div>
+            </HoverCardContent>
+        </HoverCard>
+    )
+}
+
+function HoverCardNaturalized({ children }) {
+    return (
+        <HoverCard>
+            <HoverCardTrigger asChild>
+                {children}
+            </HoverCardTrigger>
+            <HoverCardContent className="w-80">
+                <div className="flex justify-between gap-4">
+                    <div className="space-y-1">
+                        <h4 className="text-sm font-semibold">Plante naturalisée</h4>
+                        <p className="text-sm">
+                            Description de ce qu'est une plante naturalisée.
+                        </p>
+                        <div className="text-muted-foreground text-xs">
+                            Source
+                        </div>
+                    </div>
+                </div>
+            </HoverCardContent>
+        </HoverCard>
+    )
+}
 
 const SizeChip = ({ size }: { size?: number }) => {
     if (!size) return <span>Inconnue</span>;
@@ -53,7 +98,7 @@ const SizeChip = ({ size }: { size?: number }) => {
     return <span>{size} m</span>;
 }
 
-export default function Page({ params }) {
+export default function Page() {
     const router = useRouter();
 
     const { code } = router.query;
@@ -101,87 +146,87 @@ export default function Page({ params }) {
     }, [plant]);
 
     return (
-        <div>
-            {!loading && !!plant && (
-                <Card className="shadow-sm hover:shadow-md transition rounded-xs" style={{ position: 'relative' }}>
-                    <div className="flex w-full" style={{
-                        position: 'absolute',
-                        top: 0
-                    }}>
-                        <TypeChip plant={plant} chipType='1 AR' />
-                        <TypeChip plant={plant} chipType='2 CON' />
-                        <TypeChip plant={plant} chipType='3 ARBU' />
-                        <TypeChip plant={plant} chipType='4 VIV' />
-                        <TypeChip plant={plant} chipType='5 GRAM' />
-                        <TypeChip plant={plant} chipType='6 GRMP' />
-                        <TypeChip plant={plant} chipType='8 AQUA' />
-                    </div>
-                    <CardHeader className="pb-2">
-                        <div className='flex'>
-                            <div className="grow">
-                                <CardTitle className="text-lg">
-                                    <span className='italic'>{latin}</span>
-                                    {cultivar && <span>&nbsp;'{cultivar}'</span>}
-                                    {/*{comment && <span> ({comment})</span>}*/}
-                                </CardTitle>
-                                <div className="text-sm text-muted-foreground">{plant.name}</div>
+        <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+            <main className="w-full max-w-xl">
+                {!loading && !!plant && (
+                    <Card className="shadow-none rounded-xs" style={{ position: 'relative' }}>
+                        <CardHeader className="pb-2">
+                            <div className='flex'>
+                                <div className="grow">
+                                    <CardTitle className="text-lg">
+                                        <span className='italic'>{latin}</span>
+                                        {cultivar && <span>&nbsp;'{cultivar}'</span>}
+                                    </CardTitle>
+                                    <CardDescription>{plant.name}</CardDescription>
+                                </div>
+                                <CodeChip plant={plant} />
                             </div>
-
-                            <CodeChip plant={plant} />
-                        </div>
-                    </CardHeader>
-                    <CardContent className="grid">
-                        <div className="flex mb-2">
-                            {type && <Badge variant="secondary" className='rounded-xs'>{type.label}</Badge>}
-                            {!!plant.functionalGroup && (
-                                <Badge variant="secondary" className="ml-1 rounded-xs">Groupe&nbsp;{plant.functionalGroup}</Badge>
-                            )}
-                            {plant.isNative && (
-                                <Badge className="ml-1 bg-emerald-100 text-emerald-700 rounded-xs">Indigène</Badge>
-                            )}
-                            {plant.isNaturalized && (
-                                <Badge className="ml-1 bg-amber-100 text-amber-700 rounded-xs">Naturalisé</Badge>
-                            )}
-                        </div>
-                        <div className='text-sm text-muted-foreground grid grid-cols-2 mt-2'>
-                            <div className='flex-col'>
-                                <div className='flex items-center overflow-hidden [&>svg]:size-4 [&>svg]:shrink-0'>
-                                    <IconWorld />&nbsp;
-                                    <span className="font-light">Zone</span>&nbsp;
-                                    <span className="font-medium">{plant.zone || 'Inconnue'}</span>
-                                </div>
-                                <div className='flex items-center overflow-hidden [&>svg]:size-4 [&>svg]:shrink-0'>
-                                    <IconArrowsVertical />&nbsp;
-                                    <span className="font-light">Haut.</span>&nbsp;
-                                    <span className="font-medium"><SizeChip size={plant.height} /></span>
-                                </div>
-                                <div className='flex items-center overflow-hidden [&>svg]:size-4 [&>svg]:shrink-0'>
-                                    <IconArrowsHorizontal />&nbsp;
-                                    <span className="font-light">Larg.</span>&nbsp;
-                                    <span className="font-medium"><SizeChip size={plant.spread} /></span>
-                                </div>
+                        </CardHeader>
+                        <CardContent className="grid">
+                            <div className="flex mb-2">
+                                {type && <Badge variant="secondary" className='rounded-xs'>{type.label}</Badge>}
+                                {!!plant.functionalGroup && (
+                                    <HoverCardFunctionalGroup group={plant.functionalGroup}>
+                                        <Badge asChild variant='secondary' className='rounded-xs'>
+                                            <Link href='#' className="ml-1 rounded-xs">Groupe&nbsp;{plant.functionalGroup}</Link>
+                                        </Badge>
+                                    </HoverCardFunctionalGroup>
+                                )}
+                                {plant.isNative && (
+                                    <HoverCardNative>
+                                        <Badge asChild variant='secondary' className='ml-1 bg-emerald-100 text-emerald-700 rounded-xs'>
+                                            <Link href='#' className="ml-1 rounded-xs">Indigène</Link>
+                                        </Badge>
+                                    </HoverCardNative>
+                                )}
+                                {plant.isNaturalized && (
+                                    <HoverCardNaturalized>
+                                        <Badge asChild variant='secondary' className='ml-1 bg-amber-100 text-amber-700 rounded-xs'>
+                                            <Link href='#' className="ml-1 rounded-xs">Naturalisé</Link>
+                                        </Badge>
+                                    </HoverCardNaturalized>
+                                )}
                             </div>
-                            <div className='flex-col'>
-                                <div className='flex'>
-                                    <div className='flex-col'>
-                                        {!!plant.family && <div className="font-light">Fam.</div>}
-                                        {!!plant.genus && <div className="font-light">Genre</div>}
-                                        {!!plant.species && <div className="font-light">Esp.</div>}
+                            <div className='text-sm text-muted-foreground grid grid-cols-2 mt-2'>
+                                <div className='flex-col'>
+                                    <div className='flex items-center overflow-hidden [&>svg]:size-4 [&>svg]:shrink-0'>
+                                        <IconWorld />&nbsp;
+                                        <span className="font-light">Zone</span>&nbsp;
+                                        <span className="font-medium">{plant.zone || 'Inconnue'}</span>
                                     </div>
-                                    <div className='flex-col grow ml-4'>
-                                        {!!plant.family && <div className="font-medium italic">{plant.family}</div>}
-                                        {!!plant.genus && <div className="font-medium italic">{plant.genus}</div>}
-                                        {!!plant.species && <div className="font-medium italic">{plant.species}</div>}
+                                    <div className='flex items-center overflow-hidden [&>svg]:size-4 [&>svg]:shrink-0'>
+                                        <IconArrowsVertical />&nbsp;
+                                        <span className="font-light">Haut.</span>&nbsp;
+                                        <span className="font-medium"><SizeChip size={plant.height} /></span>
+                                    </div>
+                                    <div className='flex items-center overflow-hidden [&>svg]:size-4 [&>svg]:shrink-0'>
+                                        <IconArrowsHorizontal />&nbsp;
+                                        <span className="font-light">Larg.</span>&nbsp;
+                                        <span className="font-medium"><SizeChip size={plant.spread} /></span>
                                     </div>
                                 </div>
+                                <div className='flex-col'>
+                                    <div className='flex'>
+                                        <div className='flex-col'>
+                                            {!!plant.family && <div className="font-light">Fam.</div>}
+                                            {!!plant.genus && <div className="font-light">Genre</div>}
+                                            {!!plant.species && <div className="font-light">Esp.</div>}
+                                        </div>
+                                        <div className='flex-col grow ml-4'>
+                                            {!!plant.family && <div className="font-medium italic">{plant.family}</div>}
+                                            {!!plant.genus && <div className="font-medium italic">{plant.genus}</div>}
+                                            {!!plant.species && <div className="font-medium italic">{plant.species}</div>}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div className="flex flex-wrap gap-2">
-                            {/* {plant.nurseries.map((n, i) => <NurseryChip key={n.name + i} n={n} />)} */}
-                        </div>
-                    </CardContent>
-                </Card>
-            )}
+                            <div className="flex flex-wrap gap-2">
+                                {/* {plant.nurseries.map((n, i) => <NurseryChip key={n.name + i} n={n} />)} */}
+                            </div>
+                        </CardContent>
+                    </Card>
+                )}
+            </main>
         </div>
     );
 }

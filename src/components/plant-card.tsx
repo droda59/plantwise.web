@@ -7,6 +7,7 @@ import { Nursery, Plant } from "@/types/plant";
 import { getPlantType, PlantType, PLANTTYPES, PlantTypeValue } from "@/types/plantType";
 import { IconArrowsHorizontal, IconArrowsVertical, IconWorld } from "@tabler/icons-react";
 import Link from "next/link";
+import { CodeChip } from "./code-chip";
 
 const prettySun = (s) => ({ "plein-soleil": "Plein soleil", "mi-ombre": "Mi-ombre", "ombre": "Ombre" }[s] || s);
 
@@ -65,19 +66,6 @@ export const PlantCard = ({ plant }: { plant: Plant; }) => {
         );
     };
 
-    const CodeChip = () => (
-        <div className='flex items-center relative'>
-            <div className='h-10 bg-primary' style={{
-                aspectRatio: '1 / cos(30deg)',
-                '--b': '2px',
-                clipPath: 'polygon(0 50%, 50% -50%, 100% 50%, 50% 150%, 0 50%, var(--b) 50%, calc(25% + var(--b) * cos(60deg)) calc(100% - var(--b) * sin(60deg)), calc(75% - var(--b) * cos(60deg)) calc(100% - var(--b) * sin(60deg)), calc(100% - var(--b)) 50%, calc(75% - var(--b) * cos(60deg)) calc(var(--b) * sin(60deg)), calc(25% + var(--b) * cos(60deg)) calc(var(--b) * sin(60deg)), var(--b) 50%)',
-            }} />
-            <span className='text-xs w-full absolute text-center'>
-                {plant.code}
-            </span>
-        </div>
-    );
-
     return (
         <motion.div layout initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}>
             <Card className="shadow-sm hover:shadow-lg transition rounded-xs" style={{ position: 'relative' }}>
@@ -106,7 +94,7 @@ export const PlantCard = ({ plant }: { plant: Plant; }) => {
                             <div className="text-sm text-muted-foreground">{plant.name}</div>
                         </div>
 
-                        <CodeChip />
+                        <CodeChip plant={plant} />
                     </div>
                 </CardHeader>
                 <CardContent className="grid">
