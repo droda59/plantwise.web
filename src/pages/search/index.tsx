@@ -40,6 +40,7 @@ function Search() {
         if (heightMax) height[1] = parseInt(heightMax as string, 10);
         if (spreadMin) spread[0] = parseInt(spreadMin as string, 10);
         if (spreadMax) spread[1] = parseInt(spreadMax as string, 10);
+        const species = searchParams.get('species') || undefined;
 
         setFilters({
             q: searchParams.get('q') || DEFAULT_FILTERS.q,
@@ -51,6 +52,7 @@ function Search() {
             functionalGroup: searchParams.get('functionalGroup') || DEFAULT_FILTERS.functionalGroup,
             height,
             spread,
+            species,
         });
     }, [searchParams]);
 

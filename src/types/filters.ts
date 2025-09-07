@@ -6,7 +6,7 @@ export const SALTS = ["haute", "moyenne", "faible"];
 export const BLOOMS = ["printemps", "été", "automne"];
 
 export interface Filters {
-    q: string;
+    q?: string;
 
     // Conditions du site
     zone?: string;
@@ -24,6 +24,7 @@ export interface Filters {
     height?: [number, number];
     spread?: [number, number];
     functionalGroup?: string;
+    species?: string;
 };
 
 export const DEFAULT_FILTERS: Filters = {

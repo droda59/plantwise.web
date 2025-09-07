@@ -26,6 +26,7 @@ export function createSearchParams(filters?: Filters) {
             filters.spread[1] < 3000 && params.set('spreadMax', filters.spread[1].toString());
         }
         filters.functionalGroup && filters.functionalGroup !== '.' && params.set('functionalGroup', filters.functionalGroup);
+        filters.species && filters.species !== '.' && params.set('species', filters.species);
     }
 
     return params;

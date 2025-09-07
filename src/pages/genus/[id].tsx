@@ -6,6 +6,8 @@ import { useRouter } from 'next/router';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { genusApiInstance } from '@/api/genus-api';
 import { IconSlash } from '@tabler/icons-react';
+import { createSearchParams } from '@/api/plant-api';
+import Link from 'next/link';
 
 export default function Home() {
     const router = useRouter();
@@ -54,9 +56,9 @@ export default function Home() {
                         </Breadcrumb>
                         <div className='flex'>
                             <ul className='flex-col'>
-                                {speciesList?.map(g => (
+                                {speciesList?.map(s => (
                                     <li>
-                                        <i>{g}</i>
+                                        <Link href={`/search?${createSearchParams({ species: s }).toString()}`}><i>{s}</i></Link>
                                     </li>
                                 ))}
                             </ul>
