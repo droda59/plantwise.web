@@ -158,8 +158,8 @@ export default function Page() {
     }, [plant]);
 
     return (
-        <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-            <main className="w-full max-w-xl">
+        <div className="flex min-h-svh justify-center p-6 md:p-10">
+            <main className="w-full max-w-xl min-w-200">
                 {!loading && !!plant && (
                     <>
                         <Breadcrumb className='mb-4'>
@@ -198,7 +198,7 @@ export default function Page() {
                                 </div>
                             </CardHeader>
                             <CardContent className="grid">
-                                <div className='flex w-full mt-4 mb-10'>
+                                <div className='flex w-full mt-4 mb-2'>
                                     <Badge className='flex grow items-center overflow-hidden p-4 mr-2 rounded-sm' variant='outline'>
                                         <div className='flex grow [&>svg]:size-8 [&>svg]:shrink-0'><IconWorld /></div>
                                         <div className='flex-col grow'>
@@ -221,7 +221,8 @@ export default function Page() {
                                         </div>
                                     </Badge>
                                 </div>
-                                <div className='flex-col'>
+                                <Separator className='mt-8' />
+                                <div className='flex-col mt-8'>
                                     <div className='text-xl font-semibold'>
                                         Informations générales
                                     </div>
@@ -291,8 +292,18 @@ export default function Page() {
                                         </tbody>
                                     </table>
                                 </div>
+                                {/*
                                 <div className="flex flex-wrap gap-2">
-                                    {/* {plant.nurseries.map((n, i) => <NurseryChip key={n.name + i} n={n} />)} */}
+                                    {plant.nurseries.map((n, i) => <NurseryChip key={n.name + i} n={n} />)}
+                                </div>
+                                 */}
+                                <Separator className='mt-8' />
+                                <div className='flex-col mt-8'>
+                                    <div className='text-xl font-semibold'>
+                                        Images
+                                    </div>
+
+                                    <iframe id='images' width='100%' height='600' src={`https://www.bing.com/images/search?q=${plant.name}`} />
                                 </div>
                             </CardContent>
                         </Card>
