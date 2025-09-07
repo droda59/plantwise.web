@@ -42,8 +42,8 @@ export default function Home() {
                                 </span>
                             </div>
                         </h1>
-                        <CardTitle>Rechercher des plantes</CardTitle>
-                        <CardDescription>
+                        <CardTitle className='px-2'>Rechercher des plantes</CardTitle>
+                        <CardDescription className='px-2'>
                             Entrer vos critères de recherche pour trouver les bons végétaux
                         </CardDescription>
                     </CardHeader>

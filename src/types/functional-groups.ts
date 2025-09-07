@@ -11,7 +11,7 @@ export interface FunctionalGroup {
 export const FUNCTIONALGROUPS: Array<FunctionalGroup> = [
     {
         value: "1A",
-        label: "Confières, tolérant ombre",
+        label: "Conifères, tolérant ombre",
         description: "Conifères généralement tolérants à l'ombre, mais pas à la sécheresse ou l'inondation. Mycorhization ECM et graine dispersées par le vent.",
         species: "Les épinettes, sapins et thuya, et le pin blanc",
         color: 'lime-700', // '#70ad46'

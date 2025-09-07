@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { BLOOMS, COLORS, DEFAULT_FILTERS, Filters, SALTS, SOILS, SUNS, ZONES } from "@/types/filters";
 import { PLANTTYPES } from "@/types/plantType";
-import { FUNCTIONALGROUPS } from "@/types/functional-groups";
+import { FunctionalGroup, FUNCTIONALGROUPS } from "@/types/functional-groups";
 import { FilterItemSelect } from "@/components/filter-item-select";
 import { FilterItemCheckbox } from "@/components/filter-item-checkbox";
 import { FilterItemSlider } from "@/components/filter-item-slider";
@@ -124,6 +124,8 @@ export function NavPlantFilters(props:
                         icon={IconTrees}
                         options={FUNCTIONALGROUPS}
                         value={filters.functionalGroup}
+                        getLabel={(t: FunctionalGroup) => `${t.value} - ${t.label}`}
+                        disabled={!['.', '1 AR', '1b ARB', '2 CON', '3 ARBU'].includes(filters.type)}
                         setValue={v => setFilters(f => ({ ...f, functionalGroup: v || undefined }))} />
 
                     <FilterItemSlider
