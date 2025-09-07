@@ -20,6 +20,7 @@ import { FunctionalGroup, getFunctionalGroup } from '@/types/functional-groups';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
+import { genusApiInstance } from '@/api/genus-api';
 
 const NurseryChip = ({ n }: { n: Nursery }) => (
     <a href={n.website} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs rounded-full border px-2 py-1 hover:shadow-sm transition">
@@ -120,11 +121,19 @@ export default function Page() {
     const [functionalGroup, setFunctionalGroup] = useState<FunctionalGroup | undefined>();
     const [loading, setLoading] = useState(false);
 
+    const [genusList, setGenusList] = useState<string[]>();
+    const [speciesList, setSpeciesList] = useState<string[]>();
+
     const fetchPlant = async () => {
         if (plantCode) {
             setLoading(true);
 
             const data = await plantApiInstance.getPlant(plantCode);
+
+            const genus = await genusApiInstance.getGenus();
+            setGenusList(genus);
+            const species = await genusApiInstance.getSpecies('Betula');
+            setSpeciesList(species);
 
             setPlant(data);
             setLoading(false);
@@ -162,6 +171,18 @@ export default function Page() {
             <main className="w-full max-w-xl min-w-200">
                 {!loading && !!plant && (
                     <>
+                        <div className='flex'>
+                            <ul className='flex-col'>
+                                {genusList?.map(g => (
+                                    <li>{g}</li>
+                                ))}
+                            </ul>
+                            <ul className='flex-col'>
+                                {speciesList?.map(s => (
+                                    <li>{s}</li>
+                                ))}
+                            </ul>
+                        </div>
                         <Breadcrumb className='mb-4'>
                             <BreadcrumbList>
                                 <BreadcrumbItem>

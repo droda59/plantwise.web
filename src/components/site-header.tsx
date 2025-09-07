@@ -1,6 +1,5 @@
 import { IconArrowRight } from "@tabler/icons-react"
 
-import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Separator } from "./ui/separator"
 import { Input } from "./ui/input"
@@ -53,6 +52,7 @@ export function SiteHeader() {
                     </Link>
                 </h1>
                 <div className="ml-auto flex items-center gap-2">
+                    <Link className='' href='/genus'>Par genre</Link>
                     <Separator
                         orientation="vertical"
                         className="mr-2 ml-2 data-[orientation=vertical]:h-4"
