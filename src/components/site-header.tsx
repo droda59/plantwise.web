@@ -57,10 +57,14 @@ export function SiteHeader() {
                         orientation="vertical"
                         className="mr-2 ml-2 data-[orientation=vertical]:h-4"
                     />
+                    <Link className='' href='/species'>Par espèce</Link>
+                    <Separator
+                        orientation="vertical"
+                        className="mr-2 ml-2 data-[orientation=vertical]:h-4"
+                    />
                     <form onSubmit={handleQuickAccessSearch} className='flex mr-2 ml-2 relative'>
                         <IconArrowRight className="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 opacity-60" />
                         <Input id='quickAccessCode' className="pl-2 max-w-24" placeholder="Code" />
-                        {/*<Button type='submit' variant='outline' className='ml-2'><IconArrowRight /></Button>*/}
                     </form>
                 </div>
             </div>

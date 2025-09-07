@@ -40,14 +40,17 @@ export default function Home() {
                                 </BreadcrumbItem>
                             </BreadcrumbList>
                         </Breadcrumb>
-                        <div className='flex'>
-                            <ul className='flex-col'>
-                                {genusList?.map(g => (
-                                    <li>
-                                        <Link href={`/genus/${g}`}><i>{g}</i></Link>
-                                    </li>
+                        <div className='flex-col'>
+                            <h1 className='text-3xl font-semibold'>Recherche par genre</h1>
+                            <div className='grid grid-cols-2 mt-8'>
+                                {genusList?.map((g, i) => (
+                                    <>
+                                        {!!g.length && (
+                                            <Link key={i} href={`/genus/${g}`}><i>{g}</i></Link>
+                                        )}
+                                    </>
                                 ))}
-                            </ul>
+                            </div>
                         </div>
                     </>
                 )}

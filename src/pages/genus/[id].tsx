@@ -54,14 +54,16 @@ export default function Home() {
                                 </BreadcrumbItem>
                             </BreadcrumbList>
                         </Breadcrumb>
-                        <div className='flex'>
-                            <ul className='flex-col'>
-                                {speciesList?.map(s => (
-                                    <li>
-                                        <Link href={`/search?${createSearchParams({ species: s }).toString()}`}><i>{s}</i></Link>
-                                    </li>
+                        <div className='flex-col'>
+                            <h1 className='text-xl font-semibold'>{genus}</h1>
+                            <div className='grid grid-cols-2 mt-8'>
+                                {speciesList?.map((s, i) => (
+                                    <>
+                                        {!s.length && <span><i>{genus} sp.</i></span>}
+                                        {!!s.length && <Link key={i} href={`/search?${createSearchParams({ species: s }).toString()}`}><i>{s}</i></Link>}
+                                    </>
                                 ))}
-                            </ul>
+                            </div>
                         </div>
                     </>
                 )}
