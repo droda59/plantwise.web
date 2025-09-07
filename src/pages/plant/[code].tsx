@@ -171,18 +171,6 @@ export default function Page() {
             <main className="w-full max-w-xl min-w-200">
                 {!loading && !!plant && (
                     <>
-                        <div className='flex'>
-                            <ul className='flex-col'>
-                                {genusList?.map(g => (
-                                    <li>{g}</li>
-                                ))}
-                            </ul>
-                            <ul className='flex-col'>
-                                {speciesList?.map(s => (
-                                    <li>{s}</li>
-                                ))}
-                            </ul>
-                        </div>
                         <Breadcrumb className='mb-4'>
                             <BreadcrumbList>
                                 <BreadcrumbItem>
