@@ -104,17 +104,18 @@ function Search() {
                             : `${filteredPlants.length} plante${filteredPlants.length > 1 ? 's' : ''} trouvée${filteredPlants.length > 1 ? 's' : ''}`
                         } />
 
-                        {!loading &&
+                        {!filteredPlants.length && (
+                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className='text-sm text-muted-foreground'>
+                                Aucune plante ne correspond. Essayez d'élargir les filtres.
+                            </motion.div>
+                        )}
+
+                        {!loading && filteredPlants.length > 0 &&
                             <AnimatePresence mode='popLayout'>
                                 <div className='grid gap-4 grid-cols-2'>
                                     {filteredPlants.map((plant, index) => (
                                         <PlantCard key={index} plant={plant} />
                                     ))}
-                                    {filteredPlants.length === 0 && (
-                                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className='text-sm text-muted-foreground'>
-                                            Aucune plante ne correspond. Essayez d'élargir les filtres.
-                                        </motion.div>
-                                    )}
                                 </div>
                             </AnimatePresence>
                         }

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Search } from "lucide-react";
 import { IconArrowsHorizontal, IconArrowsVertical, IconDroplet, IconDropletFilled, IconFeather, IconFlower, IconPalette, IconPlant, IconSalt, IconSandbox, IconSearch, IconSun, IconTrees, IconWorld, IconX } from "@tabler/icons-react";
 
 import { SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuItem } from "@/components/ui/sidebar";
@@ -31,18 +30,18 @@ export function PlantFilters(props:
     }, [filters]);
 
     return (
-        <SidebarGroup>
-            <SidebarGroupContent className="flex flex-col p-2 pt-0">
+        <SidebarGroup className='px-0'>
+            <SidebarGroupContent className="flex flex-col">
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <Search className="w-4 h-4 absolute left-2 top-1/2 -translate-y-1/2 opacity-60" />
+                        <IconSearch className="w-4 h-4 absolute left-2 top-1/2 -translate-y-1/2 opacity-60" />
                         <Input className="pl-8" placeholder="nom commun, latin..." value={filters.q || ""} onChange={(e) => setFilters(f => ({ ...f, q: e.target.value }))} />
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarGroupContent>
 
             <SidebarGroupContent className='grid grid-cols-2 gap-6 mt-4'>
-                <SidebarMenu>
+                <SidebarMenu className='pr-2'>
                     <SidebarGroupLabel>Conditions du site</SidebarGroupLabel>
                     <FilterItemSelect
                         title='Zone'
@@ -91,7 +90,7 @@ export function PlantFilters(props:
                         setValue={v => setFilters(f => ({ ...f, floodTolerant: v || undefined }))} />
                 </SidebarMenu>
 
-                <SidebarMenu>
+                <SidebarMenu className='pl-2 mr-16'>
                     <SidebarGroupLabel>Conditions de la plante</SidebarGroupLabel>
                     <FilterItemSelect
                         title='Type'

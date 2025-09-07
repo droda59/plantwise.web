@@ -23,7 +23,7 @@ export default function Home() {
 
     return (
         <div className='font-sans grid justify-items-center p-8 gap-16'>
-            <main className='flex row-start-2 items-center '>
+            <main className='flex row-start-2 items-center'>
                 <Card className="shadow-none rounded-xs" style={{ position: 'relative' }}>
                     <CardHeader>
                         <h1 className="text-lg">
