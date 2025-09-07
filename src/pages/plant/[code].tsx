@@ -19,6 +19,7 @@ import { CodeChip } from '@/components/code-chip';
 import { FunctionalGroup, getFunctionalGroup } from '@/types/functional-groups';
 import { ExternalLink, MapPin } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
 
 const NurseryChip = ({ n }: { n: Nursery }) => (
     <a href={n.website} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs rounded-full border px-2 py-1 hover:shadow-sm transition">
@@ -28,76 +29,77 @@ const NurseryChip = ({ n }: { n: Nursery }) => (
     </a>
 );
 
-function HoverCardFunctionalGroup({ children, group }) {
-    return (
-        <HoverCard>
-            <HoverCardTrigger asChild>
-                {children}
-            </HoverCardTrigger>
-            <HoverCardContent className={`w-80 border-${group.color} rounded-sm`}>
-                <div className="flex justify-between gap-4">
-                    <div className="space-y-1">
-                        <h4 className="text-sm font-semibold">Groupe {group.value}</h4>
-                        <p className="text-sm">
-                            {group.description}
-                        </p>
-                        <div className="text-muted-foreground text-xs">
-                            {group.species}
-                        </div>
-                    </div>
-                </div>
-            </HoverCardContent>
-        </HoverCard>
-    )
-}
+const VSeparator = () => (
+    <Separator
+        orientation="vertical"
+        className="mr-4 data-[orientation=vertical]:h-4"
+    />
+);
 
-function HoverCardNative({ children }) {
-    return (
-        <HoverCard>
-            <HoverCardTrigger asChild>
-                {children}
-            </HoverCardTrigger>
-            <HoverCardContent className="w-80">
-                <div className="flex justify-between gap-4">
-                    <div className="space-y-1">
-                        <h4 className="text-sm font-semibold">Plante indigène</h4>
-                        <p className="text-sm">
-                            Plante qui pousse dans une zone donnée de l’aire de répartition globale de son espèce, sans intervention humaine.
-                            <br />
-                            En Amérique du Nord, on fait référence aux espèces qui existaient sur le continent avant la colonisation européenne.
-                        </p>
-                        <div className="text-muted-foreground text-xs">
-                            Source: Aiglon Indigo
-                        </div>
+const HoverCardFunctionalGroup = ({ children, group }) => (
+    <HoverCard>
+        <HoverCardTrigger asChild>
+            {children}
+        </HoverCardTrigger>
+        <HoverCardContent className={`w-80 border-${group.color} rounded-sm`}>
+            <div className="flex justify-between gap-4">
+                <div className="space-y-1">
+                    <h4 className="text-sm font-semibold">Groupe {group.value}</h4>
+                    <p className="text-sm">
+                        {group.description}
+                    </p>
+                    <div className="text-muted-foreground text-xs">
+                        {group.species}
                     </div>
                 </div>
-            </HoverCardContent>
-        </HoverCard>
-    )
-}
+            </div>
+        </HoverCardContent>
+    </HoverCard>
+);
 
-function HoverCardNaturalized({ children }) {
-    return (
-        <HoverCard>
-            <HoverCardTrigger asChild>
-                {children}
-            </HoverCardTrigger>
-            <HoverCardContent className="w-80">
-                <div className="flex justify-between gap-4">
-                    <div className="space-y-1">
-                        <h4 className="text-sm font-semibold">Plante naturalisée</h4>
-                        <p className="text-sm">
-                            Plante bien établie dans une zone différente de l’aire de répartition globale de son espèce après y avoir été introduite dans le cadre d’activités humaines et qui est en mesure de survivre et de se reproduire sans aide.
-                        </p>
-                        <div className="text-muted-foreground text-xs">
-                            Source: Aiglon Indigo
-                        </div>
+const HoverCardNative = ({ children }) => (
+    <HoverCard>
+        <HoverCardTrigger asChild>
+            {children}
+        </HoverCardTrigger>
+        <HoverCardContent className="w-80">
+            <div className="flex justify-between gap-4">
+                <div className="space-y-1">
+                    <h4 className="text-sm font-semibold">Plante indigène</h4>
+                    <p className="text-sm">
+                        Plante qui pousse dans une zone donnée de l’aire de répartition globale de son espèce, sans intervention humaine.
+                        <br />
+                        En Amérique du Nord, on fait référence aux espèces qui existaient sur le continent avant la colonisation européenne.
+                    </p>
+                    <div className="text-muted-foreground text-xs">
+                        Source: Aiglon Indigo
                     </div>
                 </div>
-            </HoverCardContent>
-        </HoverCard>
-    )
-}
+            </div>
+        </HoverCardContent>
+    </HoverCard>
+);
+
+const HoverCardNaturalized = ({ children }) => (
+    <HoverCard>
+        <HoverCardTrigger asChild>
+            {children}
+        </HoverCardTrigger>
+        <HoverCardContent className="w-80">
+            <div className="flex justify-between gap-4">
+                <div className="space-y-1">
+                    <h4 className="text-sm font-semibold">Plante naturalisée</h4>
+                    <p className="text-sm">
+                        Plante bien établie dans une zone différente de l’aire de répartition globale de son espèce après y avoir été introduite dans le cadre d’activités humaines et qui est en mesure de survivre et de se reproduire sans aide.
+                    </p>
+                    <div className="text-muted-foreground text-xs">
+                        Source: Aiglon Indigo
+                    </div>
+                </div>
+            </div>
+        </HoverCardContent>
+    </HoverCard>
+);
 
 const SizeChip = ({ size }: { size?: number }) => {
     if (!size) return <span>Inconnue</span>;
@@ -109,9 +111,8 @@ export default function Page() {
     const router = useRouter();
 
     const { code } = router.query;
-    if (!code) return;
-
     const plantCode = code as string;
+
     const [plant, setPlant] = useState<Plant>();
     const [type, setType] = useState<PlantType>();
     const [latin, setLatin] = useState<string>();
@@ -119,18 +120,20 @@ export default function Page() {
     const [functionalGroup, setFunctionalGroup] = useState<FunctionalGroup | undefined>();
     const [loading, setLoading] = useState(false);
 
-    const fetchPlant = async (filters?: Filters) => {
-        setLoading(true);
+    const fetchPlant = async () => {
+        if (plantCode) {
+            setLoading(true);
 
-        const data = await plantApiInstance.getPlant(plantCode);
+            const data = await plantApiInstance.getPlant(plantCode);
 
-        setPlant(data);
-        setLoading(false);
+            setPlant(data);
+            setLoading(false);
+        }
     };
 
     useEffect(() => {
         fetchPlant();
-    }, []);
+    }, [router.query]);
 
     useEffect(() => {
         if (!plant) return;
@@ -159,9 +162,9 @@ export default function Page() {
             <main className="w-full max-w-xl">
                 {!loading && !!plant && (
                     <Card className="shadow-none rounded-xs" style={{ position: 'relative' }}>
-                        <CardHeader className="pb-2">
+                        <CardHeader className="">
                             {type && <h2 className='text-lg text-muted-foreground'>{type.label}</h2>}
-                            <div className='flex'>
+                            <div className='flex mt-2'>
                                 <CodeChip plant={plant} />
                                 <div className="grow ml-4">
                                     <CardTitle className="text-3xl">
@@ -179,22 +182,22 @@ export default function Page() {
                             </div>
                         </CardHeader>
                         <CardContent className="grid">
-                            <div className='flex w-full'>
-                                <Badge className='flex grow items-center overflow-hidden p-4 m-2 rounded-sm' variant='outline'>
+                            <div className='flex w-full mt-4 mb-10'>
+                                <Badge className='flex grow items-center overflow-hidden p-4 mr-2 rounded-sm' variant='outline'>
                                     <div className='flex grow [&>svg]:size-8 [&>svg]:shrink-0'><IconWorld /></div>
                                     <div className='flex-col grow'>
                                         <div className="font-light text-xs">Zone</div>
                                         <div className="font-medium text-lg">{plant.zone || 'Inconnue'}</div>
                                     </div>
                                 </Badge>
-                                <Badge className='flex grow items-center overflow-hidden p-4 m-2 rounded-sm' variant='outline'>
+                                <Badge className='flex grow items-center overflow-hidden p-4 mx-2 rounded-sm' variant='outline'>
                                     <div className='flex grow [&>svg]:size-8 [&>svg]:shrink-0'><IconArrowsVertical /></div>
                                     <div className='flex-col grow'>
                                         <div className="font-light text-xs">Hauteur</div>
                                         <div className="font-medium text-lg"><SizeChip size={plant.height} /></div>
                                     </div>
                                 </Badge>
-                                <Badge className='flex grow items-center overflow-hidden p-4 m-2 rounded-sm' variant='outline'>
+                                <Badge className='flex grow items-center overflow-hidden p-4 ml-2 rounded-sm' variant='outline'>
                                     <div className='flex grow [&>svg]:size-8 [&>svg]:shrink-0'><IconArrowsHorizontal /></div>
                                     <div className='flex-col grow'>
                                         <div className="font-light text-xs">Largeur</div>
@@ -202,7 +205,7 @@ export default function Page() {
                                     </div>
                                 </Badge>
                             </div>
-                            <div className='flex-col mt-8'>
+                            <div className='flex-col'>
                                 <div className='text-xl font-semibold'>
                                     Informations générales
                                 </div>
@@ -211,8 +214,9 @@ export default function Page() {
                                     <tbody>
                                         {plant.isNative && (
                                             <tr>
-                                                <td className='p-1 pl-2'>Statut</td>
-                                                <td>
+                                                <td className='p-1 pl-2 text-sm'>Statut</td>
+                                                <td className='flex items-center'>
+                                                    <VSeparator />
                                                     <HoverCardNative>
                                                         <span className='cursor-help'>Indigène</span>
                                                     </HoverCardNative>
@@ -221,18 +225,20 @@ export default function Page() {
                                         )}
                                         {plant.isNaturalized && (
                                             <tr>
-                                                <td className='p-1 pl-2'>Statut</td>
-                                                <td>
-                                                    <HoverCardNative>
+                                                <td className='p-1 pl-2 text-sm'>Statut</td>
+                                                <td className='flex items-center'>
+                                                    <VSeparator />
+                                                    <HoverCardNaturalized>
                                                         <span className='cursor-help'>Naturalisé</span>
-                                                    </HoverCardNative>
+                                                    </HoverCardNaturalized>
                                                 </td>
                                             </tr>
                                         )}
                                         {!!functionalGroup && (
                                             <tr>
-                                                <td className='p-1 pl-2'>Groupe fonctionnel</td>
-                                                <td>
+                                                <td className='p-1 pl-2 text-sm'>Groupe fonctionnel</td>
+                                                <td className='flex items-center'>
+                                                    <VSeparator />
                                                     <HoverCardFunctionalGroup group={functionalGroup}>
                                                         <span className='cursor-help'>{functionalGroup.value} - {functionalGroup.label}</span>
                                                     </HoverCardFunctionalGroup>
@@ -241,20 +247,29 @@ export default function Page() {
                                         )}
                                         {!!plant.family && (
                                             <tr>
-                                                <td className='p-1 pl-2'>Famille</td>
-                                                <td><i>{plant.family}</i></td>
+                                                <td className='p-1 pl-2 text-sm'>Famille</td>
+                                                <td className='flex items-center'>
+                                                    <VSeparator />
+                                                    <i>{plant.family}</i>
+                                                </td>
                                             </tr>
                                         )}
                                         {!!plant.genus && (
                                             <tr>
-                                                <td className='p-1 pl-2'>Genre</td>
-                                                <td><i>{plant.genus}</i></td>
+                                                <td className='p-1 pl-2 text-sm'>Genre</td>
+                                                <td className='flex items-center'>
+                                                    <VSeparator />
+                                                    <i>{plant.genus}</i>
+                                                </td>
                                             </tr>
                                         )}
                                         {!!plant.species && (
                                             <tr>
-                                                <td className='p-1 pl-2'>Espèce</td>
-                                                <td><i>{plant.species}</i></td>
+                                                <td className='p-1 pl-2 text-sm'>Espèce</td>
+                                                <td className='flex items-center'>
+                                                    <VSeparator />
+                                                    <i>{plant.species}</i>
+                                                </td>
                                             </tr>
                                         )}
                                     </tbody>
