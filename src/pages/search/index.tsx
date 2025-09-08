@@ -40,7 +40,6 @@ function Search() {
         if (heightMax) height[1] = parseInt(heightMax as string, 10);
         if (spreadMin) spread[0] = parseInt(spreadMin as string, 10);
         if (spreadMax) spread[1] = parseInt(spreadMax as string, 10);
-        const species = searchParams.get('species') || undefined;
 
         setFilters({
             q: searchParams.get('q') || DEFAULT_FILTERS.q,
@@ -52,7 +51,8 @@ function Search() {
             functionalGroup: searchParams.get('functionalGroup') || DEFAULT_FILTERS.functionalGroup,
             height,
             spread,
-            species,
+            genus: searchParams.get('genus') || undefined,
+            species: searchParams.get('species') || undefined,
         });
     }, [searchParams]);
 
@@ -67,10 +67,7 @@ function Search() {
     };
 
     useEffect(() => {
-        console.log('JSON.stringify(filters)', JSON.stringify(filters));
-        console.log('JSON.stringify(DEFAULT_FILTERS)', JSON.stringify(DEFAULT_FILTERS));
         const isDefaultFilters = JSON.stringify(filters) === JSON.stringify(DEFAULT_FILTERS);
-        console.log('isDefaultFilters', isDefaultFilters);
         if (!isDefaultFilters) {
             fetchPlants(filters);
         }

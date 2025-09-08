@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { IconSlash } from '@tabler/icons-react';
-import Link from 'next/link';
 import { speciesApiInstance } from '@/api/species-api';
 import { createSearchParams } from '@/api/plant-api';
 import { Separator } from '@/components/ui/separator';
@@ -59,7 +59,8 @@ export default function Species() {
                                         <div className='grid grid-cols-2 mt-8'>
                                             {values?.map((s, i) => (
                                                 <>
-                                                    {!s.species && <span><i>{s.genus} sp.</i></span>}
+                                                {/* TODO Ajouter species vide pour chercher les Malus sp. */}
+                                                    {!s.species && <Link key={i} href={`/search?${createSearchParams({ genus: s.genus }).toString()}`}><i>{s.genus} sp.</i></Link>}
                                                     {s.species && <Link key={i} href={`/search?${createSearchParams({ species: s.species }).toString()}`}><i>{s.species}</i></Link>}
                                                 </>
                                             ))}

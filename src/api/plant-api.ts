@@ -5,7 +5,7 @@ import { Plant } from "@/types/plant";
 export function createSearchParams(filters?: Filters) {
     const params = new URLSearchParams();
     if (filters) {
-        filters.q && params.set('q', filters.q.toLowerCase());
+        filters.q && params.set('q', filters.q);
         filters.zone && filters.zone !== '.' && params.set('zone', filters.zone.toString());
         filters.soil && filters.soil !== '.' && params.set('soil', filters.soil);
         filters.sun && filters.sun !== '.' && params.set('sun', filters.sun);
@@ -26,6 +26,7 @@ export function createSearchParams(filters?: Filters) {
             filters.spread[1] < 3000 && params.set('spreadMax', filters.spread[1].toString());
         }
         filters.functionalGroup && filters.functionalGroup !== '.' && params.set('functionalGroup', filters.functionalGroup);
+        filters.genus && filters.genus !== '.' && params.set('genus', filters.genus);
         filters.species && filters.species !== '.' && params.set('species', filters.species);
     }
 

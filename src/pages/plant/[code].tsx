@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { ExternalLink, MapPin } from 'lucide-react';
+import Link from 'next/link';
 
-import { plantApiInstance } from '@/api/plant-api';
+import { createSearchParams, plantApiInstance } from '@/api/plant-api';
 import { Plant } from '@/types/plant';
 import { getPlantType, PlantType, PlantTypeValue } from "@/types/plantType";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -268,7 +268,7 @@ export default function PlantPage() {
                                                     <td className='p-1 pl-2 text-sm'>Genre</td>
                                                     <td className='flex items-center'>
                                                         <VSeparator />
-                                                        <i>{plant.genus}</i>
+                                                        <Link href={`/genus/${plant.genus}`}><i>{plant.genus}</i></Link>
                                                     </td>
                                                 </tr>
                                             )}
@@ -277,7 +277,7 @@ export default function PlantPage() {
                                                     <td className='p-1 pl-2 text-sm'>Espèce</td>
                                                     <td className='flex items-center'>
                                                         <VSeparator />
-                                                        <i>{plant.species}</i>
+                                                        <Link href={`/search?${createSearchParams({ species: plant.species }).toString()}`}><i>{plant.species}</i></Link>
                                                     </td>
                                                 </tr>
                                             )}

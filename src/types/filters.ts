@@ -24,6 +24,7 @@ export interface Filters {
     height?: [number, number];
     spread?: [number, number];
     functionalGroup?: string;
+    genus?: string;
     species?: string;
 };
 
