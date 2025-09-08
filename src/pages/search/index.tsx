@@ -20,7 +20,7 @@ import { SectionTitle } from '@/components/section-title';
 import "@/styles/globals.css";
 import SearchLayout from './search-layout';
 
-function Search() {
+function SearchPage() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [filteredPlants, setFilteredPlants] = useState<Plant[]>([]);
@@ -125,8 +125,8 @@ function Search() {
     );
 }
 
-Search.getLayout = (page) => {
+SearchPage.getLayout = (page) => {
     return <SearchLayout>{page}</SearchLayout>
 };
 
-export default Search;
+export default SearchPage;

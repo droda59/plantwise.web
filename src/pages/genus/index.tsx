@@ -7,7 +7,7 @@ import { genusApiInstance } from '@/api/genus-api';
 import { IconSlash } from '@tabler/icons-react';
 import Link from 'next/link';
 
-export default function Genus() {
+export default function GenusListPage() {
     const [genusList, setGenusList] = useState<string[]>();
     const [loading, setLoading] = useState(false);
 

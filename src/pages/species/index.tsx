@@ -9,7 +9,7 @@ import { speciesApiInstance } from '@/api/species-api';
 import { createSearchParams } from '@/api/plant-api';
 import { Separator } from '@/components/ui/separator';
 
-export default function Species() {
+export default function SpeciesPage() {
     const [speciesList, setSpeciesList] = useState<Partial<Record<string, { genus: string, species: string }[]>>>();
     const [loading, setLoading] = useState(false);
 
