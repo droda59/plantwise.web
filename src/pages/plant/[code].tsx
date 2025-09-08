@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { ExternalLink, MapPin } from 'lucide-react';
 
 import { plantApiInstance } from '@/api/plant-api';
-import { Nursery, Plant } from '@/types/plant';
+import { Plant } from '@/types/plant';
 import { getPlantType, PlantType, PlantTypeValue } from "@/types/plantType";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { IconArrowsHorizontal, IconArrowsVertical, IconSlash, IconWorld } from "@tabler/icons-react";
@@ -20,15 +20,6 @@ import { FunctionalGroup, getFunctionalGroup } from '@/types/functional-groups';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
-import { genusApiInstance } from '@/api/genus-api';
-
-const NurseryChip = ({ n }: { n: Nursery }) => (
-    <a href={n.website} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs rounded-full border px-2 py-1 hover:shadow-sm transition">
-        <MapPin className="w-3 h-3" />
-        <span>{n.name}</span>
-        <ExternalLink className="w-3 h-3 opacity-60" />
-    </a>
-);
 
 const VSeparator = () => (
     <Separator
@@ -108,7 +99,7 @@ const SizeChip = ({ size }: { size?: number }) => {
     return <span>{size} m</span>;
 }
 
-export default function Page() {
+export default function PlantPage() {
     const router = useRouter();
 
     const { code } = router.query;
@@ -121,19 +112,11 @@ export default function Page() {
     const [functionalGroup, setFunctionalGroup] = useState<FunctionalGroup | undefined>();
     const [loading, setLoading] = useState(false);
 
-    const [genusList, setGenusList] = useState<string[]>();
-    const [speciesList, setSpeciesList] = useState<string[]>();
-
     const fetchPlant = async () => {
         if (plantCode) {
             setLoading(true);
 
             const data = await plantApiInstance.getPlant(plantCode);
-
-            const genus = await genusApiInstance.getGenus();
-            setGenusList(genus);
-            const species = await genusApiInstance.getSpecies('Betula');
-            setSpeciesList(species);
 
             setPlant(data);
             setLoading(false);

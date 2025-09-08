@@ -49,7 +49,7 @@ export class plantApi {
         return data.map(d => PlantFactory.create(d));
     }
 
-    async getPlant(code: string): Promise<Plant> {
+    async getPlant(code: string): Promise<Plant | null> {
         const response = await fetch(`http://localhost:3000/api/plants/${code}`, {
             method: 'GET',
             mode: 'cors',
@@ -59,6 +59,9 @@ export class plantApi {
         });
 
         const data = await response.json();
+        console.log('data', data);
+        if (!data) return null;
+
         const plant = PlantFactory.create(data);
 
         return plant;
@@ -72,6 +75,22 @@ export class plantApi {
                 'Content-Type': 'application/json'
             },
         });
+    }
+
+    async createPlant(plant: Plant): Promise<Plant> {
+        const response = await fetch(`http://localhost:3000/api/plants`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(plant),
+        });
+
+        const data = await response.json();
+        const newPlant = PlantFactory.create(data);
+
+        return newPlant;
     }
 }
 

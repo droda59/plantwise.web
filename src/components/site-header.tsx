@@ -52,12 +52,12 @@ export function SiteHeader() {
                     </Link>
                 </h1>
                 <div className="ml-auto flex items-center gap-2">
-                    <Link className='' href='/genus'>Par genre</Link>
+                    <Link className='text-sm' href='/genus'>Par genre</Link>
                     <Separator
                         orientation="vertical"
                         className="mr-2 ml-2 data-[orientation=vertical]:h-4"
                     />
-                    <Link className='' href='/species'>Par espèce</Link>
+                    <Link className='text-sm' href='/species'>Par espèce</Link>
                     <Separator
                         orientation="vertical"
                         className="mr-2 ml-2 data-[orientation=vertical]:h-4"

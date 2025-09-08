@@ -9,7 +9,7 @@ import { IconSlash } from '@tabler/icons-react';
 import { createSearchParams } from '@/api/plant-api';
 import Link from 'next/link';
 
-export default function Home() {
+export default function Genus() {
     const router = useRouter();
 
     const { id } = router.query;
