@@ -45,7 +45,7 @@ export default function Genus() {
                             <div className='grid grid-cols-2 mt-8'>
                                 {genusList?.map((g, i) => (
                                     <>
-                                        {!!g.length && (
+                                        {g && !!g.length && (
                                             <Link key={i} href={`/genus/${g}`}><i>{g}</i></Link>
                                         )}
                                     </>
