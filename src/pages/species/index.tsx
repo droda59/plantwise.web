@@ -42,6 +42,10 @@ export default function Species() {
                                 <BreadcrumbItem>
                                     <BreadcrumbLink href="/genus">Genres</BreadcrumbLink>
                                 </BreadcrumbItem>
+                                <BreadcrumbSeparator><IconSlash /></BreadcrumbSeparator>
+                                <BreadcrumbItem>
+                                    <BreadcrumbLink href="/#">Espèces</BreadcrumbLink>
+                                </BreadcrumbItem>
                             </BreadcrumbList>
                         </Breadcrumb>
                         <div className='flex-col'>
