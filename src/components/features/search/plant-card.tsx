@@ -6,7 +6,7 @@ import { Plant } from "@/types/plant";
 import { getPlantType, PlantTypeValue } from "@/types/plantType";
 import { IconArrowsHorizontal, IconArrowsVertical, IconWorld } from "@tabler/icons-react";
 import Link from "next/link";
-import { CodeChip } from "./code-chip";
+import { CodeChip } from "../../code-chip";
 
 const prettySun = (s) => ({ "plein-soleil": "Plein soleil", "mi-ombre": "Mi-ombre", "ombre": "Ombre" }[s] || s);
 
@@ -41,14 +41,16 @@ export const PlantCard = ({ plant }: { plant: Plant; }) => {
                 height: '4px',
             };
 
-            if (chipType === '1 AR' && (plant.type === '1 AR' || plant.type === '1b ARB')) style.backgroundColor = 'lightgreen';
-            else if (chipType === '2 CON' && plant.type === '2 CON') style.backgroundColor = 'darkgreen';
-            else if (chipType === '3 ARBU' && plant.type === '3 ARBU') style.backgroundColor = 'green';
-            else if (chipType === '4 VIV' && (plant.type === '4 VIV' || plant.type === '10 FH')) style.backgroundColor = 'red';
-            else if (chipType === '5 GRAM' && plant.type === '5 GRAM') style.backgroundColor = 'wheat';
-            else if (chipType === '6 GRMP' && plant.type === '6 GRMP' || plant.type === '7 FOU') style.backgroundColor = 'wheat';
-            else if (chipType === '8 AQUA' && plant.type === '8 AQUA') style.backgroundColor = 'teal';
-
+            if ((chipType === '1 AR' && (plant.type === '1 AR' || plant.type === '1b ARB')) 
+                ||(chipType === '2 CON' && plant.type === '2 CON')
+                || (chipType === '3 ARBU' && plant.type === '3 ARBU')
+                || (chipType === '4 VIV' && (plant.type === '4 VIV' || plant.type === '10 FH'))
+                || (chipType === '5 GRAM' && plant.type === '5 GRAM')
+                || (chipType === '6 GRMP' && plant.type === '6 GRMP' || plant.type === '7 FOU')
+                || (chipType === '8 AQUA' && plant.type === '8 AQUA')) {
+                style.backgroundColor = getPlantType(plant.type).color;
+            }
+            
             return style;
         };
 
@@ -59,11 +61,8 @@ export const PlantCard = ({ plant }: { plant: Plant; }) => {
 
     return (
         <motion.div layout initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}>
-            <Card className="shadow-sm hover:shadow-lg transition rounded-xs" style={{ position: 'relative' }}>
-                <div className="flex w-full" style={{
-                    position: 'absolute',
-                    top: 0
-                }}>
+            <Card className="shadow-sm hover:shadow-lg transition rounded-xs relative">
+                <div className="flex w-full absolute top-0">
                     <TypeChip chipType='1 AR' />
                     <TypeChip chipType='2 CON' />
                     <TypeChip chipType='3 ARBU' />

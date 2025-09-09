@@ -60,7 +60,6 @@ export class plantApi {
         });
 
         const data = await response.json();
-        console.log('data', data);
         if (!data) return null;
 
         const plant = PlantFactory.create(data);

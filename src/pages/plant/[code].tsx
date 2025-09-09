@@ -169,7 +169,7 @@ export default function PlantPage() {
                                 </BreadcrumbItem>
                             </BreadcrumbList>
                         </Breadcrumb>
-                        <Card className="shadow-none rounded-xs" style={{ position: 'relative' }}>
+                        <Card className="shadow-none rounded-xs relative">
                             <CardHeader className="">
                                 {type && <h2 className='text-lg text-muted-foreground'>{type.label}</h2>}
                                 <div className='flex mt-2'>

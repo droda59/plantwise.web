@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-import { PlantCard } from '@/components/plant-card';
+import { PlantCard } from '@/components/features/search/plant-card';
 import { IconSearch } from '@tabler/icons-react';
 
 import { createSearchParams, plantApiInstance } from '@/api/plant-api';

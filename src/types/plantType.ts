@@ -3,52 +3,67 @@ export type PlantTypeLabel = "Arbre" | "Arbrisseau feuillu" | "Conifère" | "Arb
 
 export interface PlantType {
     value: PlantTypeValue,
-    label: PlantTypeLabel
+    label: PlantTypeLabel,
+    color: string,
 };
 
 export const PLANTTYPES: Array<PlantType> = [
     {
         value: "1 AR",
-        label: "Arbre"
+        label: "Arbre",
+        color: 'lightgreen',
     }, {
         value: "1b ARB",
-        label: "Arbrisseau feuillu"
+        label: "Arbrisseau feuillu",
+        color: 'lightgreen',
     }, {
         value: "2 CON",
-        label: "Conifère"
+        label: "Conifère",
+        color: 'darkgreen'
     }, {
         value: "3 ARBU",
-        label: "Arbuste"
+        label: "Arbuste",
+        color: 'green',
     }, {
         value: "4 VIV",
-        label: "Vivace"
+        label: "Vivace",
+        color: 'red',
     }, {
         value: "5 GRAM",
-        label: "Graminée"
+        label: "Graminée",
+        color: 'wheat',
     }, {
         value: "6 GRMP",
-        label: "Grimpante"
+        label: "Grimpante",
+        color: 'wheat',
     }, {
         value: "7 FOU",
-        label: "Fougère"
+        label: "Fougère",
+        color: 'wheat',
     }, {
         value: "8 AQUA",
-        label: "Aquatique"
+        label: "Aquatique",
+        color: 'teal',
     }, {
         value: "9 ANU",
-        label: "Annuelle"
+        label: "Annuelle",
+        color: 'lightgreen',
     }, {
         value: "10 FH",
-        label: "Fines herbes"
+        label: "Fines herbes",
+        color: 'red',
     }, {
         value: "11 ENS",
-        label: "Ensemencement"
+        label: "Ensemencement",
+        color: 'yellow',
     }, {
         value: "12 BUL",
-        label: "Bulbe"
+        label: "Bulbe",
+        color: 'pink',
     }, {
         value: "13 MOU",
-        label: "Mousse"
+        label: "Mousse",
+        color: 'blue',
     }
 ];
 

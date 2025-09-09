@@ -18,7 +18,6 @@ export default function SpeciesPage() {
 
         const species = await speciesApiInstance.getSpecies();
         const groupedSpecies = Object.groupBy(species, ({ genus }) => genus);
-        console.log(groupedSpecies);
         setSpeciesList(groupedSpecies);
 
         setLoading(false);
