@@ -4,12 +4,13 @@ import { IconArrowsHorizontal, IconArrowsVertical, IconDroplet, IconDropletFille
 import { SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { COLORS, DEFAULT_FILTERS, Filters, SALTS, SUNS, ZONES } from "@/types/filters";
+import { COLORS, DEFAULT_FILTERS, Filters, SALTS, SUNS } from "@/types/filters";
 import { PLANTTYPES } from "@/types/plantType";
 import { FunctionalGroup, FUNCTIONALGROUPS } from "@/types/functional-groups";
 import { FilterItemSelect } from "@/components/filter-item-select";
 import { FilterItemCheckbox } from "@/components/filter-item-checkbox";
 import { FilterItemSlider } from "@/components/filter-item-slider";
+import { HardinessZone, ZONES } from "@/types/hardiness-zone";
 
 function formatSizeChip(size: number): string {
     if (size > 100) return `${size / 100} m`;
@@ -72,6 +73,7 @@ export function PlantFilters(props:
                         icon={IconWorld}
                         options={ZONES}
                         value={filters.zone}
+                        labelFormatter={(t: HardinessZone) => `${t.value} (${t.city})`}
                         setValue={v => setFilters(f => ({ ...f, zone: v || undefined }))} />
 
                     <FilterItemSelect
@@ -121,7 +123,7 @@ export function PlantFilters(props:
                         icon={IconTrees}
                         options={FUNCTIONALGROUPS}
                         value={filters.functionalGroup}
-                        getLabel={(t: FunctionalGroup) => `${t.value} - ${t.label}`}
+                        labelFormatter={(t: FunctionalGroup) => `${t.value} - ${t.label}`}
                         disabled={!['.', '1 AR', '1b ARB', '2 CON', '3 ARBU'].includes(filters.type)}
                         setValue={v => setFilters(f => ({ ...f, functionalGroup: v || undefined }))} />
 

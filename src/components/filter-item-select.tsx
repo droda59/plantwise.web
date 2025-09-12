@@ -9,13 +9,14 @@ export function FilterItemSelect(props: {
     icon: Icon,
     options: any[],
     value?: string,
-    getLabel?: (t: any) => string,
+    labelFormatter?: (t: any) => string,
     disabled?: boolean,
     setValue: (value: React.SetStateAction<any>) => void
 }) {
+    // TODO Voir pour que le sélectionné n'ait pas le long label
     const createSelectItem = (t: any, i: number) => {
-        if (props.getLabel) {
-            return <SelectItem key={i} value={t.value}>{props.getLabel(t)}</SelectItem>;
+        if (props.labelFormatter) {
+            return <SelectItem key={i} value={t.value}>{props.labelFormatter(t)}</SelectItem>;
         }
         else if (typeof t === 'string') {
             return <SelectItem key={i} value={t}>{t}</SelectItem>;
@@ -33,8 +34,8 @@ export function FilterItemSelect(props: {
                 <SelectContent>
                     <SelectItem value=".">Tous</SelectItem>
                     {props.options.sort((a, b) => {
-                        if (props.getLabel) {
-                            return props.getLabel(a).localeCompare(props.getLabel(b));
+                        if (props.labelFormatter) {
+                            return props.labelFormatter(a).localeCompare(props.labelFormatter(b));
                         }
                         else if (typeof a === 'string') {
                             return a.localeCompare(b);
