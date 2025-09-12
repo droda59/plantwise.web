@@ -87,7 +87,21 @@ export const ZONES: Array<HardinessZone> = [
 ];
 
 export function getHardinessZone(value?: string): HardinessZone | undefined {
-    return ZONES.find(t => t.value === value);
+    if (!value) return;
+
+    var zone = value;
+    if (value === '0') zone = '0b';
+    else if (value === '1') zone = '1b';
+    else if (value === '2') zone = '2b';
+    else if (value === '3') zone = '3b';
+    else if (value === '4') zone = '4b';
+    else if (value === '5') zone = '5b';
+    else if (value === '6') zone = '6b';
+    else if (value === '7') zone = '7b';
+    else if (value === '8') zone = '8b';
+    else if (value === '9') zone = '9a';
+
+    return ZONES.find(t => t.value === zone);
 };
 
 

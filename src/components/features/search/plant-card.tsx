@@ -41,8 +41,8 @@ export const PlantCard = ({ plant }: { plant: Plant; }) => {
                 height: '4px',
             };
 
-            if ((chipType === '1 AR' && (plant.type === '1 AR' || plant.type === '1b ARB')) 
-                ||(chipType === '2 CON' && plant.type === '2 CON')
+            if ((chipType === '1 AR' && (plant.type === '1 AR' || plant.type === '1b ARB'))
+                || (chipType === '2 CON' && plant.type === '2 CON')
                 || (chipType === '3 ARBU' && plant.type === '3 ARBU')
                 || (chipType === '4 VIV' && (plant.type === '4 VIV' || plant.type === '10 FH'))
                 || (chipType === '5 GRAM' && plant.type === '5 GRAM')
@@ -50,7 +50,7 @@ export const PlantCard = ({ plant }: { plant: Plant; }) => {
                 || (chipType === '8 AQUA' && plant.type === '8 AQUA')) {
                 style.backgroundColor = getPlantType(plant.type).color;
             }
-            
+
             return style;
         };
 

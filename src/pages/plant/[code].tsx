@@ -20,6 +20,7 @@ import { FunctionalGroup, getFunctionalGroup } from '@/types/functional-groups';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
+import { getHardinessZone, HardinessZone } from '@/types/hardiness-zone';
 
 const VSeparator = () => (
     <Separator
@@ -105,6 +106,7 @@ export default function PlantPage() {
     const { code } = router.query;
     const plantCode = code as string;
 
+    const [zone, setZone] = useState<HardinessZone | undefined>();
     const [plant, setPlant] = useState<Plant>();
     const [type, setType] = useState<PlantType>();
     const [latin, setLatin] = useState<string>();
@@ -136,6 +138,7 @@ export default function PlantPage() {
         var regExp = /\(([^)]+)\)/;
         var matches = regExp.exec(plant.latin);
 
+        setZone(getHardinessZone(plant.zone));
         setType(getPlantType(plant.type));
         setFunctionalGroup(getFunctionalGroup(plant.functionalGroup));
 
@@ -191,21 +194,31 @@ export default function PlantPage() {
                             </CardHeader>
                             <CardContent className="grid">
                                 <div className='flex w-full mt-4 mb-2'>
-                                    <Badge className='flex grow items-center overflow-hidden p-4 mr-2 rounded-sm' variant='outline'>
+                                    <Badge className='flex grow items-center overflow-hidden p-4 pr-1 mr-2 rounded-sm' variant='outline'>
                                         <div className='flex grow [&>svg]:size-8 [&>svg]:shrink-0'><IconWorld /></div>
                                         <div className='flex-col grow'>
-                                            <div className="font-light text-xs">Zone</div>
-                                            <div className="font-medium text-lg">{plant.zone || 'Inconnue'}</div>
+                                            <div className="font-light text-xs">Zone de rusticité</div>
+                                            <div className="flex items-center font-medium text-lg">
+                                                <Separator
+                                                    orientation="vertical"
+                                                    className='mr-2 data-[orientation=vertical]:h-4'
+                                                    style={{
+                                                        backgroundColor: zone?.colorHex,
+                                                        width: '8px'
+                                                    }}
+                                                />
+                                                {plant.zone || 'Inconnue'}
+                                            </div>
                                         </div>
                                     </Badge>
-                                    <Badge className='flex grow items-center overflow-hidden p-4 mx-2 rounded-sm' variant='outline'>
+                                    <Badge className='flex grow items-center overflow-hidden p-4 pr-1 mx-2 rounded-sm' variant='outline'>
                                         <div className='flex grow [&>svg]:size-8 [&>svg]:shrink-0'><IconArrowsVertical /></div>
                                         <div className='flex-col grow'>
                                             <div className="font-light text-xs">Hauteur</div>
                                             <div className="font-medium text-lg"><SizeChip size={plant.height} /></div>
                                         </div>
                                     </Badge>
-                                    <Badge className='flex grow items-center overflow-hidden p-4 ml-2 rounded-sm' variant='outline'>
+                                    <Badge className='flex grow items-center overflow-hidden p-4 pr-1 ml-2 rounded-sm' variant='outline'>
                                         <div className='flex grow [&>svg]:size-8 [&>svg]:shrink-0'><IconArrowsHorizontal /></div>
                                         <div className='flex-col grow'>
                                             <div className="font-light text-xs">Largeur</div>
