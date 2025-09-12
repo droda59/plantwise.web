@@ -6,16 +6,17 @@ import { Plant } from '@/types/plant';
 import { plantApiInstance } from '@/api/plant-api';
 import { ShortPlantCard } from '@/components/features/project/short-plant-card';
 import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
+    ChartConfig,
+    ChartContainer,
+    ChartTooltip,
+    ChartTooltipContent,
 } from "@/components/ui/chart"
-import { Pie, PieChart } from 'recharts';
+import { LabelList, Pie, PieChart, PolarRadiusAxis, RadialBar, RadialBarChart } from 'recharts';
 
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts"
 import { getPlantType, PLANTTYPES } from '@/types/plantType';
-import { FUNCTIONALGROUPS } from '@/types/functional-groups';
+import { FUNCTIONALGROUPS, getFunctionalGroup } from '@/types/functional-groups';
+import { Badge } from '@/components/ui/badge';
 
 interface ChartData {
     count: number,
@@ -35,15 +36,15 @@ interface NativeChartData extends ChartData {
 };
 
 const nativeChartConfig = {
-  native: {
-    label: 'Indigène',
-  },
-  naturalized: {
-    label: 'Naturalisé',
-  },
-  other: {
-    label: 'Autre',
-  }
+    native: {
+        label: 'Indigène',
+    },
+    naturalized: {
+        label: 'Naturalisé',
+    },
+    other: {
+        label: 'Autre',
+    }
 } satisfies ChartConfig;
 
 interface GenusChartData extends ChartData {
@@ -51,22 +52,20 @@ interface GenusChartData extends ChartData {
 };
 
 const genusChartConfig = {
-  genus: {
-    label: 'Genre',
-  },
+    genus: {
+        label: 'Genre',
+    },
 } satisfies ChartConfig;
 
-
-interface GroupChartData {
+interface GroupChartData extends ChartData {
     group: string,
-    count: number,
 };
 
 const groupChartConfig = {
-  count: {
-    label: "Nombre",
-    color: "var(--chart-1)",
-  },
+    count: {
+        label: "Nombre",
+        color: "var(--chart-1)",
+    },
 } satisfies ChartConfig;
 
 /*
@@ -76,14 +75,24 @@ FUNCTIONALGROUPS.forEach(g => groupChartConfig[g.value] = g);
 */
 
 
+type ProjectPlantEntry = {
+    plant: Plant,
+    count: number
+};
 
-
+function getRandomColor() {
+    return '#' + Math.floor(Math.random() * 16777215).toString(16);
+}
 
 export default function ProjectPage() {
-    const [plantList, setPlantList] = useState<{plant: Plant, count: number}[]>([]);
+    const [plantList, setPlantList] = useState<ProjectPlantEntry[]>([]);
     const [loading, setLoading] = useState(false);
     const [typeChartData, setTypeChartData] = useState<TypeChartData[]>();
-    const [nativeChartData, setNativeChartData] = useState<NativeChartData[]>();
+    const [nativeData, setNativeData] = useState({
+        native: 0,
+        naturalized: 0,
+        other: 0,
+    });
     const [genusChartData, setGenusChartData] = useState<GenusChartData[]>();
     const [groupChartData, setGroupChartData] = useState<GroupChartData[]>();
 
@@ -97,11 +106,11 @@ export default function ProjectPage() {
         const plant4 = await plantApiInstance.getPlant('PDM');
         const plant5 = await plantApiInstance.getPlant('PUR');
         setPlantList([
-            { plant: plant1, count: 27 }, 
-            { plant: plant2, count: 7 }, 
-            { plant: plant3, count: 45 }, 
-            { plant: plant4, count: 110 }, 
-            { plant: plant5, count: 60 }, 
+            { plant: plant1, count: 3 },
+            { plant: plant2, count: 7 },
+            { plant: plant3, count: 2 },
+            { plant: plant4, count: 5 },
+            { plant: plant5, count: 6 },
         ]);
 
         setLoading(false);
@@ -109,42 +118,63 @@ export default function ProjectPage() {
 
     useEffect(() => {
         if (plantList.length) {
-            setTypeChartData(plantList.map(p => {
-                return {
-                    type: p.plant.type, count: p.count, fill: getPlantType(p.plant.type).color
-                };
-            }));
-            setNativeChartData(plantList.map(p => {
-                if (p.plant.isNative) {
-                    return { type: 'native', count: p.count, fill: 'green' };
-                } else if (p.plant.isNaturalized) {
-                    return { type: 'naturalized', count: p.count, fill: 'orange' };
-                } else {
-                    return { type: 'other', count: p.count, fill: 'lightgrey' };
+            const groupedTypes = Object.groupBy(plantList, ({ plant }) => plant.type);
+            const typeData = [] as TypeChartData[];
+            PLANTTYPES.forEach(t => {
+                var count = 0;
+                if (groupedTypes[t.value]) {
+                    for (const entry of groupedTypes[t.value]) {
+                        count += entry.count;
+                    }
                 }
-            }));
+                typeData.push({ type: t.value, count, fill: getPlantType(t.value)?.color });
+            });
+            setTypeChartData(typeData);
+
+            const nativeCounts = {
+                native: 0,
+                naturalized: 0,
+                other: 0,
+            };
+            var total = 0;
+            plantList.forEach(p => {
+                if (p.plant.isNative) {
+                    nativeCounts.native += p.count;
+                    total += p.count;
+                } else if (p.plant.isNaturalized) {
+                    nativeCounts.naturalized += p.count;
+                    total += p.count;
+                } else {
+                    nativeCounts.other += p.count;
+                    total += p.count;
+                }
+            });
+            const nativeData = {
+                native: ~~((nativeCounts.native / total) * 100),
+                naturalized: ~~((nativeCounts.naturalized / total) * 100),
+                other: ~~((nativeCounts.other / total) * 100),
+            };
+            setNativeData(nativeData);
+            console.log('nativeData', nativeData);
+
             setGenusChartData(plantList.map(p => {
                 return {
-                    genus: p.plant.genus, count: p.count, fill: 'yellow'
+                    genus: p.plant.genus, count: p.count, fill: getRandomColor()
                 };
             }));
 
             const groupedGroups = Object.groupBy(plantList, ({ plant }) => plant.functionalGroup);
-            console.log('groupedGroups', groupedGroups);
-
-            const data = [];
+            const data = [] as GroupChartData[];
             FUNCTIONALGROUPS.forEach(g => {
+                var count = 0;
                 if (groupedGroups[g.value]) {
-                    var count = 0;
                     for (const entry of groupedGroups[g.value]) {
                         count += entry.count;
                     }
-                    data.push({ group: g.value, count });
-                } else {
-                    data.push({ group: g.value, count: 0 });
                 }
+                data.push({ group: g.value, count, fill: getFunctionalGroup(g.value)?.colorHex });
             });
-            
+
             setGroupChartData(data);
         }
     }, [plantList]);
@@ -179,23 +209,23 @@ export default function ProjectPage() {
                                                         <ChartTooltipContent hideLabel />
                                                     }
                                                 />
-                                                    <Pie data={typeChartData} dataKey="count" nameKey="type" />
+                                                <Pie data={typeChartData} dataKey="count" nameKey="type" />
                                             </PieChart>
                                         </ChartContainer>
                                     </div>
                                     <div>
-                                        <h2>Graph de indigènes</h2>
-                                        <ChartContainer config={nativeChartConfig}>
-                                            <PieChart>
-                                                <ChartTooltip
-                                                    cursor={false}
-                                                    content={
-                                                        <ChartTooltipContent />
-                                                    }
-                                                />
-                                                    <Pie data={nativeChartData} dataKey="count" nameKey="type" />
-                                            </PieChart>
-                                        </ChartContainer>
+                                        <h2>Stats de indigènes</h2>
+                                        <div className='flex'>
+                                            <div>
+                                                {nativeData && nativeData.native && <Badge variant='outline' className="text-emerald-700 rounded-xs">{nativeData.native}% d'espèces indigènes</Badge>}
+                                            </div>
+                                            <div>
+                                                {nativeData && nativeData.naturalized && <Badge variant='outline' className="ml-1 text-amber-700 rounded-xs">{nativeData.naturalized} % d'espèces naturalisées</Badge>}
+                                            </div>
+                                            <div>
+                                                {nativeData && nativeData.other && <Badge variant='outline' className="ml-1 rounded-xs">{nativeData.other}% d'espèces autres</Badge>}
+                                            </div>
+                                        </div>
                                     </div>
                                     <div>
                                         <h2>Graph de genre</h2>
@@ -207,7 +237,7 @@ export default function ProjectPage() {
                                                         <ChartTooltipContent />
                                                     }
                                                 />
-                                                    <Pie data={genusChartData} dataKey="count" nameKey="genus" />
+                                                <Pie data={genusChartData} dataKey="count" nameKey="genus" />
                                             </PieChart>
                                         </ChartContainer>
                                     </div>
@@ -215,23 +245,28 @@ export default function ProjectPage() {
                                         <h2>Graph de groupe fonctionnel</h2>
                                         <ChartContainer
                                             config={groupChartConfig}
-                                            className="mx-auto aspect-square max-h-[250px]"
+                                            className="mx-auto aspect-square max-h-[350px]"
                                         >
-                                            <RadarChart data={groupChartData}>
-                                                <ChartTooltip cursor={false} content={
-                                                    <ChartTooltipContent 
-                                                          indicator={Object.keys(groupChartConfig).length > 0 ? "dot" : "line"} 
-                                                          formatter={value => value === null || value === undefined ? "N/A" : value.toLocaleString()}
-                                                    />} 
+                                            <RadialBarChart
+                                                data={groupChartData}
+                                                startAngle={180}
+                                                endAngle={0}
+                                                innerRadius={20}
+                                                outerRadius={160}
+                                            >
+                                                <ChartTooltip
+                                                    cursor={false}
+                                                    content={<ChartTooltipContent hideLabel nameKey="group" />}
                                                 />
-                                                <PolarAngleAxis dataKey="group" />
-                                                <PolarGrid />
-                                                <Radar
-                                                    dataKey="count"
-                                                    fill="var(--color-desktop)"
-                                                    fillOpacity={0.6}
-                                                />
-                                            </RadarChart>
+                                                <RadialBar dataKey="count" background>
+                                                    <LabelList
+                                                        position="middle"
+                                                        dataKey="group"
+                                                        className="fill-primary"
+                                                        fontSize={10}
+                                                    />
+                                                </RadialBar>
+                                            </RadialBarChart>
                                         </ChartContainer>
                                     </div>
                                 </div>
@@ -242,39 +277,3 @@ export default function ProjectPage() {
             </main>
         </div>
     );
-
-/*
-export const description = "A radar chart"
-
-const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 273 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
-]
-
-const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "var(--chart-1)",
-  },
-} satisfies ChartConfig
-
-        <ChartContainer
-          config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px]"
-        >
-          <RadarChart data={chartData}>
-            <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-            <PolarAngleAxis dataKey="month" />
-            <PolarGrid />
-            <Radar
-              dataKey="desktop"
-              fill="var(--color-desktop)"
-              fillOpacity={0.6}
-            />
-          </RadarChart>
-        </ChartContainer>
-*/
