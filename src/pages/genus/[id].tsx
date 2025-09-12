@@ -58,10 +58,10 @@ export default function GenusPage() {
                             <h1 className='text-xl font-semibold'>{genus}</h1>
                             <div className='grid grid-cols-2 mt-8'>
                                 {speciesList?.map((s, i) => (
-                                    <>
-                                        {!s.length && <span><i>{genus} sp.</i></span>}
+                                    <div key={i}>
+                                        {!s.length && <span key={i}><i>{genus} sp.</i></span>}
                                         {!!s.length && <Link key={i} href={`/search?${createSearchParams({ species: s }).toString()}`}><i>{s}</i></Link>}
-                                    </>
+                                    </div>
                                 ))}
                             </div>
                         </div>

@@ -51,21 +51,21 @@ export default function SpeciesPage() {
                             <h1 className='text-3xl font-semibold'>Recherche par espèce</h1>
                             <div className='flex-col mt-8'>
                                 {Object.entries(speciesList || {}).map(([key, values], i) => (
-                                    <>
-                                        <h1 key={i} className='text-xl font-semibold'>
+                                    <div key={i}>
+                                        <h1 className='text-xl font-semibold'>
                                             <Link href={`/genus/${key}`}><i>{key}</i></Link>
                                         </h1>
                                         <div className='grid grid-cols-2 mt-8'>
-                                            {values?.map((s, i) => (
-                                                <>
-                                                {/* TODO Ajouter species vide pour chercher les Malus sp. */}
-                                                    {!s.species && <Link key={i} href={`/search?${createSearchParams({ genus: s.genus }).toString()}`}><i>{s.genus} sp.</i></Link>}
-                                                    {s.species && <Link key={i} href={`/search?${createSearchParams({ species: s.species }).toString()}`}><i>{s.species}</i></Link>}
-                                                </>
+                                            {/* TODO Ajouter species vide pour chercher les Malus sp. */}
+                                            {values?.map((s, j) => (
+                                                <div key={j}>
+                                                    {!s.species && <Link key={j} href={`/search?${createSearchParams({ genus: s.genus }).toString()}`}><i>{s.genus} sp.</i></Link>}
+                                                    {s.species && <Link key={j} href={`/search?${createSearchParams({ species: s.species }).toString()}`}><i>{s.species}</i></Link>}
+                                                </div>
                                             ))}
                                         </div>
                                         <Separator className='my-8' />
-                                    </>
+                                    </div>
                                 ))}
                             </div>
                         </div>

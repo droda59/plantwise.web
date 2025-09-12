@@ -43,12 +43,8 @@ export default function GenusListPage() {
                         <div className='flex-col'>
                             <h1 className='text-3xl font-semibold'>Recherche par genre</h1>
                             <div className='grid grid-cols-2 mt-8'>
-                                {genusList?.map((g, i) => (
-                                    <>
-                                        {g && !!g.length && (
-                                            <Link key={i} href={`/genus/${g}`}><i>{g}</i></Link>
-                                        )}
-                                    </>
+                                {genusList?.map((g, i) => g && !!g.length && (
+                                    <Link key={i} href={`/genus/${g}`}><i>{g}</i></Link>
                                 ))}
                             </div>
                         </div>
