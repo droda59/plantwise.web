@@ -14,6 +14,7 @@ export class PlantFactory {
             isNaturalized: data.native === 'n',
             droughtTolerant: data.droughtTolerant ? Boolean(data.droughtTolerant) : undefined,
             floodTolerant: data.floodTolerant ? Boolean(data.floodTolerant) : undefined,
+            bloom: Array.isArray(data.bloom) ? data.bloom : (data.bloom ? [data.bloom] : []),
             height: Number(data.height) || 0,
             spread: Number(data.spread) || 0,
             saltTolerance: data.saltTolerance || undefined,
