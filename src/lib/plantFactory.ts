@@ -9,7 +9,6 @@ export class PlantFactory {
             name: data.name,
             type: data.type,
             zone: data.zone,
-            soil: Array.isArray(data.soil) ? data.soil : (data.soil ? [data.soil] : []),
             sun: Array.isArray(data.sun) ? data.sun : (data.sun ? [data.sun] : []),
             isNative: data.native === 'i',
             isNaturalized: data.native === 'n',

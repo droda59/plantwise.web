@@ -144,25 +144,3 @@ export default function Import() {
         </div>
     );
 }
-
-/*
-    id: string;
-    code: string;
-    latin: string;
-    name: string;
-    family?: string;
-    genus?: string;
-    species?: string;
-    type: PlantTypeValue;
-    functionalGroup?: string;
-    zone?: string;
-    soil: Array<'sablonneux' | 'limoneux' | 'argileux' | 'riche' | 'pauvre' | 'acide' | 'alcalin' | 'organique' | 'tourbeux' | 'loam argileux' | 'loam sablonneux' | 'humifère' | 'graveleux'>;
-    sun: Array<'plein-soleil' | 'mi-ombre' | 'ombre'>;
-    isNative: boolean;
-    isNaturalized: boolean;
-    droughtTolerant?: boolean;
-    floodTolerant?: boolean;
-    height?: number; // m (approx)
-    spread?: number; // m (approx)
-    saltTolerance?: 'haute' | 'moyenne' | 'faible';
-*/

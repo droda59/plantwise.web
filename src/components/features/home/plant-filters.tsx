@@ -4,7 +4,7 @@ import { IconArrowsHorizontal, IconArrowsVertical, IconDroplet, IconDropletFille
 import { SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { COLORS, DEFAULT_FILTERS, Filters, SALTS, SOILS, SUNS, ZONES } from "@/types/filters";
+import { COLORS, DEFAULT_FILTERS, Filters, SALTS, SUNS, ZONES } from "@/types/filters";
 import { PLANTTYPES } from "@/types/plantType";
 import { FunctionalGroup, FUNCTIONALGROUPS } from "@/types/functional-groups";
 import { FilterItemSelect } from "@/components/filter-item-select";
@@ -73,14 +73,6 @@ export function PlantFilters(props:
                         options={ZONES}
                         value={filters.zone}
                         setValue={v => setFilters(f => ({ ...f, zone: v || undefined }))} />
-
-                    <FilterItemSelect
-                        title='Sol'
-                        placeholder='Tous'
-                        icon={IconSandbox}
-                        options={SOILS}
-                        value={filters.soil}
-                        setValue={v => setFilters(f => ({ ...f, soil: v || undefined }))} />
 
                     <FilterItemSelect
                         title='Ensoleillement'

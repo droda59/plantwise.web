@@ -1,5 +1,4 @@
 export const ZONES = ['0a', '0b', '1a', '1b', '2a', '2b', '3a', '3b', '4a', '4b', '5a', '5b', '6a', '6b', '7a', '7b', '8a', '8b', '9a'];
-export const SOILS = ["sableux", "limoneux", "argileux", "riche", "pauvre", "acide", "alcalin"];
 export const SUNS = ["plein-soleil", "mi-ombre", "ombre"];
 export const COLORS = ["blanc", "jaune", "orange", "rouge", "rose", "mauve", "bleu", "vert", "rouge automnal"];
 export const SALTS = ["haute", "moyenne", "faible"];
@@ -9,7 +8,6 @@ export interface Filters {
 
     // Conditions du site
     zone?: string;
-    soil?: string;
     sun?: string;
     saltConditions?: string;
     droughtTolerant?: boolean;
@@ -17,12 +15,13 @@ export interface Filters {
 
     // Conditions de la plante
     type?: string;
+    functionalGroup?: string;
     color?: string;
     bloom?: [number, number];
-    native?: boolean;
     height?: [number, number];
     spread?: [number, number];
-    functionalGroup?: string;
+    native?: boolean;
+
     genus?: string;
     species?: string;
 };
@@ -32,7 +31,6 @@ export const DEFAULT_FILTERS: Filters = {
 
     // Conditions du site
     zone: undefined,
-    soil: undefined,
     sun: undefined,
     saltConditions: undefined,
     droughtTolerant: undefined,
@@ -40,10 +38,13 @@ export const DEFAULT_FILTERS: Filters = {
 
     // Conditions de la plante
     type: undefined,
+    functionalGroup: undefined,
     color: undefined,
     bloom: [1, 12],
-    native: undefined,
     height: [0, 3000],
     spread: [0, 3000],
-    functionalGroup: undefined,
+    native: undefined,
+
+    genus: undefined,
+    species: undefined,
 };
