@@ -30,6 +30,12 @@ function SearchPage() {
     useEffect(() => {
         if (!searchParams) return;
 
+        const bloomMin = searchParams.get('bloomMin');
+        const bloomMax = searchParams.get('bloomMax');
+        const bloom = [1, 12];
+        if (bloomMin) bloom[0] = parseInt(bloomMin as string, 10);
+        if (bloomMax) bloom[1] = parseInt(bloomMax as string, 10);
+
         const heightMin = searchParams.get('heightMin');
         const heightMax = searchParams.get('heightMax');
         const spreadMin = searchParams.get('spreadMin');
@@ -43,14 +49,17 @@ function SearchPage() {
 
         setFilters({
             q: searchParams.get('q') || DEFAULT_FILTERS.q,
-            type: searchParams.get('type') || DEFAULT_FILTERS.type,
             zone: searchParams.get('zone') || DEFAULT_FILTERS.zone,
-            native: searchParams.get('native') ? true : DEFAULT_FILTERS.native,
             droughtTolerant: searchParams.get('droughtTolerant') ? true : DEFAULT_FILTERS.droughtTolerant,
             floodTolerant: searchParams.get('floodTolerant') ? true : DEFAULT_FILTERS.floodTolerant,
+
+            type: searchParams.get('type') || DEFAULT_FILTERS.type,
             functionalGroup: searchParams.get('functionalGroup') || DEFAULT_FILTERS.functionalGroup,
+            bloom,
             height,
             spread,
+            native: searchParams.get('native') ? true : DEFAULT_FILTERS.native,
+
             genus: searchParams.get('genus') || undefined,
             species: searchParams.get('species') || undefined,
         });

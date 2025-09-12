@@ -277,3 +277,4 @@ export default function ProjectPage() {
             </main>
         </div>
     );
+}

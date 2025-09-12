@@ -14,9 +14,12 @@ export function createSearchParams(filters?: Filters) {
         filters.floodTolerant && params.set('floodTolerant', 'true');
 
         filters.type && filters.type !== '.' && params.set('type', filters.type);
+        filters.functionalGroup && filters.functionalGroup !== '.' && params.set('functionalGroup', filters.functionalGroup);
         filters.color && filters.color !== '.' && params.set('color', filters.color);
-        filters.bloom && filters.bloom !== '.' && params.set('bloom', filters.bloom);
-        filters.native && params.set('native', 'true');
+        if (filters.bloom) {
+            filters.bloom[0] > 1 && params.set('bloomMin', filters.bloom[0].toString());
+            filters.bloom[1] < 12 && params.set('bloomMax', filters.bloom[1].toString());
+        }
         if (filters.height) {
             filters.height[0] > 0 && params.set('heightMin', filters.height[0].toString());
             filters.height[1] < 3000 && params.set('heightMax', filters.height[1].toString());
@@ -25,7 +28,8 @@ export function createSearchParams(filters?: Filters) {
             filters.spread[0] > 0 && params.set('spreadMin', filters.spread[0].toString());
             filters.spread[1] < 3000 && params.set('spreadMax', filters.spread[1].toString());
         }
-        filters.functionalGroup && filters.functionalGroup !== '.' && params.set('functionalGroup', filters.functionalGroup);
+        filters.native && params.set('native', 'true');
+
         filters.genus && filters.genus !== '.' && params.set('genus', filters.genus);
         filters.species && filters.species !== '.' && params.set('species', filters.species);
     }

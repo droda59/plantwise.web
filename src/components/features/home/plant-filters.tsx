@@ -4,12 +4,35 @@ import { IconArrowsHorizontal, IconArrowsVertical, IconDroplet, IconDropletFille
 import { SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { BLOOMS, COLORS, DEFAULT_FILTERS, Filters, SALTS, SOILS, SUNS, ZONES } from "@/types/filters";
+import { COLORS, DEFAULT_FILTERS, Filters, SALTS, SOILS, SUNS, ZONES } from "@/types/filters";
 import { PLANTTYPES } from "@/types/plantType";
 import { FunctionalGroup, FUNCTIONALGROUPS } from "@/types/functional-groups";
 import { FilterItemSelect } from "@/components/filter-item-select";
 import { FilterItemCheckbox } from "@/components/filter-item-checkbox";
 import { FilterItemSlider } from "@/components/filter-item-slider";
+
+function formatSizeChip(size: number): string {
+    if (size > 100) return `${size / 100} m`;
+    return `${size} cm`;
+}
+
+function formatMonthChip(month: number): string {
+    switch (month) {
+        case 1: return 'Janvier';
+        case 2: return 'Février';
+        case 3: return 'Mars';
+        case 4: return 'Avril';
+        case 5: return 'Mai';
+        case 6: return 'Juin';
+        case 7: return 'Juillet';
+        case 8: return 'Août';
+        case 9: return 'Septembre';
+        case 10: return 'Octobre';
+        case 11: return 'Novembre';
+        case 12: return 'Décembre';
+        default: return '';
+    }
+}
 
 export function PlantFilters(props:
     {
@@ -101,22 +124,6 @@ export function PlantFilters(props:
                         setValue={v => setFilters(f => ({ ...f, type: v || undefined }))} />
 
                     <FilterItemSelect
-                        title='Couleur'
-                        placeholder='Toutes'
-                        icon={IconPalette}
-                        options={COLORS}
-                        value={filters.color}
-                        setValue={v => setFilters(f => ({ ...f, color: v || undefined }))} />
-
-                    <FilterItemSelect
-                        title='Floraison'
-                        placeholder='Toutes'
-                        icon={IconFlower}
-                        options={BLOOMS}
-                        value={filters.bloom}
-                        setValue={v => setFilters(f => ({ ...f, bloom: v || undefined }))} />
-
-                    <FilterItemSelect
                         title='Groupe fonct.'
                         placeholder='Tous'
                         icon={IconTrees}
@@ -126,20 +133,41 @@ export function PlantFilters(props:
                         disabled={!['.', '1 AR', '1b ARB', '2 CON', '3 ARBU'].includes(filters.type)}
                         setValue={v => setFilters(f => ({ ...f, functionalGroup: v || undefined }))} />
 
+                    <FilterItemSelect
+                        title='Couleur'
+                        placeholder='Toutes'
+                        icon={IconPalette}
+                        options={COLORS}
+                        value={filters.color}
+                        setValue={v => setFilters(f => ({ ...f, color: v || undefined }))} />
+
+                    <FilterItemSlider
+                        title='Floraison'
+                        min={1}
+                        max={12}
+                        icon={IconFlower}
+                        value={filters.bloom}
+                        labelFormatter={formatMonthChip}
+                        setValue={v => setFilters(f => ({ ...f, bloom: v }))} />
+
                     <FilterItemSlider
                         title='Hauteur'
                         min={0}
                         max={3000}
+                        steps={10}
                         icon={IconArrowsVertical}
                         value={filters.height}
+                        labelFormatter={formatSizeChip}
                         setValue={v => setFilters(f => ({ ...f, height: v }))} />
 
                     <FilterItemSlider
                         title='Largeur'
                         min={0}
                         max={3000}
+                        steps={10}
                         icon={IconArrowsHorizontal}
                         value={filters.spread}
+                        labelFormatter={formatSizeChip}
                         setValue={v => setFilters(f => ({ ...f, spread: v }))} />
 
                     <FilterItemCheckbox

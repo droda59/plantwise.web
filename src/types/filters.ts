@@ -3,7 +3,6 @@ export const SOILS = ["sableux", "limoneux", "argileux", "riche", "pauvre", "aci
 export const SUNS = ["plein-soleil", "mi-ombre", "ombre"];
 export const COLORS = ["blanc", "jaune", "orange", "rouge", "rose", "mauve", "bleu", "vert", "rouge automnal"];
 export const SALTS = ["haute", "moyenne", "faible"];
-export const BLOOMS = ["printemps", "été", "automne"];
 
 export interface Filters {
     q?: string;
@@ -19,7 +18,7 @@ export interface Filters {
     // Conditions de la plante
     type?: string;
     color?: string;
-    bloom?: string;
+    bloom?: [number, number];
     native?: boolean;
     height?: [number, number];
     spread?: [number, number];
@@ -42,7 +41,7 @@ export const DEFAULT_FILTERS: Filters = {
     // Conditions de la plante
     type: undefined,
     color: undefined,
-    bloom: undefined,
+    bloom: [1, 12],
     native: undefined,
     height: [0, 3000],
     spread: [0, 3000],
