@@ -5,14 +5,14 @@ export const SALTS = ["haute", "moyenne", "faible"];
 export interface Filters {
     q?: string;
 
-    // Conditions du site
+    // Critères du site
     zone?: string;
     sun?: string;
     saltConditions?: string;
     droughtTolerant?: boolean;
     floodTolerant?: boolean;
 
-    // Conditions de la plante
+    // Critères de la plante
     type?: string;
     functionalGroup?: string;
     color?: string;
@@ -28,14 +28,14 @@ export interface Filters {
 export const DEFAULT_FILTERS: Filters = {
     q: '',
 
-    // Conditions du site
+    // Critères du site
     zone: undefined,
     sun: undefined,
     saltConditions: undefined,
     droughtTolerant: undefined,
     floodTolerant: undefined,
 
-    // Conditions de la plante
+    // Critères de la plante
     type: undefined,
     functionalGroup: undefined,
     color: undefined,

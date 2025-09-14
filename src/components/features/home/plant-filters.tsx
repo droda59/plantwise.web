@@ -66,7 +66,7 @@ export function PlantFilters(props:
 
             <SidebarGroupContent className='grid grid-cols-2 gap-6 mt-4'>
                 <SidebarMenu className='pr-2'>
-                    <SidebarGroupLabel>Conditions du site</SidebarGroupLabel>
+                    <SidebarGroupLabel>Critères du site</SidebarGroupLabel>
                     <FilterItemSelect
                         title='Zone'
                         placeholder='Toutes'
@@ -108,7 +108,7 @@ export function PlantFilters(props:
                 </SidebarMenu>
 
                 <SidebarMenu className='pl-2 mr-16'>
-                    <SidebarGroupLabel>Conditions de la plante</SidebarGroupLabel>
+                    <SidebarGroupLabel>Critères de la plante</SidebarGroupLabel>
                     <FilterItemSelect
                         title='Type'
                         placeholder='Tous'

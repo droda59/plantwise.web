@@ -67,7 +67,7 @@ export function NavPlantFilters(props:
 
             <SidebarGroupContent className="flex flex-col gap-2 p-2">
                 <SidebarMenu>
-                    <SidebarGroupLabel>Conditions du site</SidebarGroupLabel>
+                    <SidebarGroupLabel>Critères du site</SidebarGroupLabel>
                     <FilterItemSelect
                         title='Zone'
                         placeholder='Toutes'
@@ -110,7 +110,7 @@ export function NavPlantFilters(props:
             </SidebarGroupContent>
             <SidebarGroupContent className="flex flex-col gap-2 p-2">
                 <SidebarMenu>
-                    <SidebarGroupLabel>Conditions de la plante</SidebarGroupLabel>
+                    <SidebarGroupLabel>Critères de la plante</SidebarGroupLabel>
                     <FilterItemSelect
                         title='Type'
                         placeholder='Tous'

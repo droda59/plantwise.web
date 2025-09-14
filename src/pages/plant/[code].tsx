@@ -3,10 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import Image from 'next/image';
 
 import { createSearchParams, plantApiInstance } from '@/api/plant-api';
 import { Plant } from '@/types/plant';
-import { getPlantType, PlantType, PlantTypeValue } from "@/types/plantType";
+import { getPlantType, PlantType } from "@/types/plantType";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { IconArrowsHorizontal, IconArrowsVertical, IconSlash, IconWorld } from "@tabler/icons-react";
 
@@ -29,6 +30,62 @@ const VSeparator = () => (
     />
 );
 
+import hardinessMap from './carte-zones-rusticite-quebec-plantes.jpg';
+
+const HoverCardHardinessZone = ({ children }) => (
+    <HoverCard>
+        <HoverCardTrigger asChild>
+            {children}
+        </HoverCardTrigger>
+        <HoverCardContent className='w-180 rounded-sm'>
+            <div className="flex justify-between gap-4">
+                <div className="space-y-1">
+                    <h4 className="text-sm font-semibold">Zones de rusticité</h4>
+                    <div className='flex'>
+                        <Image
+                            src={hardinessMap}
+                            alt='Carte des zones de rusticité' />
+                        <div className='ml-2'>
+                            <p className="text-sm">
+                                La rusticité est une cote attribuée aux plantes vivaces basée sur leur capacité à résister au froid.
+                                <br />
+                                Les zones sont classées de 0 à 9 en fonction de diverses conditions climatiques, comme la température, les précipitations et la durée de la période de gel.
+                                <br />
+                                <br />
+                                La zone 0 couvre les régions les plus froides du nord du pays, la zone 9 couvre les parties les plus chaudes de l'île de Vancouver.
+                            </p>
+                            <div className="mt-2 text-muted-foreground text-xs">
+                                Source : Gouvernement du Canada
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </HoverCardContent>
+    </HoverCard >
+);
+
+const HoverCardPlantZone = ({ children, zone }) => zone && (
+    <HoverCard>
+        <HoverCardTrigger asChild>
+            {children}
+        </HoverCardTrigger>
+        <HoverCardContent className={`w-80 border-${zone.colorHex} rounded-sm`}>
+            <div className="flex justify-between gap-4">
+                <div className="space-y-1">
+                    <h4 className="text-sm font-semibold">Zone de rusticité {zone.value}</h4>
+                    <p className="text-sm">
+                        {zone.city}
+                    </p>
+                    <div className="mt-2 text-muted-foreground text-xs">
+                        Source : Gouvernement du Canada
+                    </div>
+                </div>
+            </div>
+        </HoverCardContent>
+    </HoverCard>
+);
+
 const HoverCardFunctionalGroup = ({ children, group }) => (
     <HoverCard>
         <HoverCardTrigger asChild>
@@ -41,8 +98,11 @@ const HoverCardFunctionalGroup = ({ children, group }) => (
                     <p className="text-sm">
                         {group.description}
                     </p>
-                    <div className="text-muted-foreground text-xs">
-                        {group.species}
+                    <div className="text-xs">
+                        ex. {group.species}
+                    </div>
+                    <div className="mt-2 text-muted-foreground text-xs">
+                        Source : Jour de la Terre
                     </div>
                 </div>
             </div>
@@ -55,17 +115,17 @@ const HoverCardNative = ({ children }) => (
         <HoverCardTrigger asChild>
             {children}
         </HoverCardTrigger>
-        <HoverCardContent className="w-80">
+        <HoverCardContent className="w-80 rounded-sm">
             <div className="flex justify-between gap-4">
                 <div className="space-y-1">
                     <h4 className="text-sm font-semibold">Plante indigène</h4>
                     <p className="text-sm">
-                        Plante qui pousse dans une zone donnée de l’aire de répartition globale de son espèce, sans intervention humaine.
+                        Plante qui pousse dans une zone donnée de l'aire de répartition globale de son espèce, sans intervention humaine.
                         <br />
                         En Amérique du Nord, on fait référence aux espèces qui existaient sur le continent avant la colonisation européenne.
                     </p>
-                    <div className="text-muted-foreground text-xs">
-                        Source: Aiglon Indigo
+                    <div className="mt-2 text-muted-foreground text-xs">
+                        Source : Aiglon Indigo
                     </div>
                 </div>
             </div>
@@ -78,15 +138,15 @@ const HoverCardNaturalized = ({ children }) => (
         <HoverCardTrigger asChild>
             {children}
         </HoverCardTrigger>
-        <HoverCardContent className="w-80">
+        <HoverCardContent className="w-80 rounded-sm">
             <div className="flex justify-between gap-4">
                 <div className="space-y-1">
                     <h4 className="text-sm font-semibold">Plante naturalisée</h4>
                     <p className="text-sm">
-                        Plante bien établie dans une zone différente de l’aire de répartition globale de son espèce après y avoir été introduite dans le cadre d’activités humaines et qui est en mesure de survivre et de se reproduire sans aide.
+                        Plante bien établie dans une zone différente de l'aire de répartition globale de son espèce après y avoir été introduite dans le cadre d'activités humaines et qui est en mesure de survivre et de se reproduire sans aide.
                     </p>
-                    <div className="text-muted-foreground text-xs">
-                        Source: Aiglon Indigo
+                    <div className="mt-2 text-muted-foreground text-xs">
+                        Source : Aiglon Indigo
                     </div>
                 </div>
             </div>
@@ -107,7 +167,7 @@ export default function PlantPage() {
     const plantCode = code as string;
 
     const [zone, setZone] = useState<HardinessZone | undefined>();
-    const [plant, setPlant] = useState<Plant>();
+    const [plant, setPlant] = useState<Plant | null>();
     const [type, setType] = useState<PlantType>();
     const [latin, setLatin] = useState<string>();
     const [cultivar, setCultivar] = useState<string>();
@@ -197,18 +257,22 @@ export default function PlantPage() {
                                     <Badge className='flex grow items-center overflow-hidden p-4 pr-1 mr-2 rounded-sm' variant='outline'>
                                         <div className='flex grow [&>svg]:size-8 [&>svg]:shrink-0'><IconWorld /></div>
                                         <div className='flex-col grow'>
-                                            <div className="font-light text-xs">Zone de rusticité</div>
-                                            <div className="flex items-center font-medium text-lg">
-                                                <Separator
-                                                    orientation="vertical"
-                                                    className='mr-2 data-[orientation=vertical]:h-4'
-                                                    style={{
-                                                        backgroundColor: zone?.colorHex,
-                                                        width: '8px'
-                                                    }}
-                                                />
-                                                {plant.zone || 'Inconnue'}
-                                            </div>
+                                            <HoverCardHardinessZone>
+                                                <div className="font-light text-xs cursor-help">Zone de rusticité</div>
+                                            </HoverCardHardinessZone>
+                                            <HoverCardPlantZone zone={zone}>
+                                                <div className="flex items-center font-medium text-lg cursor-help">
+                                                    <Separator
+                                                        orientation="vertical"
+                                                        className='mr-2 data-[orientation=vertical]:h-4'
+                                                        style={{
+                                                            backgroundColor: zone?.colorHex,
+                                                            width: '8px'
+                                                        }}
+                                                    />
+                                                    {plant.zone || 'Inconnue'}
+                                                </div>
+                                            </HoverCardPlantZone>
                                         </div>
                                     </Badge>
                                     <Badge className='flex grow items-center overflow-hidden p-4 pr-1 mx-2 rounded-sm' variant='outline'>

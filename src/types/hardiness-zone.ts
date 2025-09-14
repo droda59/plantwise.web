@@ -103,6 +103,3 @@ export function getHardinessZone(value?: string): HardinessZone | undefined {
 
     return ZONES.find(t => t.value === zone);
 };
-
-
-// https://geoscan.nrcan.gc.ca/text/geoscan/fulltext/gid293828.pdf
