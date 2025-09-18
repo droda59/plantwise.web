@@ -30,8 +30,6 @@ const VSeparator = () => (
     />
 );
 
-import hardinessMap from './carte-zones-rusticite-quebec-plantes.jpg';
-
 const HoverCardHardinessZone = ({ children }) => (
     <HoverCard>
         <HoverCardTrigger asChild>
@@ -43,7 +41,9 @@ const HoverCardHardinessZone = ({ children }) => (
                     <h4 className="text-sm font-semibold">Zones de rusticité</h4>
                     <div className='flex'>
                         <Image
-                            src={hardinessMap}
+                            src='/carte-zones-rusticite-quebec-plantes.jpg'
+                            width={300}
+                            height={200}
                             alt='Carte des zones de rusticité' />
                         <div className='ml-2'>
                             <p className="text-sm">
