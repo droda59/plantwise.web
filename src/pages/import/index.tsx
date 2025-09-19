@@ -126,10 +126,8 @@ export default function Import() {
                             <Select value={plant.zone} onValueChange={v => setPlant(f => ({ ...f, zone: v }))}>
                                 <SelectTrigger className="grow"><SelectValue placeholder='Zone' /></SelectTrigger>
                                 <SelectContent>
-                                    {ZONES.sort((a, b) =>
-                                        a.localeCompare(b)
-                                    ).map((t, i) => (
-                                        <SelectItem key={i} value={t}>{t}</SelectItem>
+                                    {ZONES.map((t, i) => (
+                                        <SelectItem key={i} value={t.value}>{t.value}</SelectItem>
                                     ))}
                                 </SelectContent>
                             </Select>

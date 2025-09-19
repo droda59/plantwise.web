@@ -24,7 +24,7 @@ export default function Home() {
     return (
         <div className='font-sans grid justify-items-center p-8 gap-16'>
             <main className='flex row-start-2 items-center'>
-                <Card className="shadow-none rounded-xs" style={{ position: 'relative' }}>
+                <Card className="shadow-none" style={{ position: 'relative' }}>
                     <CardHeader>
                         <h1 className="text-lg">
                             <div className='flex items-center flex-col p-4'>
@@ -34,7 +34,7 @@ export default function Home() {
                                     fontSize: '1.5em'
                                 }}>
                                     <span style={{
-                                        color: '#1b1b1b',
+                                        color: '#e2e5e8',
                                     }}>PLANT</span>
                                     <span style={{
                                         color: '#1180be',

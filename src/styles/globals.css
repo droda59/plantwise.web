@@ -40,6 +40,7 @@
     --color-popover: var(--popover);
     --color-card-foreground: var(--card-foreground);
     --color-card: var(--card);
+    --radius-xs: calc(var(--radius) - 6px);
     --radius-sm: calc(var(--radius) - 4px);
     --radius-md: calc(var(--radius) - 2px);
     --radius-lg: var(--radius);
@@ -48,72 +49,168 @@
 
 :root {
     --radius: 0.625rem;
+
+    --color-primary: #80917D;
+    --color-primary-muted: #676f65;
+    --color-secondary: #134B42;
+    --color-accent: #f8ca35;
+    --color-highlight: #ca773b;
+    --color-highlight-muted: #936645;
+    --color-muted: #AEBA8A;
+    --color-background: #1F1F1F;
+    --color-frame: #262626;
+    --color-text: #f7f5ee;
+    --color-text-muted: #82817f;
+
+
+    --gray-background: #0d1117;   /* fond principal */
+    --gray-component: #191d21; /* fond Card, Badge, Input etc. */
+    --gray-frame: #363636;
+    --gray-ring: #474747;
+
+    /* Background et texte par défaut */
+    --bg-color: var(--gray-background);
+    --bg-card: yellow;
+    --text-color: var(--color-primary);
+    --text-muted: var(--color-muted);
+    --accent-color: var(--color-accent);
+    --highlight-color: var(--color-highlight);
+
+    /* ShadCN UI */
+    --button-bg: var(--accent-color);
+    --button-text: var(--color-secondary);
+    --button-hover: var(--highlight-color);
+
+    --input-bg: var(--bg-color);
+    --input-border: var(--color-primary);
+    --input-text: var(--text-color);
+
+    --card: var(--gray-component);
+    --card-bg: var(--bg-color);
+    --card-border: var(--color-frame);
+    --card-text: var(--text-color);
+    --card-foreground: var(--color-text);
+
+    --alert-bg: var(--color-primary);
+    --alert-text: var(--color-secondary);
+
+    --badge-bg: var(--accent-color);
+    --badge-text: var(--color-secondary);
+
+    --tab-bg: var(--bg-color);
+    --tab-border: var(--color-primary);
+    --tab-active: var(--accent-color);
+    --tab-text: var(--text-color);
+
+    --checkbox-bg: var(--bg-color);
+    --checkbox-border: var(--color-primary);
+    --checkbox-check: var(--accent-color);
+
+/* 
+    --radius: 0.625rem;
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.145 0 0);
     --card: oklch(1 0 0);
-    --card-foreground: oklch(0.141 0.005 285.823);
+    --card-foreground: oklch(0.145 0 0);
     --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.141 0.005 285.823);
-    --primary: oklch(0.21 0.006 285.885);
+    --popover-foreground: oklch(0.145 0 0);
+    --primary: oklch(0.205 0 0);
     --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.967 0.001 286.375);
-    --secondary-foreground: oklch(0.21 0.006 285.885);
-    --muted: oklch(0.967 0.001 286.375);
-    --muted-foreground: oklch(0.552 0.016 285.938);
-    --accent: oklch(0.967 0.001 286.375);
-    --accent-foreground: oklch(0.21 0.006 285.885);
+    --secondary: oklch(0.97 0 0);
+    --secondary-foreground: oklch(0.205 0 0);
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.556 0 0);
+    --accent: oklch(0.97 0 0);
+    --accent-foreground: oklch(0.205 0 0);
     --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.92 0.004 286.32);
-    --input: oklch(0.92 0.004 286.32);
-    --ring: oklch(0.705 0.015 286.067);
+    --border: oklch(0.922 0 0);
+    --input: oklch(0.922 0 0);
+    --ring: oklch(0.708 0 0);
     --chart-1: oklch(0.646 0.222 41.116);
     --chart-2: oklch(0.6 0.118 184.704);
     --chart-3: oklch(0.398 0.07 227.392);
     --chart-4: oklch(0.828 0.189 84.429);
     --chart-5: oklch(0.769 0.188 70.08);
     --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.141 0.005 285.823);
-    --sidebar-primary: oklch(0.21 0.006 285.885);
+    --sidebar-foreground: oklch(0.145 0 0);
+    --sidebar-primary: oklch(0.205 0 0);
     --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.967 0.001 286.375);
-    --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
-    --sidebar-border: oklch(0.92 0.004 286.32);
-    --sidebar-ring: oklch(0.705 0.015 286.067);
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.141 0.005 285.823);
+    --sidebar-accent: oklch(0.97 0 0);
+    --sidebar-accent-foreground: oklch(0.205 0 0);
+    --sidebar-border: oklch(0.922 0 0);
+    --sidebar-ring: oklch(0.708 0 0); */
 }
 
 .dark {
-    --background: oklch(0.141 0.005 285.823);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.21 0.006 285.885);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.21 0.006 285.885);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.92 0.004 286.32);
-    --primary-foreground: oklch(0.21 0.006 285.885);
-    --secondary: oklch(0.274 0.006 286.033);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.274 0.006 286.033);
-    --muted-foreground: oklch(0.705 0.015 286.067);
-    --accent: oklch(0.274 0.006 286.033);
-    --accent-foreground: oklch(0.985 0 0);
-    --destructive: oklch(0.704 0.191 22.216);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.552 0.016 285.938);
-    --chart-1: oklch(0.488 0.243 264.376);
-    --chart-2: oklch(0.696 0.17 162.48);
-    --chart-3: oklch(0.769 0.188 70.08);
-    --chart-4: oklch(0.627 0.265 303.9);
-    --chart-5: oklch(0.645 0.246 16.439);
-    --sidebar: oklch(0.21 0.006 285.885);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.274 0.006 286.033);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.552 0.016 285.938);
+    --bg-color: var(--gray-background);
+
+    --primary: var(--color-highlight);
+    
+    --background: var(--color-accent);
+    --foreground: var(--color-accent);
+
+    --text-color: var(--color-text);
+    --text-muted: var(--color-text-muted);
+
+    --muted: var(--color-highlight-muted);
+    --muted-foreground: var(--color-text-muted);
+
+    --input: var(--gray-frame);
+    --ring: var(--gray-ring);
+    --destructive: var(--color-highlight);
+
+    --border: var(--gray-frame);
+    --card: var(--gray-component);
+    --card-foreground: var(--color-text);
+
+
+    --sidebar: var(--gray-component);
+    --sidebar-primary: var(--gray-background);
+
+
+
+    --popover: var(--gray-component);
+    --popover-foreground: var(--color-text);
+    
+    --accent-color: var(--color-accent);
+    --highlight-color: var(--color-highlight);
+
+    --button-bg: var(--accent-color);
+    --button-text: var(--color-secondary);
+    --button-hover: var(--highlight-color);
+
+    --input-bg: var(--color-accent);
+    --input-border: var(--color-accent);
+    --input-text: var(--color-accent);
+    --color-input: var(--color-accent);
+
+    --alert-bg: var(--color-primary);
+    --alert-text: var(--color-secondary);
+
+    --badge-bg: var(--accent-color);
+    --badge-text: var(--color-secondary);
+
+    --tab-bg: var(--bg-color);
+    --tab-border: var(--color-primary);
+    --tab-active: var(--accent-color);
+    --tab-text: var(--text-color);
+
+    --checkbox-bg: var(--bg-color);
+    --checkbox-border: var(--color-primary);
+    --checkbox-check: var(--accent-color);
 }
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* -------------------------
+   Utilities custom
+-------------------------- */
+
+.hover\:bg-highlight:hover { background-color: var(--highlight-color); }
+.hover\:text-highlight:hover { color: var(--highlight-color); }
 
 @layer base {
     * {

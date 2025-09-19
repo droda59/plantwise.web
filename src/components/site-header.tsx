@@ -43,7 +43,7 @@ export function SiteHeader() {
                             fontWeight: 'normal',
                         }}>
                             <span style={{
-                                color: '#1b1b1b',
+                                color: '#e2e5e8',
                             }}>PLANT</span>
                             <span style={{
                                 color: '#1180be',
