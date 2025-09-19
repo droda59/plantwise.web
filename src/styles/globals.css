@@ -55,7 +55,7 @@
     --color-secondary: #134B42;
     --color-accent: #f8ca35;
     --color-highlight: #ca773b;
-    --color-highlight-muted: #936645;
+    --color-highlight-muted: #4d392a;
     --color-muted: #AEBA8A;
     --color-background: #1F1F1F;
     --color-frame: #262626;
@@ -63,8 +63,10 @@
     --color-text-muted: #82817f;
 
 
-    --gray-background: #0d1117;   /* fond principal */
-    --gray-component: #191d21; /* fond Card, Badge, Input etc. */
+    --gray-background: #0d1117;
+    /* fond principal */
+    --gray-component: #191d21;
+    /* fond Card, Badge, Input etc. */
     --gray-frame: #363636;
     --gray-ring: #474747;
 
@@ -106,7 +108,7 @@
     --checkbox-border: var(--color-primary);
     --checkbox-check: var(--accent-color);
 
-/* 
+    /* 
     --radius: 0.625rem;
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
@@ -145,7 +147,7 @@
     --bg-color: var(--gray-background);
 
     --primary: var(--color-highlight);
-    
+
     --background: var(--color-accent);
     --foreground: var(--color-accent);
 
@@ -167,11 +169,15 @@
     --sidebar: var(--gray-component);
     --sidebar-primary: var(--gray-background);
 
-
-
     --popover: var(--gray-component);
     --popover-foreground: var(--color-text);
-    
+
+    --accent: var(--color-highlight-muted);
+    --accent-foreground: var(--color-accent);
+
+
+
+
     --accent-color: var(--color-accent);
     --highlight-color: var(--color-highlight);
 
@@ -201,16 +207,21 @@
 }
 
 body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
+    background-color: var(--bg-color);
+    color: var(--text-color);
 }
 
 /* -------------------------
    Utilities custom
 -------------------------- */
 
-.hover\:bg-highlight:hover { background-color: var(--highlight-color); }
-.hover\:text-highlight:hover { color: var(--highlight-color); }
+.hover\:bg-highlight:hover {
+    background-color: var(--highlight-color);
+}
+
+.hover\:text-highlight:hover {
+    color: var(--highlight-color);
+}
 
 @layer base {
     * {
