@@ -4,6 +4,7 @@ import Link from "next/link"
 import { Separator } from "./ui/separator"
 import { Input } from "./ui/input"
 import { useRouter } from "next/navigation"
+import { cn } from "@/lib/utils"
 
 interface FormElements extends HTMLFormControlsCollection {
     quickAccessCode: HTMLInputElement
@@ -12,7 +13,7 @@ interface QuickAccessCodeFormElement extends HTMLFormElement {
     readonly elements: FormElements
 }
 
-export function SiteHeader() {
+export function SiteHeader({ className }: { className: string }) {
     const router = useRouter();
 
     function handleQuickAccessSearch(event: React.FormEvent<QuickAccessCodeFormElement>) {
@@ -28,7 +29,7 @@ export function SiteHeader() {
     }
 
     return (
-        <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
+        <header className={cn("flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)", className)}>
             <div className="flex w-full items-center lg:gap-2 lg:px-4">
                 <h1 className="text-base font-medium">
                     <Link className='flex items-center flex-col p-4' href='/'>

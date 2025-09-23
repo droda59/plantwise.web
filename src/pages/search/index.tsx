@@ -11,7 +11,6 @@ import { createSearchParams, plantApiInstance } from '@/api/plant-api';
 import { Plant } from '@/types/plant';
 import { DEFAULT_FILTERS, Filters } from '@/types/filters';
 import { FilterSidebar } from "@/components/features/search/filter-sidebar"
-import { SiteHeader } from "@/components/site-header"
 import {
     SidebarInset,
     SidebarProvider,
@@ -99,14 +98,12 @@ function SearchPage() {
                 {
                     "--sidebar-width": "calc(var(--spacing) * 80)",
                     "--header-height": "calc(var(--spacing) * 12)",
-                    "top": "calc(var(--spacing) * 12)",
                 } as React.CSSProperties
             }
         >
             <FilterSidebar filters={filters} variant="inset" onApplyFilters={applyFilters} onResetFilters={resetFilters} />
             <SidebarInset>
-                <SiteHeader />
-                <div className="@container/main flex gap-2 flex  items-center px-6">
+                <div className="@container/main gap-2 items-center px-6 overflow-auto block">
                     <div className="flex flex-col gap-6 py-6 w-full">
                         <SectionTitle title='Résultats' icon={IconSearch} subtitle={loading
                             ? 'Chargement des plantes...'

@@ -35,7 +35,6 @@ export function FilterSidebar({
                 </SidebarMenu>
             </SidebarHeader>
             <SidebarContent>
-                {/* add quick access to plant code */}
                 <NavPlantFilters filters={filters} onApplyFilters={onApplyFilters} onResetFilters={onResetFilters} />
             </SidebarContent>
         </Sidebar >
