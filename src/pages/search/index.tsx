@@ -99,6 +99,7 @@ function SearchPage() {
                 {
                     "--sidebar-width": "calc(var(--spacing) * 80)",
                     "--header-height": "calc(var(--spacing) * 12)",
+                    "top": "calc(var(--spacing) * 12)",
                 } as React.CSSProperties
             }
         >

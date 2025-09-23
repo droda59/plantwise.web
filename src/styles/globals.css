@@ -154,7 +154,7 @@
     --text-color: var(--color-text);
     --text-muted: var(--color-text-muted);
 
-    --muted: var(--color-highlight-muted);
+    --muted: var(--color-text-muted);
     --muted-foreground: var(--color-text-muted);
 
     --input: var(--gray-frame);

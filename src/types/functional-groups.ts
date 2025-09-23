@@ -29,7 +29,7 @@ export const FUNCTIONALGROUPS: Array<FunctionalGroup> = [
         label: "Tolérant ombre, feuilles larges et minces",
         description: "Climaciques. Arbres tolérants à l'ombre à feuilles larges et minces, croissance moyenne. Mycorhization mixte et graine dispersées par le vent surtout.",
         species: "Les plupart des érables, les tilleuls, magnolia, le hêtre, ostryer et quelques autres petits arbres",
-        color: 'sky-400', // '#2f74b7'
+        color: 'sky-500', // '#2f74b7'
         colorHex: '#2f74b7',
     }, {
         value: "2B",

@@ -7,14 +7,44 @@ import { getPlantType, PlantTypeValue } from "@/types/plantType";
 import { IconArrowsHorizontal, IconArrowsVertical, IconWorld } from "@tabler/icons-react";
 import Link from "next/link";
 import { CodeChip } from "../../code-chip";
-
-const prettySun = (s) => ({ "plein-soleil": "Plein soleil", "mi-ombre": "Mi-ombre", "ombre": "Ombre" }[s] || s);
+import { cn } from "@/lib/utils"
+import { getFunctionalGroup } from "@/types/functional-groups";
 
 const SizeChip = ({ size }: { size?: number }) => {
     if (!size) return <span>Inconnue</span>;
     if (size < 1) return <span>{size * 100} cm</span>;
     return <span>{size} m</span>;
 }
+
+const typeColors = {
+    '1 AR': 'border-green-500',
+    '1b ARB': 'border-lime-400',
+    '2 CON': 'border-emerald-700',
+    '3 ARBU': 'border-lime-400',
+    '4 VIV': 'border-red-500',
+    '5 GRAM': 'border-orange-200',
+    '6 GRMP': 'border-red-500',
+    '7 FOU': 'border-lime-300',
+    '8 AQUA': 'border-cyan-500',
+    '9 ANU': 'border-fuchsia-400',
+    '10 FH': 'border-green-300',
+    '11 ENS': 'border',
+    '12 BUL': 'border-red-300k',
+    '13 MOU': 'border',
+};
+
+const groupColors = {
+    '1A': 'border-lime-700',
+    '1B': 'border-lime-200',
+    '2A': 'border-sky-500',
+    '2B': 'border-sky-400',
+    '2C': 'border-sky-300',
+    '3A': 'border-amber-700',
+    '3B': 'border-orange-300',
+    '4A': 'border-yellow-500',
+    '4B': 'border-yellow-200',
+    '5': 'border-yellow-300',
+};
 
 export const PlantCard = ({ plant }: { plant: Plant; }) => {
     const originalName = plant.latin;
@@ -24,6 +54,7 @@ export const PlantCard = ({ plant }: { plant: Plant; }) => {
     var matches = regExp.exec(plant.latin);
 
     const type = getPlantType(plant.type);
+    const functionalGroup = getFunctionalGroup(plant.functionalGroup);
 
     var latin = originalName;
     var cultivar = undefined;
@@ -37,7 +68,7 @@ export const PlantCard = ({ plant }: { plant: Plant; }) => {
     const TypeChip = ({ chipType }: { chipType: PlantTypeValue }) => {
         function getChipBackgroundColor() {
             const style = {
-                backgroundColor: 'lightgrey',
+                backgroundColor: '#262626',
                 height: '4px',
             };
 
@@ -62,6 +93,7 @@ export const PlantCard = ({ plant }: { plant: Plant; }) => {
     return (
         <motion.div layout initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}>
             <Card className="shadow-sm hover:shadow-lg transition rounded-xs relative">
+                {/*
                 <div className="flex w-full absolute top-0">
                     <TypeChip chipType='1 AR' />
                     <TypeChip chipType='2 CON' />
@@ -71,6 +103,7 @@ export const PlantCard = ({ plant }: { plant: Plant; }) => {
                     <TypeChip chipType='6 GRMP' />
                     <TypeChip chipType='8 AQUA' />
                 </div>
+                */}
                 <CardHeader className="pb-2">
                     <div className='flex'>
                         <div className="grow">
@@ -89,18 +122,18 @@ export const PlantCard = ({ plant }: { plant: Plant; }) => {
                 </CardHeader>
                 <CardContent className="grid">
                     <div className="flex mb-2">
-                        {type && <Badge variant="secondary" className='rounded-xs'>{type.label}</Badge>}
+                        {type && <Badge variant="outline" className={cn(typeColors[plant.type], 'text-card-foreground rounded-xs')}>{type.label}</Badge>}
                         {!!plant.functionalGroup && (
-                            <Badge variant="secondary" className="ml-1 rounded-xs">Groupe&nbsp;{plant.functionalGroup}</Badge>
+                            <Badge variant="outline" className={cn(functionalGroup ? groupColors[functionalGroup.value] : 'border', 'ml-1 text-card-foreground rounded-xs')}>Groupe&nbsp;{plant.functionalGroup}</Badge>
                         )}
                         {plant.isNative && (
-                            <Badge className="ml-1 bg-emerald-100 text-emerald-700 rounded-xs">Indigène</Badge>
+                            <Badge variant='outline' className="ml-1 border-green-400 text-card-foreground rounded-xs">Indigène</Badge>
                         )}
                         {plant.isNaturalized && (
-                            <Badge className="ml-1 bg-amber-100 text-amber-700 rounded-xs">Naturalisé</Badge>
+                            <Badge variant='outline' className="ml-1 border-amber-400 text-card-foreground rounded-xs">Naturalisé</Badge>
                         )}
                     </div>
-                    <div className='text-sm text-muted-foreground grid grid-cols-2 mt-2'>
+                    <div className='text-sm text-muted grid grid-cols-2 mt-2'>
                         <div className='flex-col'>
                             <div className='flex items-center overflow-hidden [&>svg]:size-4 [&>svg]:shrink-0'>
                                 <IconWorld />&nbsp;
