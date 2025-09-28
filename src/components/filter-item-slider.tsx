@@ -2,13 +2,14 @@ import React from "react";
 
 import { SidebarMenuItem } from "./ui/sidebar";
 import { Slider } from "./ui/slider";
+import { Icon, IconProps } from "@tabler/icons-react";
 
 export function FilterItemSlider(props: {
     title: string,
     min: number,
     max: number,
     steps?: number,
-    icon: Icon,
+    icon: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<Icon>>,
     value?: number[],
     labelFormatter: (value: number) => string,
     setValue: (value: number[]) => void

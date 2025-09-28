@@ -2,11 +2,12 @@ import React from "react";
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SidebarMenuFilterItem } from "./filter-item";
+import { Icon, IconProps } from "@tabler/icons-react";
 
 export function FilterItemSelect(props: {
     title: string,
     placeholder: string,
-    icon: Icon,
+    icon: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<Icon>>,
     options: any[],
     value?: string,
     labelFormatter?: (t: any) => string,

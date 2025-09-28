@@ -50,7 +50,7 @@ export class plantApi {
 
         const data = await response.json();
 
-        return data.map(d => PlantFactory.create(d));
+        return data.map((d: any) => PlantFactory.create(d));
     }
 
     async getPlant(code: string): Promise<Plant | null> {

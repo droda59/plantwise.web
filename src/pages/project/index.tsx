@@ -27,8 +27,7 @@ interface TypeChartData extends ChartData {
     type: string
 };
 
-const typeChartConfig = {
-} satisfies ChartConfig;
+const typeChartConfig: Record<string, typeof PLANTTYPES[number]> = {};
 PLANTTYPES.forEach(p => typeChartConfig[p.value] = p);
 
 interface NativeChartData extends ChartData {
@@ -106,11 +105,11 @@ export default function ProjectPage() {
         const plant4 = await plantApiInstance.getPlant('PDM');
         const plant5 = await plantApiInstance.getPlant('PUR');
         setPlantList([
-            { plant: plant1, count: 3 },
-            { plant: plant2, count: 7 },
-            { plant: plant3, count: 2 },
-            { plant: plant4, count: 5 },
-            { plant: plant5, count: 6 },
+            ...(plant1 ? [{ plant: plant1, count: 3 }] : []),
+            ...(plant2 ? [{ plant: plant2, count: 7 }] : []),
+            ...(plant3 ? [{ plant: plant3, count: 2 }] : []),
+            ...(plant4 ? [{ plant: plant4, count: 5 }] : []),
+            ...(plant5 ? [{ plant: plant5, count: 6 }] : []),
         ]);
 
         setLoading(false);
@@ -123,7 +122,7 @@ export default function ProjectPage() {
             PLANTTYPES.forEach(t => {
                 var count = 0;
                 if (groupedTypes[t.value]) {
-                    for (const entry of groupedTypes[t.value]) {
+                    for (const entry of groupedTypes[t.value] ?? []) {
                         count += entry.count;
                     }
                 }
@@ -159,20 +158,20 @@ export default function ProjectPage() {
 
             setGenusChartData(plantList.map(p => {
                 return {
-                    genus: p.plant.genus, count: p.count, fill: getRandomColor()
+                    genus: p.plant.genus ?? '', count: p.count, fill: getRandomColor()
                 };
             }));
 
-            const groupedGroups = Object.groupBy(plantList, ({ plant }) => plant.functionalGroup);
+            const groupedGroups = Object.groupBy(plantList, ({ plant }) => plant.functionalGroup ?? 'unknown');
             const data = [] as GroupChartData[];
             FUNCTIONALGROUPS.forEach(g => {
                 var count = 0;
                 if (groupedGroups[g.value]) {
-                    for (const entry of groupedGroups[g.value]) {
+                    for (const entry of groupedGroups[g.value] ?? []) {
                         count += entry.count;
                     }
                 }
-                data.push({ group: g.value, count, fill: getFunctionalGroup(g.value)?.colorHex });
+                data.push({ group: g.value, count, fill: getFunctionalGroup(g.value)?.colorHex ?? "#cccccc" });
             });
 
             setGroupChartData(data);

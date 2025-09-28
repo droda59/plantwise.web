@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { Switch } from "./ui/switch";
 import { SidebarMenuFilterItem } from "./filter-item";
+import { Icon, IconProps } from "@tabler/icons-react";
 
 export function FilterItemCheckbox(props: {
     title: string,
     id: string,
-    icon: Icon,
+    icon: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<Icon>>,
     value?: boolean,
     setValue: (value: React.SetStateAction<any>) => void
 }) {

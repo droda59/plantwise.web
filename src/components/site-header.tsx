@@ -13,16 +13,11 @@ interface QuickAccessCodeFormElement extends HTMLFormElement {
     readonly elements: FormElements
 }
 
-export function SiteHeader({ className }: { className: string }) {
+export function SiteHeader({ className }: { className?: string }) {
     const router = useRouter();
 
     function handleQuickAccessSearch(event: React.FormEvent<QuickAccessCodeFormElement>) {
         event.preventDefault();
-        const form = event.currentTarget;
-        const formElements = form.elements as typeof form.elements & {
-            quickAccessCode: HTMLInputElement
-        };
-
         const code = event.currentTarget.elements.quickAccessCode.value;
 
         router.push(`/plant/${code}`);

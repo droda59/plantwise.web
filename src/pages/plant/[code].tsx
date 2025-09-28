@@ -30,7 +30,7 @@ const VSeparator = () => (
     />
 );
 
-const HoverCardHardinessZone = ({ children }) => (
+const HoverCardHardinessZone = ({ children }: { children: React.ReactNode }) => (
     <HoverCard>
         <HoverCardTrigger asChild>
             {children}
@@ -65,7 +65,7 @@ const HoverCardHardinessZone = ({ children }) => (
     </HoverCard >
 );
 
-const HoverCardPlantZone = ({ children, zone }) => zone && (
+const HoverCardPlantZone = ({ children, zone }: { children: React.ReactNode, zone?: HardinessZone }) => zone && (
     <HoverCard>
         <HoverCardTrigger asChild>
             {children}
@@ -86,7 +86,7 @@ const HoverCardPlantZone = ({ children, zone }) => zone && (
     </HoverCard>
 );
 
-const HoverCardFunctionalGroup = ({ children, group }) => (
+const HoverCardFunctionalGroup = ({ children, group }: { children: React.ReactNode, group: FunctionalGroup }) => (
     <HoverCard>
         <HoverCardTrigger asChild>
             {children}
@@ -110,7 +110,7 @@ const HoverCardFunctionalGroup = ({ children, group }) => (
     </HoverCard>
 );
 
-const HoverCardNative = ({ children }) => (
+const HoverCardNative = ({ children }: { children: React.ReactNode }) => (
     <HoverCard>
         <HoverCardTrigger asChild>
             {children}
@@ -133,7 +133,7 @@ const HoverCardNative = ({ children }) => (
     </HoverCard>
 );
 
-const HoverCardNaturalized = ({ children }) => (
+const HoverCardNaturalized = ({ children }: { children: React.ReactNode }) => (
     <HoverCard>
         <HoverCardTrigger asChild>
             {children}

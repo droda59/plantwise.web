@@ -126,7 +126,7 @@ export function NavPlantFilters(props:
                         options={FUNCTIONALGROUPS}
                         value={filters.functionalGroup}
                         labelFormatter={(t: FunctionalGroup) => `${t.value} - ${t.label}`}
-                        disabled={!['.', '1 AR', '1b ARB', '2 CON', '3 ARBU'].includes(filters.type)}
+                        disabled={!['.', '1 AR', '1b ARB', '2 CON', '3 ARBU'].includes(filters.type ?? '')}
                         setValue={v => setFilters(f => ({ ...f, functionalGroup: v || undefined }))} />
 
                     <FilterItemSelect
@@ -144,7 +144,7 @@ export function NavPlantFilters(props:
                         icon={IconFlower}
                         value={filters.bloom}
                         labelFormatter={formatMonthChip}
-                        setValue={v => setFilters(f => ({ ...f, bloom: v }))} />
+                        setValue={v => setFilters(f => ({ ...f, bloom: v as [number, number] }))} />
 
                     <FilterItemSlider
                         title='Hauteur'
@@ -154,7 +154,7 @@ export function NavPlantFilters(props:
                         icon={IconArrowsVertical}
                         value={filters.height}
                         labelFormatter={formatSizeChip}
-                        setValue={v => setFilters(f => ({ ...f, height: v }))} />
+                        setValue={v => setFilters(f => ({ ...f, height: v as [number, number] }))} />
 
                     <FilterItemSlider
                         title='Largeur'
@@ -164,7 +164,7 @@ export function NavPlantFilters(props:
                         icon={IconArrowsHorizontal}
                         value={filters.spread}
                         labelFormatter={formatSizeChip}
-                        setValue={v => setFilters(f => ({ ...f, spread: v }))} />
+                        setValue={v => setFilters(f => ({ ...f, spread: v as [number, number] }))} />
 
                     <FilterItemCheckbox
                         title='Espèce indigène'

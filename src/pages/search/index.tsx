@@ -31,7 +31,7 @@ function SearchPage() {
 
         const bloomMin = searchParams.get('bloomMin');
         const bloomMax = searchParams.get('bloomMax');
-        const bloom = [1, 12];
+        const bloom: [number, number] = [1, 12];
         if (bloomMin) bloom[0] = parseInt(bloomMin as string, 10);
         if (bloomMax) bloom[1] = parseInt(bloomMax as string, 10);
 
@@ -39,8 +39,8 @@ function SearchPage() {
         const heightMax = searchParams.get('heightMax');
         const spreadMin = searchParams.get('spreadMin');
         const spreadMax = searchParams.get('spreadMax');
-        const height = [0, 3000];
-        const spread = [0, 3000];
+        const height: [number, number] = [0, 3000];
+        const spread: [number, number] = [0, 3000];
         if (heightMin) height[0] = parseInt(heightMin as string, 10);
         if (heightMax) height[1] = parseInt(heightMax as string, 10);
         if (spreadMin) spread[0] = parseInt(spreadMin as string, 10);
@@ -132,7 +132,7 @@ function SearchPage() {
     );
 }
 
-SearchPage.getLayout = (page) => {
+SearchPage.getLayout = (page: any) => {
     return <SearchLayout>{page}</SearchLayout>
 };
 

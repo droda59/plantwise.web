@@ -110,7 +110,7 @@ export default function Import() {
                         </div>
 
                         <div className="grid w-full max-w-sm items-center gap-3 mt-4">
-                            <Select value={plant.type} onValueChange={v => setPlant(f => ({ ...f, type: v }))}>
+                            <Select value={plant.type} onValueChange={v => setPlant(f => ({ ...f, type: v as Plant['type'] }))}>
                                 <SelectTrigger className="grow"><SelectValue placeholder='Type' /></SelectTrigger>
                                 <SelectContent>
                                     {PLANTTYPES.sort((a, b) =>
