@@ -22,6 +22,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { getHardinessZone, HardinessZone } from '@/types/hardiness-zone';
+import { SizeChip } from '@/components/size-chip';
 
 const sunToleranceMap = {
     full: 'Plein soleil',
@@ -160,11 +161,15 @@ const HoverCardNaturalized = ({ children }: { children: React.ReactNode }) => (
     </HoverCard>
 );
 
-const SizeChip = ({ size }: { size?: number }) => {
-    if (!size) return <span>Inconnue</span>;
-    if (size < 1) return <span>{size * 100} cm</span>;
-    return <span>{size} m</span>;
-}
+const GeneralInfoRow = ({ label, children }: { label: string, children: React.ReactNode }) => (
+    <tr>
+        <td className='p-1 pl-2 text-sm'>{label}</td>
+        <td className='flex items-center'>
+            <VSeparator />
+            {children}
+        </td>
+    </tr>
+);
 
 export default function PlantPage() {
     const router = useRouter();
@@ -305,73 +310,45 @@ export default function PlantPage() {
                                     <table className="table-auto w-full mt-4 text-ms">
                                         <tbody>
                                             {plant.isNative && (
-                                                <tr>
-                                                    <td className='p-1 pl-2 text-sm'>Statut</td>
-                                                    <td className='flex items-center'>
-                                                        <VSeparator />
-                                                        <HoverCardNative>
-                                                            <span className='cursor-help'>Indigène</span>
-                                                        </HoverCardNative>
-                                                    </td>
-                                                </tr>
+                                                <GeneralInfoRow label='Statut'>
+                                                    <HoverCardNative>
+                                                        <span className='cursor-help'>Indigène</span>
+                                                    </HoverCardNative>
+                                                </GeneralInfoRow>
                                             )}
                                             {plant.isNaturalized && (
-                                                <tr>
-                                                    <td className='p-1 pl-2 text-sm'>Statut</td>
-                                                    <td className='flex items-center'>
-                                                        <VSeparator />
-                                                        <HoverCardNaturalized>
-                                                            <span className='cursor-help'>Naturalisé</span>
-                                                        </HoverCardNaturalized>
-                                                    </td>
-                                                </tr>
+                                                <GeneralInfoRow label='Statut'>
+                                                    <HoverCardNaturalized>
+                                                        <span className='cursor-help'>Naturalisé</span>
+                                                    </HoverCardNaturalized>
+                                                </GeneralInfoRow>
                                             )}
                                             {!!functionalGroup && (
-                                                <tr>
-                                                    <td className='p-1 pl-2 text-sm'>Groupe fonctionnel</td>
-                                                    <td className='flex items-center'>
-                                                        <VSeparator />
-                                                        <HoverCardFunctionalGroup group={functionalGroup}>
-                                                            <span className='cursor-help'>{functionalGroup.value} - {functionalGroup.label}</span>
-                                                        </HoverCardFunctionalGroup>
-                                                    </td>
-                                                </tr>
+                                                <GeneralInfoRow label='Groupe fonctionnel'>
+                                                    <HoverCardFunctionalGroup group={functionalGroup}>
+                                                        <span className='cursor-help'>{functionalGroup.value} - {functionalGroup.label}</span>
+                                                    </HoverCardFunctionalGroup>
+                                                </GeneralInfoRow>
                                             )}
                                             {!!plant.sunTolerance && (
-                                                <tr>
-                                                    <td className='p-1 pl-2 text-sm'>Tolérance au soleil</td>
-                                                    <td className='flex items-center'>
-                                                        <VSeparator />
-                                                        <span>{plant.sunTolerance.map((s) => sunToleranceMap[s]).join(', ')}</span>
-                                                    </td>
-                                                </tr>
+                                                <GeneralInfoRow label='Tolérance au soleil'>
+                                                    <span>{plant.sunTolerance.map((s) => sunToleranceMap[s]).join(', ')}</span>
+                                                </GeneralInfoRow>
                                             )}
                                             {!!plant.family && (
-                                                <tr>
-                                                    <td className='p-1 pl-2 text-sm'>Famille</td>
-                                                    <td className='flex items-center'>
-                                                        <VSeparator />
-                                                        <i>{plant.family}</i>
-                                                    </td>
-                                                </tr>
+                                                <GeneralInfoRow label='Famille'>
+                                                    <i>{plant.family}</i>
+                                                </GeneralInfoRow>
                                             )}
                                             {!!plant.genus && (
-                                                <tr>
-                                                    <td className='p-1 pl-2 text-sm'>Genre</td>
-                                                    <td className='flex items-center'>
-                                                        <VSeparator />
-                                                        <Link href={`/genus/${plant.genus}`}><i>{plant.genus}</i></Link>
-                                                    </td>
-                                                </tr>
+                                                <GeneralInfoRow label='Genre'>
+                                                    <Link href={`/genus/${plant.genus}`}><i>{plant.genus}</i></Link>
+                                                </GeneralInfoRow>
                                             )}
                                             {!!plant.species && (
-                                                <tr>
-                                                    <td className='p-1 pl-2 text-sm'>Espèce</td>
-                                                    <td className='flex items-center'>
-                                                        <VSeparator />
-                                                        <Link href={`/search?${createSearchParams({ species: plant.species }).toString()}`}><i>{plant.species}</i></Link>
-                                                    </td>
-                                                </tr>
+                                                <GeneralInfoRow label='Espèce'>
+                                                    <Link href={`/search?${createSearchParams({ species: plant.species }).toString()}`}><i>{plant.species}</i></Link>
+                                                </GeneralInfoRow>
                                             )}
                                         </tbody>
                                     </table>

@@ -9,12 +9,7 @@ import Link from "next/link";
 import { CodeChip } from "../../code-chip";
 import { cn } from "@/lib/utils"
 import { getFunctionalGroup } from "@/types/functional-groups";
-
-const SizeChip = ({ size }: { size?: number }) => {
-    if (!size) return <span>Inconnue</span>;
-    if (size < 1) return <span>{size * 100} cm</span>;
-    return <span>{size} m</span>;
-}
+import { SizeChip } from "@/components/size-chip";
 
 const typeColors = {
     '1 AR': 'border-green-500',
