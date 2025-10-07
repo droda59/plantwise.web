@@ -120,6 +120,7 @@ export function PlantFilters(props:
 
                     <FilterItemSlider
                         title='Floraison'
+                        disabled
                         min={1}
                         max={12}
                         icon={IconFlower}
