@@ -12,29 +12,7 @@ import { FilterItemSelect } from "@/components/filter-item-select";
 import { FilterItemCheckbox } from "@/components/filter-item-checkbox";
 import { FilterItemSlider } from "@/components/filter-item-slider";
 import { HardinessZone, ZONES } from "@/types/hardiness-zone";
-
-function formatSizeChip(size: number): string {
-    if (size > 100) return `${size / 100} m`;
-    return `${size} cm`;
-}
-
-function formatMonthChip(month: number): string {
-    switch (month) {
-        case 1: return 'Janvier';
-        case 2: return 'Février';
-        case 3: return 'Mars';
-        case 4: return 'Avril';
-        case 5: return 'Mai';
-        case 6: return 'Juin';
-        case 7: return 'Juillet';
-        case 8: return 'Août';
-        case 9: return 'Septembre';
-        case 10: return 'Octobre';
-        case 11: return 'Novembre';
-        case 12: return 'Décembre';
-        default: return '';
-    }
-}
+import { formatMonthChip, formatSizeChip } from "@/lib/utils";
 
 export function NavPlantFilters(props:
     {
@@ -79,6 +57,7 @@ export function NavPlantFilters(props:
 
                     <FilterItemSelect
                         title='Ensoleillement'
+                        disabled
                         placeholder='Tous'
                         icon={IconSun}
                         options={SUNS}
@@ -87,6 +66,7 @@ export function NavPlantFilters(props:
 
                     <FilterItemSelect
                         title='Présence de sels'
+                        disabled
                         placeholder='Tous'
                         icon={IconSalt}
                         options={SALTS}
@@ -95,6 +75,7 @@ export function NavPlantFilters(props:
 
                     <FilterItemCheckbox
                         title='Sujet à la sécheresse'
+                        disabled
                         id='droughtTolerant'
                         icon={IconDroplet}
                         value={filters.droughtTolerant}
@@ -102,6 +83,7 @@ export function NavPlantFilters(props:
 
                     <FilterItemCheckbox
                         title="Sujet à l'excès d'eau"
+                        disabled
                         id='floodTolerant'
                         icon={IconDropletFilled}
                         value={filters.floodTolerant}
@@ -131,6 +113,7 @@ export function NavPlantFilters(props:
 
                     <FilterItemSelect
                         title='Couleur'
+                        disabled
                         placeholder='Toutes'
                         icon={IconPalette}
                         options={COLORS}

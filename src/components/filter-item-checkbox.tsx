@@ -9,11 +9,12 @@ export function FilterItemCheckbox(props: {
     id: string,
     icon: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<Icon>>,
     value?: boolean,
+    disabled?: boolean,
     setValue: (value: React.SetStateAction<any>) => void
 }) {
     return (
         <SidebarMenuFilterItem icon={props.icon} label={props.title} target={props.id}>
-            <Switch checked={!!props.value} onCheckedChange={props.setValue} id={props.id} />
+            <Switch checked={!!props.value} onCheckedChange={props.setValue} id={props.id} disabled={props.disabled} />
         </SidebarMenuFilterItem>
     );
 }
