@@ -8,17 +8,19 @@ export function createSearchParams(filters?: Filters) {
         filters.q && params.set('q', filters.q);
         filters.zone && filters.zone !== '.' && params.set('zone', filters.zone.toString());
         filters.sunConditions && filters.sunConditions !== '.' && params.set('sun', filters.sunConditions);
-        filters.saltConditions && params.set('saltConditions', filters.saltConditions);
-        filters.droughtTolerant && params.set('droughtTolerant', 'true');
-        filters.floodTolerant && params.set('floodTolerant', 'true');
+        // filters.saltConditions && params.set('saltConditions', filters.saltConditions);
+        // filters.droughtTolerant && params.set('droughtTolerant', 'true');
+        // filters.floodTolerant && params.set('floodTolerant', 'true');
 
         filters.type && filters.type !== '.' && params.set('type', filters.type);
         filters.functionalGroup && filters.functionalGroup !== '.' && params.set('functionalGroup', filters.functionalGroup);
-        filters.color && filters.color !== '.' && params.set('color', filters.color);
+        // filters.color && filters.color !== '.' && params.set('color', filters.color);
+        /*
         if (filters.bloom) {
             filters.bloom[0] > 1 && params.set('bloomMin', filters.bloom[0].toString());
             filters.bloom[1] < 12 && params.set('bloomMax', filters.bloom[1].toString());
         }
+        */
         if (filters.height) {
             filters.height[0] > 0 && params.set('heightMin', filters.height[0].toString());
             filters.height[1] < 3000 && params.set('heightMax', filters.height[1].toString());

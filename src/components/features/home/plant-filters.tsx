@@ -69,7 +69,6 @@ export function PlantFilters(props:
                         placeholder='Tous'
                         icon={IconSalt}
                         options={SALTS}
-                        value={filters.saltConditions}
                         setValue={v => setFilters(f => ({ ...f, saltConditions: v || undefined }))} />
 
                     <FilterItemCheckbox
@@ -77,7 +76,6 @@ export function PlantFilters(props:
                         disabled
                         id='droughtTolerant'
                         icon={IconDroplet}
-                        value={filters.droughtTolerant}
                         setValue={v => setFilters(f => ({ ...f, droughtTolerant: v || undefined }))} />
 
                     <FilterItemCheckbox
@@ -85,7 +83,6 @@ export function PlantFilters(props:
                         disabled
                         id='floodTolerant'
                         icon={IconDropletFilled}
-                        value={filters.floodTolerant}
                         setValue={v => setFilters(f => ({ ...f, floodTolerant: v || undefined }))} />
                 </SidebarMenu>
 
@@ -115,7 +112,6 @@ export function PlantFilters(props:
                         placeholder='Toutes'
                         icon={IconPalette}
                         options={COLORS}
-                        value={filters.color}
                         setValue={v => setFilters(f => ({ ...f, color: v || undefined }))} />
 
                     <FilterItemSlider
@@ -124,9 +120,8 @@ export function PlantFilters(props:
                         min={1}
                         max={12}
                         icon={IconFlower}
-                        value={filters.bloom}
                         labelFormatter={formatMonthChip}
-                        setValue={v => setFilters(f => ({ ...f, bloom: Array.isArray(v) && v.length === 2 ? [v[0], v[1]] : f.bloom }))} />
+                        setValue={v => setFilters(f => ({ ...f, bloom: v as [number, number] }))} />
 
                     <FilterItemSlider
                         title='Hauteur'

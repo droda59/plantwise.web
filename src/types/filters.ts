@@ -7,15 +7,15 @@ export interface Filters {
     // Critères du site
     zone?: string;
     sunConditions?: string;
-    saltConditions?: string;
-    droughtTolerant?: boolean;
-    floodTolerant?: boolean;
+    // saltConditions?: string;
+    // droughtTolerant?: boolean;
+    // floodTolerant?: boolean;
 
     // Critères de la plante
     type?: string;
     functionalGroup?: string;
-    color?: string;
-    bloom?: [number, number];
+    // color?: string;
+    // bloom?: [number, number];
     height?: [number, number];
     spread?: [number, number];
     native?: boolean;
@@ -30,15 +30,15 @@ export const DEFAULT_FILTERS: Filters = {
     // Critères du site
     zone: undefined,
     sunConditions: undefined,
-    saltConditions: undefined,
-    droughtTolerant: undefined,
-    floodTolerant: undefined,
+    // saltConditions: undefined,
+    // droughtTolerant: undefined,
+    // floodTolerant: undefined,
 
     // Critères de la plante
     type: undefined,
     functionalGroup: undefined,
-    color: undefined,
-    bloom: [1, 12],
+    // color: undefined,
+    // bloom: [1, 12],
     height: [0, 3000],
     spread: [0, 3000],
     native: undefined,
