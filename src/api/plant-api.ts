@@ -7,7 +7,7 @@ export function createSearchParams(filters?: Filters) {
     if (filters) {
         filters.q && params.set('q', filters.q);
         filters.zone && filters.zone !== '.' && params.set('zone', filters.zone.toString());
-        filters.sun && filters.sun !== '.' && params.set('sun', filters.sun);
+        filters.sunConditions && filters.sunConditions !== '.' && params.set('sun', filters.sunConditions);
         filters.saltConditions && params.set('saltConditions', filters.saltConditions);
         filters.droughtTolerant && params.set('droughtTolerant', 'true');
         filters.floodTolerant && params.set('floodTolerant', 'true');

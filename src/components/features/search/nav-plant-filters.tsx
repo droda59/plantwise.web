@@ -5,7 +5,7 @@ import { IconArrowsHorizontal, IconArrowsVertical, IconDroplet, IconDropletFille
 import { SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { COLORS, DEFAULT_FILTERS, Filters, SALTS, SUNS } from "@/types/filters";
+import { COLORS, DEFAULT_FILTERS, Filters, SALTS } from "@/types/filters";
 import { PLANTTYPES } from "@/types/plantType";
 import { FunctionalGroup, FUNCTIONALGROUPS } from "@/types/functional-groups";
 import { FilterItemSelect } from "@/components/filter-item-select";
@@ -13,6 +13,7 @@ import { FilterItemCheckbox } from "@/components/filter-item-checkbox";
 import { FilterItemSlider } from "@/components/filter-item-slider";
 import { HardinessZone, ZONES } from "@/types/hardiness-zone";
 import { formatMonthChip, formatSizeChip } from "@/lib/utils";
+import { SUNCONDITIONS } from "@/types/sun-condition";
 
 export function NavPlantFilters(props:
     {
@@ -57,12 +58,11 @@ export function NavPlantFilters(props:
 
                     <FilterItemSelect
                         title='Ensoleillement'
-                        disabled
                         placeholder='Tous'
                         icon={IconSun}
-                        options={SUNS}
-                        value={filters.sun}
-                        setValue={v => setFilters(f => ({ ...f, sun: v || undefined }))} />
+                        options={SUNCONDITIONS}
+                        value={filters.sunConditions}
+                        setValue={v => setFilters(f => ({ ...f, sunConditions: v || undefined }))} />
 
                     <FilterItemSelect
                         title='Présence de sels'

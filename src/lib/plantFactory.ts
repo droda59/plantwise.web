@@ -1,3 +1,4 @@
+import { SunConditionValue } from "@/types/sun-condition";
 import { Plant } from "@/types/plant";
 
 export class PlantFactory {
@@ -9,7 +10,7 @@ export class PlantFactory {
             name: data.name,
             type: data.type,
             zone: data.zone,
-            sun: Array.isArray(data.sun) ? data.sun : (data.sun ? [data.sun] : []),
+            sunTolerance: !!data.sunTolerance ? String(data.sunTolerance).split(',').map(s => s.trim() as SunConditionValue) : [],
             isNative: data.native === 'i',
             isNaturalized: data.native === 'n',
             droughtTolerant: data.droughtTolerant ? Boolean(data.droughtTolerant) : undefined,
@@ -22,7 +23,6 @@ export class PlantFactory {
             genus: data.genus,
             species: data.species,
             functionalGroup: data.functionalGroup,
-            // nurseries: Array.isArray(data.nurseries) ? data.nurseries : [],
         };
     }
 }

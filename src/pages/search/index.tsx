@@ -49,8 +49,9 @@ function SearchPage() {
         setFilters({
             q: searchParams.get('q') || DEFAULT_FILTERS.q,
             zone: searchParams.get('zone') || DEFAULT_FILTERS.zone,
-            droughtTolerant: searchParams.get('droughtTolerant') ? true : DEFAULT_FILTERS.droughtTolerant,
-            floodTolerant: searchParams.get('floodTolerant') ? true : DEFAULT_FILTERS.floodTolerant,
+            sunConditions: searchParams.get('sun') || DEFAULT_FILTERS.sunConditions,
+            // droughtTolerant: searchParams.get('droughtTolerant') ? true : DEFAULT_FILTERS.droughtTolerant,
+            // floodTolerant: searchParams.get('floodTolerant') ? true : DEFAULT_FILTERS.floodTolerant,
 
             type: searchParams.get('type') || DEFAULT_FILTERS.type,
             functionalGroup: searchParams.get('functionalGroup') || DEFAULT_FILTERS.functionalGroup,

@@ -1,4 +1,3 @@
-export const SUNS = ["plein-soleil", "mi-ombre", "ombre"];
 export const COLORS = ["blanc", "jaune", "orange", "rouge", "rose", "mauve", "bleu", "vert", "rouge automnal"];
 export const SALTS = ["haute", "moyenne", "faible"];
 
@@ -7,7 +6,7 @@ export interface Filters {
 
     // Critères du site
     zone?: string;
-    sun?: string;
+    sunConditions?: string;
     saltConditions?: string;
     droughtTolerant?: boolean;
     floodTolerant?: boolean;
@@ -30,7 +29,7 @@ export const DEFAULT_FILTERS: Filters = {
 
     // Critères du site
     zone: undefined,
-    sun: undefined,
+    sunConditions: undefined,
     saltConditions: undefined,
     droughtTolerant: undefined,
     floodTolerant: undefined,

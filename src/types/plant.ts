@@ -1,4 +1,5 @@
 import { PlantTypeValue } from './plantType';
+import { SunConditionValue } from './sun-condition';
 
 export interface Plant {
     id?: string;
@@ -11,7 +12,7 @@ export interface Plant {
     type: PlantTypeValue;
     functionalGroup?: string;
     zone?: string;
-    sun?: Array<'plein-soleil' | 'mi-ombre' | 'ombre'>;
+    sunTolerance?: Array<SunConditionValue>;
     isNative?: boolean;
     isNaturalized?: boolean;
     droughtTolerant?: boolean;
@@ -20,13 +21,4 @@ export interface Plant {
     height?: number; // m (approx)
     spread?: number; // m (approx)
     saltTolerance?: 'haute' | 'moyenne' | 'faible';
-    // nurseries?: Nursery[];
 }
-
-/*
-export interface Nursery {
-    name: string;
-    city: string;
-    website: string;
-}
-*/

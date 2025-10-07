@@ -23,6 +23,12 @@ import { Separator } from '@/components/ui/separator';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { getHardinessZone, HardinessZone } from '@/types/hardiness-zone';
 
+const sunToleranceMap = {
+    full: 'Plein soleil',
+    partial: 'Mi-ombre',
+    shade: 'Ombre'
+};
+
 const VSeparator = () => (
     <Separator
         orientation="vertical"
@@ -331,6 +337,15 @@ export default function PlantPage() {
                                                     </td>
                                                 </tr>
                                             )}
+                                            {!!plant.sunTolerance && (
+                                                <tr>
+                                                    <td className='p-1 pl-2 text-sm'>Tolérance au soleil</td>
+                                                    <td className='flex items-center'>
+                                                        <VSeparator />
+                                                        <span>{plant.sunTolerance.map((s) => sunToleranceMap[s]).join(', ')}</span>
+                                                    </td>
+                                                </tr>
+                                            )}
                                             {!!plant.family && (
                                                 <tr>
                                                     <td className='p-1 pl-2 text-sm'>Famille</td>
@@ -361,11 +376,6 @@ export default function PlantPage() {
                                         </tbody>
                                     </table>
                                 </div>
-                                {/*
-                                <div className="flex flex-wrap gap-2">
-                                    {plant.nurseries.map((n, i) => <NurseryChip key={n.name + i} n={n} />)}
-                                </div>
-                                 */}
                                 <Separator className='mt-8' />
                                 <div className='flex-col mt-8'>
                                     <div className='text-xl font-semibold'>
