@@ -13,7 +13,7 @@ export function FilterItemCheckbox(props: {
     setValue: (value: React.SetStateAction<any>) => void
 }) {
     return (
-        <SidebarMenuFilterItem icon={props.icon} label={props.title} target={props.id}>
+        <SidebarMenuFilterItem icon={props.icon} label={props.title} target={props.id} disabled={props.disabled}>
             <Switch checked={!!props.value} onCheckedChange={props.setValue} id={props.id} disabled={props.disabled} />
         </SidebarMenuFilterItem>
     );

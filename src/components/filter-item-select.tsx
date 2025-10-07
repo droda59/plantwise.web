@@ -29,7 +29,7 @@ export function FilterItemSelect(props: {
     }
 
     return (
-        <SidebarMenuFilterItem icon={props.icon} title={props.title}>
+        <SidebarMenuFilterItem icon={props.icon} title={props.title} disabled={props.disabled}>
             <Select value={props.value || ""} onValueChange={props.setValue} disabled={props.disabled}>
                 <SelectTrigger className="grow"><SelectValue placeholder={props.placeholder} /></SelectTrigger>
                 <SelectContent>
