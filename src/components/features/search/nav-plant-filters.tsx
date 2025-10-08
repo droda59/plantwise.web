@@ -53,7 +53,7 @@ export function NavPlantFilters(props:
                         icon={IconWorld}
                         options={ZONES}
                         value={filters.zone}
-                        labelFormatter={(t: HardinessZone) => `${t.value} (${t.city})`}
+                        labelFormatter={(t: HardinessZone) => `${t.value} (${t.label})`}
                         setValue={v => setFilters(f => ({ ...f, zone: v || undefined }))} />
 
                     <FilterItemSelect

@@ -1,10 +1,8 @@
+import { ValueLabelPair } from "./value-label";
+
 export const COLORS = ["blanc", "jaune", "orange", "rouge", "rose", "mauve", "bleu", "vert", "rouge automnal"];
 export const SALTS = ["haute", "moyenne", "faible"];
 
-interface ValueLabelPair<K> {
-    value: K;
-    label: string;
-}
 export const MONTHS: Array<ValueLabelPair<string>> = [
     {
         value: '1',

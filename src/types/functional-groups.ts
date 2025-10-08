@@ -1,8 +1,8 @@
+import { ValueLabelPair } from "./value-label";
+
 export type FunctionalGroupValue = "1A" | "1B" | "2A" | "2B" | "2C" | "3A" | "3B" | "4A" | "4B" | "5";
 
-export interface FunctionalGroup {
-    value: FunctionalGroupValue,
-    label: string,
+export interface FunctionalGroup extends ValueLabelPair<FunctionalGroupValue> {
     description: string,
     species: string,
     color: string,

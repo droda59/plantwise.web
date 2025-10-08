@@ -1,12 +1,8 @@
+import { ValueLabelPair } from "./value-label";
+
 export type SunConditionValue = 'full' | 'partial' | 'shade';
-export type SunConditionLabel = 'Plein soleil' | 'Mi-ombre' | 'Ombre';
 
-export interface SunCondition {
-    value: SunConditionValue,
-    label: SunConditionLabel,
-};
-
-export const SUNCONDITIONS: Array<SunCondition> = [
+export const SUNCONDITIONS: Array<ValueLabelPair<SunConditionValue>> = [
     {
         value: "full",
         label: "Plein soleil",

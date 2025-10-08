@@ -83,7 +83,7 @@ const HoverCardPlantZone = ({ children, zone }: { children: React.ReactNode, zon
                 <div className="space-y-1">
                     <h4 className="text-sm font-semibold">Zone de rusticité {zone.value}</h4>
                     <p className="text-sm">
-                        {zone.city}
+                        {zone.label}
                     </p>
                     <div className="mt-2 text-muted-foreground text-xs">
                         Source : Gouvernement du Canada

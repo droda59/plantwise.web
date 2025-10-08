@@ -1,3 +1,5 @@
+import { FunctionalGroupValue } from './functional-groups';
+import { HardinessZoneValue } from './hardiness-zone';
 import { PlantTypeValue } from './plantType';
 import { SunConditionValue } from './sun-condition';
 
@@ -10,8 +12,8 @@ export interface Plant {
     genus?: string;
     species?: string;
     type: PlantTypeValue;
-    functionalGroup?: string;
-    zone?: string;
+    functionalGroup?: FunctionalGroupValue;
+    zone?: HardinessZoneValue;
     sunTolerance?: Array<SunConditionValue>;
     isNative?: boolean;
     isNaturalized?: boolean;
