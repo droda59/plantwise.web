@@ -71,7 +71,7 @@ export class plantApi {
     }
 
     async importPlants(): Promise<void> {
-        await fetch(`${apiURL}/api/plants/import`, {
+        await fetch(`http://localhost:3000/api/plants/import`, {
             method: 'POST',
             mode: 'cors',
             headers: {
