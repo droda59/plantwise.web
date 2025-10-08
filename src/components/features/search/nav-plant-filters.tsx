@@ -68,7 +68,7 @@ export function NavPlantFilters(props:
                         }[a.value])}
                         value={filters.sunConditions}
                         setValue={v => setFilters(f => ({ ...f, sunConditions: v || undefined }))} />
-
+                    {/* 
                     <FilterItemSelect
                         title='Présence de sels'
                         disabled
@@ -76,20 +76,23 @@ export function NavPlantFilters(props:
                         icon={IconSalt}
                         options={SALTS}
                         setValue={v => setFilters(f => ({ ...f, saltConditions: v || undefined }))} />
-
+ */}
+                    {/* 
                     <FilterItemCheckbox
                         title='Sujet à la sécheresse'
                         disabled
                         id='droughtTolerant'
                         icon={IconDroplet}
                         setValue={v => setFilters(f => ({ ...f, droughtTolerant: v || undefined }))} />
-
+ */}
+                    {/* 
                     <FilterItemCheckbox
                         title="Sujet à l'excès d'eau"
                         disabled
                         id='floodTolerant'
                         icon={IconDropletFilled}
                         setValue={v => setFilters(f => ({ ...f, floodTolerant: v || undefined }))} />
+                         */}
                 </SidebarMenu>
             </SidebarGroupContent>
             <SidebarGroupContent className="flex flex-col gap-2 p-2">
@@ -113,7 +116,7 @@ export function NavPlantFilters(props:
                         labelFormatter={(t: FunctionalGroup) => `${t.value} - ${t.label}`}
                         disabled={!['.', '1 AR', '1b ARB', '2 CON', '3 ARBU'].includes(filters.type ?? '')}
                         setValue={v => setFilters(f => ({ ...f, functionalGroup: v || undefined }))} />
-
+                    {/* 
                     <FilterItemSelect
                         title='Couleur'
                         disabled
@@ -121,7 +124,7 @@ export function NavPlantFilters(props:
                         icon={IconPalette}
                         options={COLORS}
                         setValue={v => setFilters(f => ({ ...f, color: v || undefined }))} />
-
+ */}
                     <FilterItemSelect
                         title='Floraison'
                         placeholder="Toute l'année"
