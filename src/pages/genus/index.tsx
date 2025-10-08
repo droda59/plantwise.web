@@ -7,14 +7,17 @@ import { genusApiInstance } from '@/api/genus-api';
 import { IconSlash } from '@tabler/icons-react';
 import Link from 'next/link';
 
+type GenusGroup = { genus: string, count: number };
+
 export default function GenusListPage() {
-    const [genusList, setGenusList] = useState<string[]>();
+    const [genusList, setGenusList] = useState<GenusGroup[]>();
     const [loading, setLoading] = useState(false);
 
     const fetchList = async () => {
         setLoading(true);
 
         const genus = await genusApiInstance.getGenus();
+        console.log(genus);
         setGenusList(genus);
 
         setLoading(false);
@@ -43,8 +46,8 @@ export default function GenusListPage() {
                         <div className='flex-col'>
                             <h1 className='text-3xl font-semibold'>Recherche par genre</h1>
                             <div className='grid grid-cols-2 mt-8'>
-                                {genusList?.map((g, i) => g && !!g.length && (
-                                    <Link key={i} href={`/genus/${g}`}><i>{g}</i></Link>
+                                {genusList?.map((g, i) => g && !!g.genus.length && (
+                                    <Link key={i} href={`/genus/${g.genus}`}><i>{g.genus}</i> <span className='text-muted text-sm'>({g.count})</span></Link>
                                 ))}
                             </div>
                         </div>

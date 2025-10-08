@@ -10,6 +10,8 @@ import { createSearchParams } from '@/api/plant-api';
 import Link from 'next/link';
 import { speciesFirstWord } from '@/lib/utils';
 
+type SpeciesGroup = { species: string | undefined, count: number };
+
 export default function GenusPage() {
     const router = useRouter();
 
@@ -17,7 +19,7 @@ export default function GenusPage() {
     const genus = id as string;
 
     const [loading, setLoading] = useState(false);
-    const [speciesList, setSpeciesList] = useState<string[]>();
+    const [speciesList, setSpeciesList] = useState<SpeciesGroup[]>();
 
     const fetchSpecies = async () => {
         if (genus) {
@@ -60,8 +62,8 @@ export default function GenusPage() {
                             <div className='grid grid-cols-2 mt-8'>
                                 {speciesList?.map((s, i) => (
                                     <div key={i}>
-                                        {!s.length && <span key={i}><i>{genus} sp.</i></span>}
-                                        {!!s.length && <Link key={i} href={`/search?${createSearchParams({ species: s }).toString()}`}><i>{speciesFirstWord(s)}</i></Link>}
+                                        {!s.species?.length && <span key={i}><i>{genus} sp.</i> <span className='text-muted text-sm'>({s.count})</span></span>}
+                                        {!!s.species?.length && <Link key={i} href={`/search?${createSearchParams({ species: s.species }).toString()}`}><i>{speciesFirstWord(s.species)}</i> <span className='text-muted text-sm'>({s.count})</span></Link>}
                                     </div>
                                 ))}
                             </div>
