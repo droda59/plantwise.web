@@ -23,7 +23,7 @@ import { Separator } from '@/components/ui/separator';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { getHardinessZone, HardinessZone } from '@/types/hardiness-zone';
 import { SizeChip } from '@/components/size-chip';
-import { formatMonthChip } from '@/lib/utils';
+import { formatMonthChip, speciesFirstWord } from '@/lib/utils';
 
 const sunToleranceMap = {
     full: 'Plein soleil',
@@ -73,24 +73,26 @@ const HoverCardHardinessZone = ({ children }: { children: React.ReactNode }) => 
     </HoverCard >
 );
 
-const HoverCardPlantZone = ({ children, zone }: { children: React.ReactNode, zone?: HardinessZone }) => zone && (
+const HoverCardPlantZone = ({ children, zone }: { children: React.ReactNode, zone?: HardinessZone }) => (
     <HoverCard>
         <HoverCardTrigger asChild>
             {children}
         </HoverCardTrigger>
-        <HoverCardContent className={`w-80 border-${zone.colorHex} rounded-sm`}>
-            <div className="flex justify-between gap-4">
-                <div className="space-y-1">
-                    <h4 className="text-sm font-semibold">Zone de rusticité {zone.value}</h4>
-                    <p className="text-sm">
-                        {zone.label}
-                    </p>
-                    <div className="mt-2 text-muted-foreground text-xs">
-                        Source : Gouvernement du Canada
+        {!!zone && (
+            <HoverCardContent className={`w-80 border-${zone.colorHex} rounded-sm`}>
+                <div className="flex justify-between gap-4">
+                    <div className="space-y-1">
+                        <h4 className="text-sm font-semibold">Zone de rusticité {zone.value}</h4>
+                        <p className="text-sm">
+                            {zone.label}
+                        </p>
+                        <div className="mt-2 text-muted-foreground text-xs">
+                            Source : Gouvernement du Canada
+                        </div>
                     </div>
                 </div>
-            </div>
-        </HoverCardContent>
+            </HoverCardContent>
+        )}
     </HoverCard>
 );
 
@@ -282,7 +284,7 @@ export default function PlantPage() {
                                                             width: '8px'
                                                         }}
                                                     />
-                                                    {plant.zone || 'Inconnue'}
+                                                    {zone?.value || 'Inconnue'}
                                                 </div>
                                             </HoverCardPlantZone>
                                         </div>
@@ -331,7 +333,7 @@ export default function PlantPage() {
                                                     </HoverCardFunctionalGroup>
                                                 </GeneralInfoRow>
                                             )}
-                                            {!!plant.sunTolerance && (
+                                            {!!plant.sunTolerance?.length && (
                                                 <GeneralInfoRow label='Tolérance au soleil'>
                                                     <span>{plant.sunTolerance.map(s => sunToleranceMap[s]).join(', ')}</span>
                                                 </GeneralInfoRow>
@@ -353,7 +355,7 @@ export default function PlantPage() {
                                             )}
                                             {!!plant.species && (
                                                 <GeneralInfoRow label='Espèce'>
-                                                    <Link href={`/search?${createSearchParams({ species: plant.species }).toString()}`}><i>{plant.species}</i></Link>
+                                                    <Link href={`/search?${createSearchParams({ species: plant.species }).toString()}`}><i>{speciesFirstWord(plant.species)}</i></Link>
                                                 </GeneralInfoRow>
                                             )}
                                         </tbody>

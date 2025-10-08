@@ -8,6 +8,7 @@ import { genusApiInstance } from '@/api/genus-api';
 import { IconSlash } from '@tabler/icons-react';
 import { createSearchParams } from '@/api/plant-api';
 import Link from 'next/link';
+import { speciesFirstWord } from '@/lib/utils';
 
 export default function GenusPage() {
     const router = useRouter();
@@ -60,7 +61,7 @@ export default function GenusPage() {
                                 {speciesList?.map((s, i) => (
                                     <div key={i}>
                                         {!s.length && <span key={i}><i>{genus} sp.</i></span>}
-                                        {!!s.length && <Link key={i} href={`/search?${createSearchParams({ species: s }).toString()}`}><i>{s}</i></Link>}
+                                        {!!s.length && <Link key={i} href={`/search?${createSearchParams({ species: s }).toString()}`}><i>{speciesFirstWord(s)}</i></Link>}
                                     </div>
                                 ))}
                             </div>

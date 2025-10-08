@@ -27,3 +27,9 @@ const monthLookup: Record<number, string> = {
 export function formatMonthChip(month: number): string {
     return monthLookup[month] ?? '';
 }
+
+export function speciesFirstWord(fullName: string): string {
+    const shortGenre = fullName.replace(/.* /, `${fullName[0]}. `);
+
+    return shortGenre;
+}

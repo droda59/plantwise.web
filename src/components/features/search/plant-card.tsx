@@ -7,7 +7,7 @@ import { getPlantType, PlantTypeValue } from "@/types/plantType";
 import { IconArrowsHorizontal, IconArrowsVertical, IconWorld } from "@tabler/icons-react";
 import Link from "next/link";
 import { CodeChip } from "../../code-chip";
-import { cn } from "@/lib/utils"
+import { cn, speciesFirstWord } from "@/lib/utils"
 import { getFunctionalGroup } from "@/types/functional-groups";
 import { SizeChip } from "@/components/size-chip";
 
@@ -156,7 +156,7 @@ export const PlantCard = ({ plant }: { plant: Plant; }) => {
                                 <div className='flex-col grow ml-4'>
                                     {!!plant.family && <div className="font-medium italic">{plant.family}</div>}
                                     {!!plant.genus && <div className="font-medium italic">{plant.genus}</div>}
-                                    {!!plant.species && <div className="font-medium italic">{plant.species}</div>}
+                                    {!!plant.species && <div className="font-medium italic">{speciesFirstWord(plant.species)}</div>}
                                 </div>
                             </div>
                         </div>

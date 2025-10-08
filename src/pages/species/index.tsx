@@ -8,6 +8,7 @@ import { IconSlash } from '@tabler/icons-react';
 import { speciesApiInstance } from '@/api/species-api';
 import { createSearchParams } from '@/api/plant-api';
 import { Separator } from '@/components/ui/separator';
+import { speciesFirstWord } from '@/lib/utils';
 
 export default function SpeciesPage() {
     const [speciesList, setSpeciesList] = useState<Partial<Record<string, { genus: string, species: string }[]>>>();
@@ -60,7 +61,7 @@ export default function SpeciesPage() {
                                             {values?.map((s, j) => (
                                                 <div key={j}>
                                                     {!s.species && <Link key={j} href={`/search?${createSearchParams({ genus: s.genus }).toString()}`}><i>{s.genus} sp.</i></Link>}
-                                                    {s.species && <Link key={j} href={`/search?${createSearchParams({ species: s.species }).toString()}`}><i>{s.species}</i></Link>}
+                                                    {s.species && <Link key={j} href={`/search?${createSearchParams({ species: s.species }).toString()}`}><i>{speciesFirstWord(s.species)}</i></Link>}
                                                 </div>
                                             ))}
                                         </div>
