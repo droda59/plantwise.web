@@ -2,6 +2,8 @@ import { PlantFactory } from "@/lib/plantFactory";
 import { Filters } from "@/types/filters";
 import { Plant } from "@/types/plant";
 
+const apiURL = 'https://plantwise-api.onrender.com';
+
 export function createSearchParams(filters?: Filters) {
     const params = new URLSearchParams();
     if (filters) {
@@ -38,7 +40,7 @@ export class plantApi {
     async getPlants(filters?: Filters): Promise<Plant[]> {
         const params = createSearchParams(filters);
         const query = filters && `?${params.toString()}` || '';
-        const response = await fetch(`http://localhost:3000/api/plants${query}`, {
+        const response = await fetch(`${apiURL}/api/plants${query}`, {
             method: 'GET',
             mode: 'cors',
             headers: {
@@ -52,7 +54,7 @@ export class plantApi {
     }
 
     async getPlant(code: string): Promise<Plant | null> {
-        const response = await fetch(`http://localhost:3000/api/plants/${code}`, {
+        const response = await fetch(`${apiURL}/api/plants/${code}`, {
             method: 'GET',
             mode: 'cors',
             headers: {
@@ -69,7 +71,7 @@ export class plantApi {
     }
 
     async importPlants(): Promise<void> {
-        await fetch(`http://localhost:3000/api/plants/import`, {
+        await fetch(`${apiURL}/api/plants/import`, {
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -79,7 +81,7 @@ export class plantApi {
     }
 
     async createPlant(plant: Plant): Promise<Plant> {
-        const response = await fetch(`http://localhost:3000/api/plants`, {
+        const response = await fetch(`${apiURL}/api/plants`, {
             method: 'POST',
             mode: 'cors',
             headers: {

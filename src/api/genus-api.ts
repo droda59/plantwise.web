@@ -1,6 +1,8 @@
+const apiURL = 'https://plantwise-api.onrender.com';
+
 export class genusApi {
     async getGenus(): Promise<string[]> {
-        const response = await fetch(`http://localhost:3000/api/genus`, {
+        const response = await fetch(`${apiURL}/api/genus`, {
             method: 'GET',
             mode: 'cors',
             headers: {
@@ -14,7 +16,7 @@ export class genusApi {
     }
 
     async getSpecies(genus: string): Promise<string[]> {
-        const response = await fetch(`http://localhost:3000/api/genus/${genus}`, {
+        const response = await fetch(`${apiURL}/api/genus/${genus}`, {
             method: 'GET',
             mode: 'cors',
             headers: {
