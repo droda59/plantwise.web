@@ -123,7 +123,7 @@ export default function Import() {
                         </div>
 
                         <div className="grid w-full max-w-sm items-center gap-3 mt-4">
-                            <Select value={plant.zone} onValueChange={v => setPlant(f => ({ ...f, zone: v }))}>
+                            <Select value={plant.zone} onValueChange={v => setPlant(f => ({ ...f, zone: v as Plant['zone'] }))}>
                                 <SelectTrigger className="grow"><SelectValue placeholder='Zone' /></SelectTrigger>
                                 <SelectContent>
                                     {ZONES.map((t, i) => (
