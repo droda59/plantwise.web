@@ -13,7 +13,7 @@ import { FilterItemCheckbox } from "@/components/filter-item-checkbox";
 import { FilterItemSlider } from "@/components/filter-item-slider";
 import { HardinessZone, ZONES } from "@/types/hardiness-zone";
 import { formatSizeChip } from "@/lib/utils";
-import { SUNCONDITIONS } from "@/types/sun-condition";
+import { SUNCONDITIONS, SunConditionValue } from "@/types/sun-condition";
 
 export function NavPlantFilters(props:
     {
@@ -61,6 +61,11 @@ export function NavPlantFilters(props:
                         placeholder='Tous'
                         icon={IconSun}
                         options={SUNCONDITIONS}
+                        sorter={(a: { value: SunConditionValue }) => ({
+                            'full': 1,
+                            'partial': 2,
+                            'shade': 3,
+                        }[a.value])}
                         value={filters.sunConditions}
                         setValue={v => setFilters(f => ({ ...f, sunConditions: v || undefined }))} />
 
@@ -95,6 +100,7 @@ export function NavPlantFilters(props:
                         placeholder='Tous'
                         icon={IconPlant}
                         options={PLANTTYPES}
+                        sorter={(a, b) => a['label'].localeCompare(b['label'])}
                         value={filters.type}
                         setValue={v => setFilters(f => ({ ...f, type: v || undefined }))} />
 
@@ -121,6 +127,7 @@ export function NavPlantFilters(props:
                         placeholder="Toute l'année"
                         icon={IconFlower}
                         options={MONTHS}
+                        sorter={a => Number(a)}
                         value={filters.bloom}
                         setValue={v => setFilters(f => ({ ...f, bloom: v || undefined }))} />
 

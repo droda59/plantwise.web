@@ -10,6 +10,7 @@ export function FilterItemSelect(props: {
     icon: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<Icon>>,
     options: any[],
     value?: string,
+    sorter?: (a: any, b: any) => number,
     labelFormatter?: (t: any) => string,
     disabled?: boolean,
     setValue: (value: React.SetStateAction<any>) => void
@@ -35,13 +36,12 @@ export function FilterItemSelect(props: {
                 <SelectContent>
                     <SelectItem value=".">Tous</SelectItem>
                     {props.options.sort((a, b) => {
-                        if (props.labelFormatter) {
-                            return props.labelFormatter(a).localeCompare(props.labelFormatter(b));
-                        }
-                        else if (typeof a === 'string') {
+                        if (props.sorter) {
+                            return props.sorter(a, b);
+                        } else if (typeof a === 'string') {
                             return a.localeCompare(b);
                         } else if (typeof a === 'object') {
-                            return a['label'].localeCompare(b['label']);
+                            return a['value'].localeCompare(b['value']);
                         }
                     }).map(createSelectItem)}
                 </SelectContent>

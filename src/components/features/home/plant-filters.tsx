@@ -12,7 +12,7 @@ import { FilterItemCheckbox } from "@/components/filter-item-checkbox";
 import { FilterItemSlider } from "@/components/filter-item-slider";
 import { HardinessZone, ZONES } from "@/types/hardiness-zone";
 import { formatSizeChip } from "@/lib/utils";
-import { SUNCONDITIONS } from "@/types/sun-condition";
+import { SUNCONDITIONS, SunConditionValue } from "@/types/sun-condition";
 
 export function PlantFilters(props:
     {
@@ -60,6 +60,11 @@ export function PlantFilters(props:
                         placeholder='Tous'
                         icon={IconSun}
                         options={SUNCONDITIONS}
+                        sorter={(a: { value: SunConditionValue }) => ({
+                            'full': 1,
+                            'partial': 2,
+                            'shade': 3,
+                        }[a.value])}
                         value={filters.sunConditions}
                         setValue={v => setFilters(f => ({ ...f, sunConditions: v || undefined }))} />
 
@@ -94,6 +99,7 @@ export function PlantFilters(props:
                         icon={IconPlant}
                         options={PLANTTYPES}
                         value={filters.type}
+                        sorter={(a, b) => a['label'].localeCompare(b['label'])}
                         setValue={v => setFilters(f => ({ ...f, type: v || undefined }))} />
 
                     <FilterItemSelect
@@ -119,6 +125,7 @@ export function PlantFilters(props:
                         placeholder="Toute l'année"
                         icon={IconFlower}
                         options={MONTHS}
+                        sorter={a => Number(a)}
                         value={filters.bloom}
                         setValue={v => setFilters(f => ({ ...f, bloom: v || undefined }))} />
 
