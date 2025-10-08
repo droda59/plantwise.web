@@ -23,6 +23,7 @@ import { Separator } from '@/components/ui/separator';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { getHardinessZone, HardinessZone } from '@/types/hardiness-zone';
 import { SizeChip } from '@/components/size-chip';
+import { formatMonthChip } from '@/lib/utils';
 
 const sunToleranceMap = {
     full: 'Plein soleil',
@@ -332,7 +333,12 @@ export default function PlantPage() {
                                             )}
                                             {!!plant.sunTolerance && (
                                                 <GeneralInfoRow label='Tolérance au soleil'>
-                                                    <span>{plant.sunTolerance.map((s) => sunToleranceMap[s]).join(', ')}</span>
+                                                    <span>{plant.sunTolerance.map(s => sunToleranceMap[s]).join(', ')}</span>
+                                                </GeneralInfoRow>
+                                            )}
+                                            {!!plant.bloom?.length && (
+                                                <GeneralInfoRow label='Floraison'>
+                                                    <span>{plant.bloom.map(b => formatMonthChip(b)).join(', ')}</span>
                                                 </GeneralInfoRow>
                                             )}
                                             {!!plant.family && (

@@ -1,6 +1,50 @@
 export const COLORS = ["blanc", "jaune", "orange", "rouge", "rose", "mauve", "bleu", "vert", "rouge automnal"];
 export const SALTS = ["haute", "moyenne", "faible"];
 
+interface ValueLabelPair<K> {
+    value: K;
+    label: string;
+}
+export const MONTHS: Array<ValueLabelPair<string>> = [
+    {
+        value: '1',
+        label: "Janvier",
+    }, {
+        value: '2',
+        label: "Février",
+    }, {
+        value: '3',
+        label: "Mars",
+    }, {
+        value: '4',
+        label: "Avril",
+    }, {
+        value: '5',
+        label: "Mai",
+    }, {
+        value: '6',
+        label: "Juin",
+    }, {
+        value: '7',
+        label: "Juillet",
+    }, {
+        value: '8',
+        label: "Août",
+    }, {
+        value: '9',
+        label: "Septembre",
+    }, {
+        value: '10',
+        label: "Octobre",
+    }, {
+        value: '11',
+        label: "Novembre",
+    }, {
+        value: '12',
+        label: "Décembre",
+    }
+];
+
 export interface Filters {
     q?: string;
 
@@ -15,7 +59,7 @@ export interface Filters {
     type?: string;
     functionalGroup?: string;
     // color?: string;
-    // bloom?: [number, number];
+    bloom?: string;
     height?: [number, number];
     spread?: [number, number];
     native?: boolean;
@@ -38,7 +82,7 @@ export const DEFAULT_FILTERS: Filters = {
     type: undefined,
     functionalGroup: undefined,
     // color: undefined,
-    // bloom: [1, 12],
+    bloom: undefined,
     height: [0, 3000],
     spread: [0, 3000],
     native: undefined,

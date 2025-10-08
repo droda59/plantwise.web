@@ -17,7 +17,7 @@ export interface Plant {
     isNaturalized?: boolean;
     // droughtTolerant?: boolean;
     // floodTolerant?: boolean;
-    // bloom?: number[];
+    bloom?: number[];
     height?: number; // m (approx)
     spread?: number; // m (approx)
     // saltTolerance?: 'haute' | 'moyenne' | 'faible';

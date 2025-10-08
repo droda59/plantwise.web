@@ -29,14 +29,6 @@ function SearchPage() {
     useEffect(() => {
         if (!searchParams) return;
 
-        /*
-        const bloomMin = searchParams.get('bloomMin');
-        const bloomMax = searchParams.get('bloomMax');
-        const bloom: [number, number] = [1, 12];
-        if (bloomMin) bloom[0] = parseInt(bloomMin as string, 10);
-        if (bloomMax) bloom[1] = parseInt(bloomMax as string, 10);
-        */
-
         const heightMin = searchParams.get('heightMin');
         const heightMax = searchParams.get('heightMax');
         const spreadMin = searchParams.get('spreadMin');
@@ -57,7 +49,7 @@ function SearchPage() {
 
             type: searchParams.get('type') || DEFAULT_FILTERS.type,
             functionalGroup: searchParams.get('functionalGroup') || DEFAULT_FILTERS.functionalGroup,
-            // bloom,
+            bloom: searchParams.get('bloom') || DEFAULT_FILTERS.bloom,
             height,
             spread,
             native: searchParams.get('native') ? true : DEFAULT_FILTERS.native,

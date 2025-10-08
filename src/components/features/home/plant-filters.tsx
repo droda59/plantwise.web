@@ -4,14 +4,14 @@ import { IconArrowsHorizontal, IconArrowsVertical, IconDroplet, IconDropletFille
 import { SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { COLORS, DEFAULT_FILTERS, Filters, SALTS } from "@/types/filters";
+import { COLORS, DEFAULT_FILTERS, Filters, MONTHS, SALTS } from "@/types/filters";
 import { PLANTTYPES } from "@/types/plantType";
 import { FunctionalGroup, FUNCTIONALGROUPS } from "@/types/functional-groups";
 import { FilterItemSelect } from "@/components/filter-item-select";
 import { FilterItemCheckbox } from "@/components/filter-item-checkbox";
 import { FilterItemSlider } from "@/components/filter-item-slider";
 import { HardinessZone, ZONES } from "@/types/hardiness-zone";
-import { formatMonthChip, formatSizeChip } from "@/lib/utils";
+import { formatSizeChip } from "@/lib/utils";
 import { SUNCONDITIONS } from "@/types/sun-condition";
 
 export function PlantFilters(props:
@@ -114,14 +114,13 @@ export function PlantFilters(props:
                         options={COLORS}
                         setValue={v => setFilters(f => ({ ...f, color: v || undefined }))} />
 
-                    <FilterItemSlider
+                    <FilterItemSelect
                         title='Floraison'
-                        disabled
-                        min={1}
-                        max={12}
+                        placeholder="Toute l'année"
                         icon={IconFlower}
-                        labelFormatter={formatMonthChip}
-                        setValue={v => setFilters(f => ({ ...f, bloom: v as [number, number] }))} />
+                        options={MONTHS}
+                        value={filters.bloom}
+                        setValue={v => setFilters(f => ({ ...f, bloom: v || undefined }))} />
 
                     <FilterItemSlider
                         title='Hauteur'
