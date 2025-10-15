@@ -365,7 +365,7 @@ export default function PlantPage() {
                                         Images
                                     </div>
 
-                                    <iframe id='images' width='100%' height='600' src={`https://www.bing.com/images/search?q=${plant.name}`} />
+                                    <iframe id='images' width='100%' height='600' src={`https://www.bing.com/images/search?q=${plant.latin}`} />
                                 </div>
                             </CardContent>
                         </Card>
