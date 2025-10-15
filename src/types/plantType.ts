@@ -9,7 +9,7 @@ export interface PlantType extends ValueLabelPair<PlantTypeValue> {
 export const PLANTTYPES: Array<PlantType> = [
     {
         value: "1 AR",
-        label: "Arbre",
+        label: "Arbre feuillu",
         color: 'lightgreen',
     }, {
         value: "1b ARB",
