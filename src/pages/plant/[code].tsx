@@ -183,8 +183,6 @@ export default function PlantPage() {
     const [zone, setZone] = useState<HardinessZone | undefined>();
     const [plant, setPlant] = useState<Plant | null>();
     const [type, setType] = useState<PlantType>();
-    const [latin, setLatin] = useState<string>();
-    const [cultivar, setCultivar] = useState<string>();
     const [functionalGroup, setFunctionalGroup] = useState<FunctionalGroup | undefined>();
     const [loading, setLoading] = useState(false);
 
@@ -206,24 +204,9 @@ export default function PlantPage() {
     useEffect(() => {
         if (!plant) return;
 
-        const originalName = plant.latin;
-        const nameWithCultivar = plant.latin.split("'");
-
-        var regExp = /\(([^)]+)\)/;
-        var matches = regExp.exec(plant.latin);
-
         setZone(getHardinessZone(plant.zone));
         setType(getPlantType(plant.type));
         setFunctionalGroup(getFunctionalGroup(plant.functionalGroup));
-
-        if (nameWithCultivar.length > 1) {
-            setCultivar(nameWithCultivar[1]);
-            setLatin(nameWithCultivar[0].trim());
-        } else if (matches) {
-            setLatin(originalName.substring(0, originalName.indexOf('(')).trim());
-        } else {
-            setLatin(originalName);
-        }
     }, [plant]);
 
     return (
@@ -242,7 +225,7 @@ export default function PlantPage() {
                                 </BreadcrumbItem>
                                 <BreadcrumbSeparator><IconSlash /></BreadcrumbSeparator>
                                 <BreadcrumbItem>
-                                    <BreadcrumbLink href="#"><i>{latin}</i></BreadcrumbLink>
+                                    <BreadcrumbLink href="#"><i>{plant.species || plant.genus}</i></BreadcrumbLink>
                                 </BreadcrumbItem>
                             </BreadcrumbList>
                         </Breadcrumb>
@@ -254,13 +237,15 @@ export default function PlantPage() {
                                     <div className="grow ml-4">
                                         <CardTitle className="text-3xl">
                                             <h1>
-                                                <span className='italic'>{latin}</span>
-                                                {cultivar && <span>&nbsp;'{cultivar}'</span>}
+                                                <span className='italic'>{plant.species || plant.genus}</span>
+                                                {plant.cultivar && <span>&nbsp;'{plant.cultivar}'</span>}
+                                                {plant.note && <span>&nbsp;({plant.note})</span>}
                                             </h1>
                                         </CardTitle>
                                         <CardDescription>
                                             <h3>
-                                                {plant.name}
+                                                {plant.synonym && <div className="text-sm text-muted-foreground">syn.&nbsp;<span className='italic'>{plant.synonym}</span></div>}
+                                                {plant.commonName && <div className="text-sm text-muted-foreground">{plant.commonName}</div>}
                                             </h3>
                                         </CardDescription>
                                     </div>
@@ -361,6 +346,19 @@ export default function PlantPage() {
                                         </tbody>
                                     </table>
                                 </div>
+
+                                <Separator className='mt-8' />
+                                <div className='flex-col mt-8'>
+                                    <div className='text-xl font-semibold'>
+                                        Plus d'informations
+                                    </div>
+                                    <div className='mt-4'>
+                                        <div className='text-ms'>
+                                            {plant.vascanID && <Link className='font-medium text-blue-600 dark:text-blue-500 hover:underline' href={`https://data.canadensys.net/vascan/taxon/${plant.vascanID}`} target='_blank'>Base de données des plantes vasculaires du Canada (VASCAN)</Link>}
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <Separator className='mt-8' />
                                 <div className='flex-col mt-8'>
                                     <div className='text-xl font-semibold'>
