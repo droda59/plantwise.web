@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-import { PlantCard } from '@/components/features/search/plant-card';
+import { PlantCard, PlantListCard } from '@/components/features/search/plant-card';
 import { IconSearch } from '@tabler/icons-react';
 
 import { createSearchParams, plantApiInstance } from '@/api/plant-api';
@@ -23,6 +23,7 @@ function SearchPage() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [filteredPlants, setFilteredPlants] = useState<Plant[]>([]);
+    const [groups, setGroups] = useState<[string, Plant[] | undefined][]>();
     const [loading, setLoading] = useState(false);
     const [filters, setFilters] = useState(DEFAULT_FILTERS);
 
@@ -64,6 +65,10 @@ function SearchPage() {
         setLoading(true);
 
         const data = await plantApiInstance.getPlants(filters);
+
+        const groupedSpeciesObj = Object.groupBy(data, d => d.species ?? 'unknown');
+        const groupedSpecies = Object.entries(groupedSpeciesObj);
+        setGroups(groupedSpecies);
 
         setFilteredPlants(data);
         setLoading(false);
@@ -114,9 +119,11 @@ function SearchPage() {
                         {!loading && filteredPlants.length > 0 &&
                             <AnimatePresence mode='popLayout'>
                                 <div className='grid gap-4 grid-cols-2'>
-                                    {filteredPlants.map((plant, index) => (
-                                        <PlantCard key={index} plant={plant} />
-                                    ))}
+                                    {groups?.map(([key, values]) =>
+                                        values?.length && values?.length <= 1
+                                            ? <PlantCard key={key} plant={values[0]} />
+                                            : values && <PlantListCard key={key} plants={values} />
+                                    )}
                                 </div>
                             </AnimatePresence>
                         }
