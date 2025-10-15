@@ -2,8 +2,8 @@ import { PlantFactory } from "@/lib/plantFactory";
 import { Filters } from "@/types/filters";
 import { Plant } from "@/types/plant";
 
-// const apiURL = 'https://plantwise-api.onrender.com';
-const apiURL = 'http://localhost:3000';
+const apiURL = 'https://plantwise-api.onrender.com';
+// const apiURL = 'http://localhost:3000';
 
 export function createSearchParams(filters?: Filters) {
     const params = new URLSearchParams();

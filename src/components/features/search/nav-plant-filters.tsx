@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Search } from "lucide-react";
 import { IconArrowsHorizontal, IconArrowsVertical, IconDroplet, IconDropletFilled, IconFeather, IconFlower, IconPalette, IconPlant, IconSalt, IconSandbox, IconSearch, IconSun, IconTrees, IconWorld, IconX } from "@tabler/icons-react";
 
 import { SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { COLORS, DEFAULT_FILTERS, Filters, MONTHS, SALTS } from "@/types/filters";
+import { DEFAULT_FILTERS, Filters, MONTHS } from "@/types/filters";
 import { PLANTTYPES } from "@/types/plantType";
 import { FunctionalGroup, FUNCTIONALGROUPS } from "@/types/functional-groups";
 import { FilterItemSelect } from "@/components/filter-item-select";
@@ -38,7 +37,7 @@ export function NavPlantFilters(props:
             <SidebarGroupContent className="flex flex-col gap-2 p-2">
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <Search className="w-4 h-4 absolute left-2 top-1/2 -translate-y-1/2 opacity-60" />
+                        <IconSearch className="w-4 h-4 absolute left-2 top-1/2 -translate-y-1/2 opacity-60" />
                         <Input className="pl-8" placeholder="nom commun, latin..." value={filters.q || ""} onChange={(e) => setFilters(f => ({ ...f, q: e.target.value }))} />
                     </SidebarMenuItem>
                 </SidebarMenu>
