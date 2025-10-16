@@ -232,3 +232,23 @@ body {
         @apply bg-background text-foreground;
     }
 }
+
+.codechip button {
+    cursor: pointer;
+}
+
+.codechip button svg {
+    display: none;
+}
+
+.codechip button span {
+    display: inline-block;
+}
+
+.codechip button:hover svg {
+    /* display: block; */
+}
+
+.codechip button:hover span {
+    /* display: none; */
+}

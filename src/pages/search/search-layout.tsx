@@ -1,3 +1,6 @@
+"use client";
+
+import { ProjectProvider } from '@/components/project-context';
 import { SiteHeader } from '@/components/site-header';
 import '@/styles/globals.css';
 
@@ -7,9 +10,9 @@ export default function SearchLayout({
     children: React.ReactNode
 }) {
     return (
-        <div>
+        <ProjectProvider>
             <SiteHeader className='fixed w-full' />
             {children}
-        </div>
+        </ProjectProvider>
     )
 }

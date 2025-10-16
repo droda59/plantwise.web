@@ -1,3 +1,6 @@
+"use client";
+
+import { ProjectProvider } from "@/components/project-context";
 import { SiteHeader } from "@/components/site-header";
 
 export default function RootLayout({
@@ -6,9 +9,9 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <div>
+        <ProjectProvider>
             <SiteHeader />
             {children}
-        </div>
+        </ProjectProvider>
     );
 }

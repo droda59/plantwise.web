@@ -5,7 +5,6 @@ import {
     SidebarContent,
     SidebarHeader,
     SidebarMenu,
-    SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { IconFilter } from "@tabler/icons-react"
@@ -28,9 +27,7 @@ export function FilterSidebar({
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:!p-1.5">
-                            <SectionTitle icon={IconFilter} title="Filtres" />
-                        </SidebarMenuButton>
+                        <SectionTitle icon={IconFilter} title="Filtres" />
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarHeader>

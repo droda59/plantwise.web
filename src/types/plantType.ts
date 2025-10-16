@@ -44,17 +44,9 @@ export const PLANTTYPES: Array<PlantType> = [
         label: "Aquatique",
         color: 'teal',
     }, {
-        value: "9 ANU",
-        label: "Annuelle",
-        color: 'lightgreen',
-    }, {
         value: "10 FH",
         label: "Fines herbes",
         color: 'red',
-    }, {
-        value: "11 ENS",
-        label: "Ensemencement",
-        color: 'yellow',
     }, {
         value: "12 BUL",
         label: "Bulbe",
