@@ -38,7 +38,7 @@ export function PlantFilters(props:
                 <SidebarMenu>
                     <SidebarMenuItem className='px-2'>
                         <IconSearch className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 opacity-60" />
-                        <Input className="pl-8" placeholder="nom commun, latin..." value={filters.q || ""} onChange={(e) => setFilters(f => ({ ...f, q: e.target.value }))} />
+                        <Input name='q' className="pl-8" placeholder="nom commun, latin..." value={filters.q || ""} onChange={(e) => setFilters(f => ({ ...f, q: e.target.value }))} />
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarGroupContent>
@@ -47,6 +47,7 @@ export function PlantFilters(props:
                 <SidebarMenu className='pr-2'>
                     <SidebarGroupLabel>Critères du site</SidebarGroupLabel>
                     <FilterItemSelect
+                        name='zone'
                         title='Zone'
                         placeholder='Toutes'
                         icon={IconWorld}
@@ -56,6 +57,7 @@ export function PlantFilters(props:
                         setValue={v => setFilters(f => ({ ...f, zone: v || undefined }))} />
 
                     <FilterItemSelect
+                        name='sun'
                         title='Ensoleillement'
                         placeholder='Tous'
                         icon={IconSun}
@@ -97,6 +99,7 @@ export function PlantFilters(props:
                 <SidebarMenu className='pl-2 mr-16'>
                     <SidebarGroupLabel>Critères de la plante</SidebarGroupLabel>
                     <FilterItemSelect
+                        name='type'
                         title='Type'
                         placeholder='Tous'
                         icon={IconPlant}
@@ -106,6 +109,7 @@ export function PlantFilters(props:
                         setValue={v => setFilters(f => ({ ...f, type: v || undefined }))} />
 
                     <FilterItemSelect
+                        name='group'
                         title='Groupe fonct.'
                         placeholder='Tous'
                         icon={IconTrees}
@@ -124,6 +128,7 @@ export function PlantFilters(props:
                         setValue={v => setFilters(f => ({ ...f, color: v || undefined }))} />
  */}
                     <FilterItemSelect
+                        name='bloom'
                         title='Floraison'
                         placeholder="Toute l'année"
                         icon={IconFlower}
@@ -133,6 +138,7 @@ export function PlantFilters(props:
                         setValue={v => setFilters(f => ({ ...f, bloom: v || undefined }))} />
 
                     <FilterItemSlider
+                        name='height'
                         title='Hauteur'
                         min={0}
                         max={3000}
@@ -143,6 +149,7 @@ export function PlantFilters(props:
                         setValue={v => setFilters(f => ({ ...f, height: Array.isArray(v) && v.length === 2 ? [v[0], v[1]] as [number, number] : f.height }))} />
 
                     <FilterItemSlider
+                        name='spread'
                         title='Largeur'
                         min={0}
                         max={3000}

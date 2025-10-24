@@ -5,6 +5,7 @@ import { Slider } from "./ui/slider";
 import { Icon, IconProps } from "@tabler/icons-react";
 
 export function FilterItemSlider(props: {
+    name: string,
     title: string,
     min: number,
     max: number,
@@ -21,7 +22,7 @@ export function FilterItemSlider(props: {
             <div className={`flex items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-hidden ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground group-has-data-[sidebar=menu-action]/menu-item:pr-8 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 ${props.disabled && 'text-muted'}`}>
                 <props.icon />
                 <span className='flex w-full'>
-                    <label className="grow text-sm font-medium">{props.title}</label>
+                    <span className="grow text-sm font-medium">{props.title}</span>
                     {props.value && props.value.length && (
                         <span>
                             {props.labelFormatter(props.value[0])} - {props.labelFormatter(props.value[1])}
@@ -31,6 +32,8 @@ export function FilterItemSlider(props: {
             </div>
             <div className='flex items-center gap-2 rounded-md p-2 text-left text-sm outline-hidden ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground group-has-data-[sidebar=menu-action]/menu-item:pr-8 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&>svg]:size-4 [&>svg]:shrink-0'>
                 <Slider
+                    name={props.name}
+                    id={props.name}
                     disabled={props.disabled}
                     min={props.min}
                     max={props.max}

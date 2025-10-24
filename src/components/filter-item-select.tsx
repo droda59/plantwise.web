@@ -5,6 +5,7 @@ import { SidebarMenuFilterItem } from "./filter-item";
 import { Icon, IconProps } from "@tabler/icons-react";
 
 export function FilterItemSelect(props: {
+    name: string,
     title: string,
     placeholder: string,
     icon: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<Icon>>,
@@ -31,7 +32,7 @@ export function FilterItemSelect(props: {
 
     return (
         <SidebarMenuFilterItem icon={props.icon} title={props.title} disabled={props.disabled}>
-            <Select value={props.value || ""} onValueChange={props.setValue} disabled={props.disabled}>
+            <Select name={props.name} value={props.value || ""} onValueChange={props.setValue} disabled={props.disabled}>
                 <SelectTrigger className="grow"><SelectValue placeholder={props.placeholder} /></SelectTrigger>
                 <SelectContent>
                     <SelectItem value=".">Tous</SelectItem>

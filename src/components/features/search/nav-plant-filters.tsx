@@ -47,6 +47,7 @@ export function NavPlantFilters(props:
                 <SidebarMenu>
                     <SidebarGroupLabel>Critères du site</SidebarGroupLabel>
                     <FilterItemSelect
+                        name='zone'
                         title='Zone'
                         placeholder='Toutes'
                         icon={IconWorld}
@@ -56,6 +57,7 @@ export function NavPlantFilters(props:
                         setValue={v => setFilters(f => ({ ...f, zone: v || undefined }))} />
 
                     <FilterItemSelect
+                        name='sun'
                         title='Ensoleillement'
                         placeholder='Tous'
                         icon={IconSun}
@@ -98,6 +100,7 @@ export function NavPlantFilters(props:
                 <SidebarMenu>
                     <SidebarGroupLabel>Critères de la plante</SidebarGroupLabel>
                     <FilterItemSelect
+                        name='type'
                         title='Type'
                         placeholder='Tous'
                         icon={IconPlant}
@@ -107,6 +110,7 @@ export function NavPlantFilters(props:
                         setValue={v => setFilters(f => ({ ...f, type: v || undefined }))} />
 
                     <FilterItemSelect
+                        name='group'
                         title='Groupe fonct.'
                         placeholder='Tous'
                         icon={IconTrees}
@@ -125,6 +129,7 @@ export function NavPlantFilters(props:
                         setValue={v => setFilters(f => ({ ...f, color: v || undefined }))} />
  */}
                     <FilterItemSelect
+                        name='bloom'
                         title='Floraison'
                         placeholder="Toute l'année"
                         icon={IconFlower}
@@ -134,6 +139,7 @@ export function NavPlantFilters(props:
                         setValue={v => setFilters(f => ({ ...f, bloom: v || undefined }))} />
 
                     <FilterItemSlider
+                        name='height'
                         title='Hauteur'
                         min={0}
                         max={3000}
@@ -144,6 +150,7 @@ export function NavPlantFilters(props:
                         setValue={v => setFilters(f => ({ ...f, height: v as [number, number] }))} />
 
                     <FilterItemSlider
+                        name='spread'
                         title='Largeur'
                         min={0}
                         max={3000}
