@@ -12,6 +12,7 @@ import { cn, speciesFirstWord } from "@/lib/utils"
 import { getFunctionalGroup } from "@/types/functional-groups";
 import { SizeChip } from "@/components/size-chip";
 import { Button } from "@/components/ui/button";
+import { getSunConditionValue } from "@/types/sun-condition";
 
 const typeColors = {
     '1 AR': 'border-green-500',
@@ -83,9 +84,9 @@ const SunInfo = ({ plant }: PlantInfo) => (
     <div className='flex items-center overflow-hidden [&>svg]:size-4 [&>svg]:shrink-0'>
         <span className="font-light">Soleil</span>&nbsp;
         {!plant.sunTolerance?.length && <span className="font-medium">Inconnu</span>}
-        {plant.sunTolerance?.includes('full') && <IconSunHighFilled />}
-        {plant.sunTolerance?.includes('partial') && <IconSunHigh />}
-        {plant.sunTolerance?.includes('shade') && <IconSunOff />}
+        {plant.sunTolerance?.includes('full') && <IconSunHighFilled title={getSunConditionValue('full')} />}
+        {plant.sunTolerance?.includes('partial') && <IconSunHigh title={getSunConditionValue('partial')} />}
+        {plant.sunTolerance?.includes('shade') && <IconSunOff title={getSunConditionValue('shade')} />}
     </div>
 );
 
