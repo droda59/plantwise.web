@@ -111,7 +111,7 @@ function SearchPage() {
                         } />
 
                         {!filteredPlants.length && (
-                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className='text-sm text-muted-foreground'>
+                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className='text-lg'>
                                 Aucune plante ne correspond. Essayez d'élargir les filtres.
                             </motion.div>
                         )}

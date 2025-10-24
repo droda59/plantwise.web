@@ -212,7 +212,7 @@ export default function PlantPage() {
     return (
         <div className="flex min-h-svh justify-center p-6 md:p-10">
             <main className="w-full max-w-xl min-w-200">
-                {!loading && !!plant && (
+                {!loading && (
                     <>
                         <Breadcrumb className='mb-4'>
                             <BreadcrumbList>
@@ -223,152 +223,163 @@ export default function PlantPage() {
                                 <BreadcrumbItem>
                                     <BreadcrumbLink href="/search">Recherche</BreadcrumbLink>
                                 </BreadcrumbItem>
-                                <BreadcrumbSeparator><IconSlash /></BreadcrumbSeparator>
-                                <BreadcrumbItem>
-                                    <BreadcrumbLink href="#"><i>{plant.species || plant.genus}</i></BreadcrumbLink>
-                                </BreadcrumbItem>
+                                {!!plant && (
+                                    <>
+                                        <BreadcrumbSeparator><IconSlash /></BreadcrumbSeparator>
+                                        <BreadcrumbItem>
+                                            <BreadcrumbLink href="#"><i>{plant.species || plant.genus}</i></BreadcrumbLink>
+                                        </BreadcrumbItem>
+                                    </>
+                                )}
                             </BreadcrumbList>
                         </Breadcrumb>
-                        <Card className="shadow-none rounded-xs relative">
-                            <CardHeader className="">
-                                {type && <h2 className='text-lg text-muted-foreground'>{type.label}</h2>}
-                                <div className='flex mt-2'>
-                                    <CodeChip plant={plant} />
-                                    <div className="grow ml-4">
-                                        <CardTitle className="text-3xl">
-                                            <h1>
-                                                <span className='italic'>{plant.species || plant.genus}</span>
-                                                {plant.cultivar && <span>&nbsp;'{plant.cultivar}'</span>}
-                                                {plant.note && <span>&nbsp;({plant.note})</span>}
-                                            </h1>
-                                        </CardTitle>
-                                        <CardDescription>
-                                            <h3>
-                                                {plant.synonym && <div className="text-sm text-muted-foreground">syn.&nbsp;<span className='italic'>{plant.synonym}</span></div>}
-                                                {plant.commonName && <div className="text-sm text-muted-foreground">{plant.commonName}</div>}
-                                            </h3>
-                                        </CardDescription>
-                                    </div>
-                                </div>
-                            </CardHeader>
-                            <CardContent className="grid">
-                                <div className='flex w-full mt-4 mb-2'>
-                                    <Badge className='flex grow items-center overflow-hidden p-4 pr-1 mr-2 rounded-sm' variant='outline'>
-                                        <div className='flex grow [&>svg]:size-8 [&>svg]:shrink-0'><IconWorld /></div>
-                                        <div className='flex-col grow'>
-                                            <HoverCardHardinessZone>
-                                                <div className="font-light text-xs cursor-help">Zone de rusticité</div>
-                                            </HoverCardHardinessZone>
-                                            <HoverCardPlantZone zone={zone}>
-                                                <div className="flex items-center font-medium text-lg cursor-help">
-                                                    <Separator
-                                                        orientation="vertical"
-                                                        className='mr-2 data-[orientation=vertical]:h-4'
-                                                        style={{
-                                                            backgroundColor: zone?.colorHex,
-                                                            width: '8px'
-                                                        }}
-                                                    />
-                                                    {zone?.value || 'Inconnue'}
-                                                </div>
-                                            </HoverCardPlantZone>
-                                        </div>
-                                    </Badge>
-                                    <Badge className='flex grow items-center overflow-hidden p-4 pr-1 mx-2 rounded-sm' variant='outline'>
-                                        <div className='flex grow [&>svg]:size-8 [&>svg]:shrink-0'><IconArrowsVertical /></div>
-                                        <div className='flex-col grow'>
-                                            <div className="font-light text-xs">Hauteur</div>
-                                            <div className="font-medium text-lg"><SizeChip size={plant.height} /></div>
-                                        </div>
-                                    </Badge>
-                                    <Badge className='flex grow items-center overflow-hidden p-4 pr-1 ml-2 rounded-sm' variant='outline'>
-                                        <div className='flex grow [&>svg]:size-8 [&>svg]:shrink-0'><IconArrowsHorizontal /></div>
-                                        <div className='flex-col grow'>
-                                            <div className="font-light text-xs">Largeur</div>
-                                            <div className="font-medium text-lg"><SizeChip size={plant.spread} /></div>
-                                        </div>
-                                    </Badge>
-                                </div>
-                                <Separator className='mt-8' />
-                                <div className='flex-col mt-8'>
-                                    <div className='text-xl font-semibold'>
-                                        Informations générales
-                                    </div>
-
-                                    <table className="table-auto w-full mt-4 text-ms">
-                                        <tbody>
-                                            {plant.isNative && (
-                                                <GeneralInfoRow label='Statut'>
-                                                    <HoverCardNative>
-                                                        <span className='cursor-help'>Indigène</span>
-                                                    </HoverCardNative>
-                                                </GeneralInfoRow>
-                                            )}
-                                            {plant.isNaturalized && (
-                                                <GeneralInfoRow label='Statut'>
-                                                    <HoverCardNaturalized>
-                                                        <span className='cursor-help'>Naturalisé</span>
-                                                    </HoverCardNaturalized>
-                                                </GeneralInfoRow>
-                                            )}
-                                            {!!functionalGroup && (
-                                                <GeneralInfoRow label='Groupe fonctionnel'>
-                                                    <HoverCardFunctionalGroup group={functionalGroup}>
-                                                        <span className='cursor-help'>{functionalGroup.value} - {functionalGroup.label}</span>
-                                                    </HoverCardFunctionalGroup>
-                                                </GeneralInfoRow>
-                                            )}
-                                            {!!plant.sunTolerance?.length && (
-                                                <GeneralInfoRow label='Tolérance au soleil'>
-                                                    <span>{plant.sunTolerance.map(s => sunToleranceMap[s]).join(', ')}</span>
-                                                </GeneralInfoRow>
-                                            )}
-                                            {!!plant.bloom?.length && (
-                                                <GeneralInfoRow label='Floraison'>
-                                                    <span>{plant.bloom.map(b => formatMonthChip(b)).join(', ')}</span>
-                                                </GeneralInfoRow>
-                                            )}
-                                            {!!plant.family && (
-                                                <GeneralInfoRow label='Famille'>
-                                                    <i>{plant.family}</i>
-                                                </GeneralInfoRow>
-                                            )}
-                                            {!!plant.genus && (
-                                                <GeneralInfoRow label='Genre'>
-                                                    <Link href={`/genus/${plant.genus}`}><i>{plant.genus}</i></Link>
-                                                </GeneralInfoRow>
-                                            )}
-                                            {!!plant.species && (
-                                                <GeneralInfoRow label='Espèce'>
-                                                    <Link href={`/search?${createSearchParams({ species: plant.species }).toString()}`}><i>{speciesFirstWord(plant.species)}</i></Link>
-                                                </GeneralInfoRow>
-                                            )}
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                <Separator className='mt-8' />
-                                <div className='flex-col mt-8'>
-                                    <div className='text-xl font-semibold'>
-                                        Plus d'informations
-                                    </div>
-                                    <div className='mt-4'>
-                                        <div className='text-ms'>
-                                            {plant.vascanID && <Link className='font-medium text-blue-600 dark:text-blue-500 hover:underline' href={`https://data.canadensys.net/vascan/taxon/${plant.vascanID}`} target='_blank'>Base de données des plantes vasculaires du Canada (VASCAN)</Link>}
+                        {!plant && (
+                            <span className='text-lg'>
+                                Aucune plante ne correspond à ce code
+                            </span>
+                        )}
+                        {!!plant && (
+                            <Card className="shadow-none rounded-xs relative">
+                                <CardHeader className="">
+                                    {type && <h2 className='text-lg text-muted-foreground'>{type.label}</h2>}
+                                    <div className='flex mt-2'>
+                                        <CodeChip plant={plant} />
+                                        <div className="grow ml-4">
+                                            <CardTitle className="text-3xl">
+                                                <h1>
+                                                    <span className='italic'>{plant.species || plant.genus}</span>
+                                                    {plant.cultivar && <span>&nbsp;'{plant.cultivar}'</span>}
+                                                    {plant.note && <span>&nbsp;({plant.note})</span>}
+                                                </h1>
+                                            </CardTitle>
+                                            <CardDescription>
+                                                <h3>
+                                                    {plant.synonym && <div className="text-sm text-muted-foreground">syn.&nbsp;<span className='italic'>{plant.synonym}</span></div>}
+                                                    {plant.commonName && <div className="text-sm text-muted-foreground">{plant.commonName}</div>}
+                                                </h3>
+                                            </CardDescription>
                                         </div>
                                     </div>
-                                </div>
+                                </CardHeader>
+                                <CardContent className="grid">
+                                    <div className='flex w-full mt-4 mb-2'>
+                                        <Badge className='flex grow items-center overflow-hidden p-4 pr-1 mr-2 rounded-sm' variant='outline'>
+                                            <div className='flex grow [&>svg]:size-8 [&>svg]:shrink-0'><IconWorld /></div>
+                                            <div className='flex-col grow'>
+                                                <HoverCardHardinessZone>
+                                                    <div className="font-light text-xs cursor-help">Zone de rusticité</div>
+                                                </HoverCardHardinessZone>
+                                                <HoverCardPlantZone zone={zone}>
+                                                    <div className="flex items-center font-medium text-lg cursor-help">
+                                                        <Separator
+                                                            orientation="vertical"
+                                                            className='mr-2 data-[orientation=vertical]:h-4'
+                                                            style={{
+                                                                backgroundColor: zone?.colorHex,
+                                                                width: '8px'
+                                                            }}
+                                                        />
+                                                        {zone?.value || 'Inconnue'}
+                                                    </div>
+                                                </HoverCardPlantZone>
+                                            </div>
+                                        </Badge>
+                                        <Badge className='flex grow items-center overflow-hidden p-4 pr-1 mx-2 rounded-sm' variant='outline'>
+                                            <div className='flex grow [&>svg]:size-8 [&>svg]:shrink-0'><IconArrowsVertical /></div>
+                                            <div className='flex-col grow'>
+                                                <div className="font-light text-xs">Hauteur</div>
+                                                <div className="font-medium text-lg"><SizeChip size={plant.height} /></div>
+                                            </div>
+                                        </Badge>
+                                        <Badge className='flex grow items-center overflow-hidden p-4 pr-1 ml-2 rounded-sm' variant='outline'>
+                                            <div className='flex grow [&>svg]:size-8 [&>svg]:shrink-0'><IconArrowsHorizontal /></div>
+                                            <div className='flex-col grow'>
+                                                <div className="font-light text-xs">Largeur</div>
+                                                <div className="font-medium text-lg"><SizeChip size={plant.spread} /></div>
+                                            </div>
+                                        </Badge>
+                                    </div>
+                                    <Separator className='mt-8' />
+                                    <div className='flex-col mt-8'>
+                                        <div className='text-xl font-semibold'>
+                                            Informations générales
+                                        </div>
 
-                                <Separator className='mt-8' />
-                                <div className='flex-col mt-8'>
-                                    <div className='text-xl font-semibold'>
-                                        Images
+                                        <table className="table-auto w-full mt-4 text-ms">
+                                            <tbody>
+                                                {plant.isNative && (
+                                                    <GeneralInfoRow label='Statut'>
+                                                        <HoverCardNative>
+                                                            <span className='cursor-help'>Indigène</span>
+                                                        </HoverCardNative>
+                                                    </GeneralInfoRow>
+                                                )}
+                                                {plant.isNaturalized && (
+                                                    <GeneralInfoRow label='Statut'>
+                                                        <HoverCardNaturalized>
+                                                            <span className='cursor-help'>Naturalisé</span>
+                                                        </HoverCardNaturalized>
+                                                    </GeneralInfoRow>
+                                                )}
+                                                {!!functionalGroup && (
+                                                    <GeneralInfoRow label='Groupe fonctionnel'>
+                                                        <HoverCardFunctionalGroup group={functionalGroup}>
+                                                            <span className='cursor-help'>{functionalGroup.value} - {functionalGroup.label}</span>
+                                                        </HoverCardFunctionalGroup>
+                                                    </GeneralInfoRow>
+                                                )}
+                                                {!!plant.sunTolerance?.length && (
+                                                    <GeneralInfoRow label='Tolérance au soleil'>
+                                                        <span>{plant.sunTolerance.map(s => sunToleranceMap[s]).join(', ')}</span>
+                                                    </GeneralInfoRow>
+                                                )}
+                                                {!!plant.bloom?.length && (
+                                                    <GeneralInfoRow label='Floraison'>
+                                                        <span>{plant.bloom.map(b => formatMonthChip(b)).join(', ')}</span>
+                                                    </GeneralInfoRow>
+                                                )}
+                                                {!!plant.family && (
+                                                    <GeneralInfoRow label='Famille'>
+                                                        <i>{plant.family}</i>
+                                                    </GeneralInfoRow>
+                                                )}
+                                                {!!plant.genus && (
+                                                    <GeneralInfoRow label='Genre'>
+                                                        <Link href={`/genus/${plant.genus}`}><i>{plant.genus}</i></Link>
+                                                    </GeneralInfoRow>
+                                                )}
+                                                {!!plant.species && (
+                                                    <GeneralInfoRow label='Espèce'>
+                                                        <Link href={`/search?${createSearchParams({ species: plant.species }).toString()}`}><i>{speciesFirstWord(plant.species)}</i></Link>
+                                                    </GeneralInfoRow>
+                                                )}
+                                            </tbody>
+                                        </table>
                                     </div>
 
-                                    <iframe id='images' width='100%' height='600' src={`https://www.bing.com/images/search?q=${plant.latin}`} />
-                                </div>
-                            </CardContent>
-                        </Card>
+                                    <Separator className='mt-8' />
+                                    <div className='flex-col mt-8'>
+                                        <div className='text-xl font-semibold'>
+                                            Plus d'informations
+                                        </div>
+                                        <div className='mt-4'>
+                                            <div className='text-ms'>
+                                                {plant.vascanID && <Link className='font-medium text-blue-600 dark:text-blue-500 hover:underline' href={`https://data.canadensys.net/vascan/taxon/${plant.vascanID}`} target='_blank'>Base de données des plantes vasculaires du Canada (VASCAN)</Link>}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <Separator className='mt-8' />
+                                    <div className='flex-col mt-8'>
+                                        <div className='text-xl font-semibold'>
+                                            Images
+                                        </div>
+
+                                        <iframe id='images' width='100%' height='600' src={`https://www.bing.com/images/search?q=${plant.latin}`} />
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        )}
                     </>
                 )}
             </main>
