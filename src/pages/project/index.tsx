@@ -67,6 +67,21 @@ function getRandomColor() {
     return '#' + Math.floor(Math.random() * 16777215).toString(16);
 }
 
+const monthLookup = (month: number) => ({
+    1: 'j',
+    2: 'f',
+    3: 'm',
+    4: 'a',
+    5: 'm',
+    6: 'j',
+    7: 'j',
+    8: 'a',
+    9: 's',
+    10: 'o',
+    11: 'n',
+    12: 'd'
+}[month]);
+
 export default function ProjectPage() {
     const { projectPlants } = useProject();
 
@@ -251,7 +266,7 @@ export default function ProjectPage() {
                                     <div className='mt-4'>
                                         <ChartContainer
                                             config={groupChartConfig}
-                                            className="mx-auto aspect-square max-h-[350px]"
+                                            className="aspect-square"
                                         >
                                             <RadialBarChart
                                                 data={groupChartData}
@@ -274,6 +289,45 @@ export default function ProjectPage() {
                                                 </RadialBar>
                                             </RadialBarChart>
                                         </ChartContainer>
+                                    </div>
+                                </div>
+
+
+                                <Separator className='mt-8' />
+                                <div className='flex-col mt-8'>
+                                    <div className='text-xl font-semibold'>
+                                        Calendrier des floraisons
+                                    </div>
+                                    <div className='mt-4'>
+                                        <table>
+                                            <thead className='table-auto'>
+                                                <tr>
+                                                    {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((month, i) => (
+                                                        <td key={`header-${month}`} className='px-1'>
+                                                            {month === 0
+                                                                ? (<div>&nbsp;</div>)
+                                                                : (<div>{monthLookup(month)}</div>)}
+                                                        </td>
+                                                    ))}
+                                                </tr>
+                                            </thead>
+                                            <tbody className='table-auto'>
+                                                {plantList.map((plant, j) => (
+                                                    <tr key={j}>
+                                                        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((month, i) => (
+                                                            <td className='px-1'>
+                                                                {month === 0
+                                                                    ? <div className='text-xs'>{plant.code}</div>
+                                                                    : <div className='flex justify-center items-center'>
+                                                                        {plant.bloom?.includes(month) ? 'X' : '-'}
+                                                                    </div>
+                                                                }
+                                                            </td>
+                                                        ))}
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>

@@ -22,13 +22,13 @@ export interface Plant {
     sunTolerance?: Array<SunConditionValue>;
     bloom?: number[];
 
-    family?: string;
-    genus?: string;
+    family: string;
+    genus: string;
     species?: string;
     cultivar?: string;
     note?: string;
     synonym?: string;
-    commonName?: string;
+    commonName: string;
 
     functionalGroup?: FunctionalGroupValue;
 
