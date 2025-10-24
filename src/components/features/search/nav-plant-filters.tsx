@@ -38,7 +38,7 @@ export function NavPlantFilters(props:
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <IconSearch className="w-4 h-4 absolute left-2 top-1/2 -translate-y-1/2 opacity-60" />
-                        <Input className="pl-8" placeholder="nom commun, latin..." value={filters.q || ""} onChange={(e) => setFilters(f => ({ ...f, q: e.target.value }))} />
+                        <Input name='q' className="pl-8" placeholder="nom commun, latin..." value={filters.q || ""} onChange={(e) => setFilters(f => ({ ...f, q: e.target.value }))} />
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarGroupContent>
