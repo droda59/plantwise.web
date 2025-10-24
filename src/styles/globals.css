@@ -246,9 +246,9 @@ body {
 }
 
 .codechip button:hover svg {
-    /* display: block; */
+    display: block;
 }
 
 .codechip button:hover span {
-    /* display: none; */
+    display: none;
 }

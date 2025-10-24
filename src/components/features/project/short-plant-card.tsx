@@ -12,7 +12,7 @@ export const ShortPlantCard = ({ plant, count }: { plant: Plant, count: number }
 
     return (
         <motion.div layout initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}>
-            <Card className="shadow-sm hover:shadow-lg transition rounded-xs">
+            <Card className="shadow-sm hover:shadow-lg transition rounded-xs py-4 gap-2">
                 <CardHeader className="pb-0">
                     <div className='flex'>
                         <div className="grow">
@@ -36,10 +36,10 @@ export const ShortPlantCard = ({ plant, count }: { plant: Plant, count: number }
                             <Badge variant="secondary" className="ml-1 rounded-xs">Groupe&nbsp;{plant.functionalGroup}</Badge>
                         )}
                         {plant.isNative && (
-                            <Badge className="ml-1 bg-emerald-100 text-emerald-700 rounded-xs">Indigène</Badge>
+                            <Badge variant="secondary" className="ml-1 text-emerald-700 rounded-xs">Indigène</Badge>
                         )}
                         {plant.isNaturalized && (
-                            <Badge className="ml-1 bg-amber-100 text-amber-700 rounded-xs">Naturalisé</Badge>
+                            <Badge variant="secondary" className="ml-1 text-amber-700 rounded-xs">Naturalisé</Badge>
                         )}
                     </div>
                     <div className='flex'>
