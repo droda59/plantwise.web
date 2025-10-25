@@ -7,8 +7,6 @@ export interface Plant {
     id?: string;
     code: string;
 
-    latin: string;
-    name: string;
     type: PlantTypeValue;
 
     zone?: HardinessZoneValue;

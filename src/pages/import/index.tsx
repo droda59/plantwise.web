@@ -21,13 +21,14 @@ export default function Import() {
     const [codeExists, setCodeExists] = useState<boolean | undefined>(undefined);
     const [plant, setPlant] = useState<Plant>({
         code: '',
-        latin: '',
-        name: '',
+        family: '',
+        genus: '',
+        commonName: '',
         type: '1 AR',
     });
 
     useEffect(() => {
-        setCanCreate(!!plant.code && !!plant.latin && !!plant.name && !!plant.type);
+        setCanCreate(!!plant.code && !!plant.family && !!plant.genus && !!plant.commonName && !!plant.type);
     }, [plant]);
 
     const createPlantAsync = async (plant: Plant) => {
@@ -83,13 +84,8 @@ export default function Import() {
                         </div>
 
                         <div className="grid w-full max-w-sm items-center gap-3 mt-4">
-                            <Label htmlFor="latin">Nom latin *</Label>
-                            <Input required type="text" id="latin" placeholder="Nom latin" value={plant.latin || ''} onChange={(e) => setPlant(f => ({ ...f, latin: e.target.value }))} />
-                        </div>
-
-                        <div className="grid w-full max-w-sm items-center gap-3 mt-4">
-                            <Label htmlFor="name">Nom vernaculaire *</Label>
-                            <Input required type="text" id="name" placeholder="Nom vernaculaire" value={plant.name || ''} onChange={(e) => setPlant(f => ({ ...f, name: e.target.value }))} />
+                            <Label htmlFor="commonName">Nom vernaculaire *</Label>
+                            <Input required type="text" id="commonName" placeholder="Nom vernaculaire" value={plant.commonName || ''} onChange={(e) => setPlant(f => ({ ...f, commonName: e.target.value }))} />
                         </div>
 
                         <Separator className='m8-8' />

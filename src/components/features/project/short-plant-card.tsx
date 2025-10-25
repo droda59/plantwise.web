@@ -23,7 +23,7 @@ export const ShortPlantCard = ({ plant, count }: { plant: Plant, count: number }
                                     {plant.note && <span>&nbsp;({plant.note})</span>}
                                 </Link>
                             </CardTitle>
-                            <div className="text-sm text-muted-foreground">{plant.name}</div>
+                            <div className="text-sm text-muted-foreground">{plant.commonName}</div>
                         </div>
 
                         <CodeChip plant={plant} />
