@@ -7,8 +7,6 @@ export class PlantFactory {
             id: data.id,
             code: data.code,
 
-            latin: data.latin,
-            name: data.name,
             type: data.type,
 
             zone: data.zone,
