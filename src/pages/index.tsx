@@ -21,6 +21,10 @@ export default function Home() {
         router.push(`/search${query}`);
     };
 
+    const changeFilters = (filters: Filters) => {
+        setFilters(filters);
+    };
+
     return (
         <div className='font-sans grid justify-items-center p-8 gap-16'>
             <main className='flex row-start-2 items-center'>
@@ -48,7 +52,7 @@ export default function Home() {
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <PlantFilters filters={filters} onApplyFilters={applyFilters} onResetFilters={resetFilters} />
+                        <PlantFilters filters={filters} onApplyFilters={applyFilters} onResetFilters={resetFilters} onChangeFilters={changeFilters} />
                     </CardContent>
                 </Card>
             </main>

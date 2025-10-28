@@ -17,20 +17,16 @@ import { SUNCONDITIONS, SunConditionValue } from "@/types/sun-condition";
 export function PlantFilters(props:
     {
         filters: Filters,
+        onChangeFilters: (filters: Filters) => void,
         onApplyFilters: (filters: Filters) => void,
         onResetFilters: () => void
     }) {
-    const [filters, setFilters] = useState(props.filters);
     const [searchDisabled, setSearchDisabled] = useState(false);
 
     useEffect(() => {
-        setFilters(props.filters);
-    }, [props]);
-
-    useEffect(() => {
-        const isDefaultFilters = JSON.stringify(filters) === JSON.stringify(DEFAULT_FILTERS);
+        const isDefaultFilters = JSON.stringify(props.filters) === JSON.stringify(DEFAULT_FILTERS);
         setSearchDisabled(isDefaultFilters);
-    }, [filters]);
+    }, [props.filters]);
 
     return (
         <SidebarGroup className='px-0'>
@@ -38,7 +34,7 @@ export function PlantFilters(props:
                 <SidebarMenu>
                     <SidebarMenuItem className='px-2'>
                         <IconSearch className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 opacity-60" />
-                        <Input name='q' className="pl-8" placeholder="nom commun, latin..." value={filters.q || ""} onChange={(e) => setFilters(f => ({ ...f, q: e.target.value }))} />
+                        <Input name='q' className="pl-8" placeholder="nom commun, latin..." value={props.filters.q || ""} onChange={(e) => props.onChangeFilters({ ...props.filters, q: e.target.value })} />
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarGroupContent>
@@ -52,9 +48,9 @@ export function PlantFilters(props:
                         placeholder='Toutes'
                         icon={IconWorld}
                         options={ZONES}
-                        value={filters.zone}
+                        value={props.filters.zone}
                         labelFormatter={(t: HardinessZone) => `${t.value} (${t.label})`}
-                        setValue={v => setFilters(f => ({ ...f, zone: v || undefined }))} />
+                        setValue={v => props.onChangeFilters({ ...props.filters, zone: v || undefined })} />
 
                     <FilterItemSelect
                         name='sun'
@@ -67,8 +63,8 @@ export function PlantFilters(props:
                             'partial': 2,
                             'shade': 3,
                         }[a.value])}
-                        value={filters.sunConditions}
-                        setValue={v => setFilters(f => ({ ...f, sunConditions: v || undefined }))} />
+                        value={props.filters.sunConditions}
+                        setValue={v => props.onChangeFilters({ ...props.filters, sunConditions: v || undefined })} />
                     {/* 
                     <FilterItemSelect
                         title='Présence de sels'
@@ -76,7 +72,7 @@ export function PlantFilters(props:
                         placeholder='Tous'
                         icon={IconSalt}
                         options={SALTS}
-                        setValue={v => setFilters(f => ({ ...f, saltConditions: v || undefined }))} />
+                        setValue={v => props.onChangeFilters({ ...props.filters, saltConditions: v || undefined })} />
  */}
                     {/* 
                     <FilterItemCheckbox
@@ -84,7 +80,7 @@ export function PlantFilters(props:
                         disabled
                         id='droughtTolerant'
                         icon={IconDroplet}
-                        setValue={v => setFilters(f => ({ ...f, droughtTolerant: v || undefined }))} />
+                        setValue={v => props.onChangeFilters({ ...props.filters, droughtTolerant: v || undefined })} />
  */}
                     {/* 
                     <FilterItemCheckbox
@@ -92,7 +88,7 @@ export function PlantFilters(props:
                         disabled
                         id='floodTolerant'
                         icon={IconDropletFilled}
-                        setValue={v => setFilters(f => ({ ...f, floodTolerant: v || undefined }))} /> 
+                        setValue={v => props.onChangeFilters({ ...props.filters, floodTolerant: v || undefined })} /> 
 */}
                 </SidebarMenu>
 
@@ -104,9 +100,9 @@ export function PlantFilters(props:
                         placeholder='Tous'
                         icon={IconPlant}
                         options={PLANTTYPES}
-                        value={filters.type}
+                        value={props.filters.type}
                         sorter={(a, b) => a['label'].localeCompare(b['label'])}
-                        setValue={v => setFilters(f => ({ ...f, type: v || undefined }))} />
+                        setValue={v => props.onChangeFilters({ ...props.filters, type: v || undefined })} />
 
                     <FilterItemSelect
                         name='group'
@@ -114,10 +110,10 @@ export function PlantFilters(props:
                         placeholder='Tous'
                         icon={IconTrees}
                         options={FUNCTIONALGROUPS}
-                        value={filters.functionalGroup}
+                        value={props.filters.functionalGroup}
                         labelFormatter={(t: FunctionalGroup) => `${t.value} - ${t.label}`}
-                        disabled={!['.', '1 AR', '1b ARB', '2 CON', '3 ARBU'].includes(filters.type ?? '')}
-                        setValue={v => setFilters(f => ({ ...f, functionalGroup: v || undefined }))} />
+                        disabled={!['.', '1 AR', '1b ARB', '2 CON', '3 ARBU'].includes(props.filters.type ?? '')}
+                        setValue={v => props.onChangeFilters({ ...props.filters, functionalGroup: v || undefined })} />
                     {/* 
                     <FilterItemSelect
                         title='Couleur'
@@ -125,7 +121,7 @@ export function PlantFilters(props:
                         placeholder='Toutes'
                         icon={IconPalette}
                         options={COLORS}
-                        setValue={v => setFilters(f => ({ ...f, color: v || undefined }))} />
+                        setValue={v => props.onChangeFilters({ ...props.filters, color: v || undefined }))} />
  */}
                     <FilterItemSelect
                         name='bloom'
@@ -134,8 +130,8 @@ export function PlantFilters(props:
                         icon={IconFlower}
                         options={MONTHS}
                         sorter={a => Number(a)}
-                        value={filters.bloom}
-                        setValue={v => setFilters(f => ({ ...f, bloom: v || undefined }))} />
+                        value={props.filters.bloom}
+                        setValue={v => props.onChangeFilters({ ...props.filters, bloom: v || undefined })} />
 
                     <FilterItemSlider
                         name='height'
@@ -144,9 +140,9 @@ export function PlantFilters(props:
                         max={3000}
                         steps={10}
                         icon={IconArrowsVertical}
-                        value={filters.height}
+                        value={props.filters.height}
                         labelFormatter={formatSizeChip}
-                        setValue={v => setFilters(f => ({ ...f, height: Array.isArray(v) && v.length === 2 ? [v[0], v[1]] as [number, number] : f.height }))} />
+                        setValue={v => props.onChangeFilters({ ...props.filters, height: Array.isArray(v) && v.length === 2 ? [v[0], v[1]] as [number, number] : props.filters.height })} />
 
                     <FilterItemSlider
                         name='spread'
@@ -155,16 +151,16 @@ export function PlantFilters(props:
                         max={3000}
                         steps={10}
                         icon={IconArrowsHorizontal}
-                        value={filters.spread}
+                        value={props.filters.spread}
                         labelFormatter={formatSizeChip}
-                        setValue={v => setFilters(f => ({ ...f, spread: Array.isArray(v) && v.length === 2 ? [v[0], v[1]] as [number, number] : f.spread }))} />
+                        setValue={v => props.onChangeFilters({ ...props.filters, spread: Array.isArray(v) && v.length === 2 ? [v[0], v[1]] as [number, number] : props.filters.spread })} />
 
                     <FilterItemCheckbox
                         title='Espèce indigène'
                         id='native'
                         icon={IconFeather}
-                        value={filters.native}
-                        setValue={v => setFilters(f => ({ ...f, native: v || undefined }))} />
+                        value={props.filters.native}
+                        setValue={v => props.onChangeFilters({ ...props.filters, native: v || undefined })} />
                 </SidebarMenu>
             </SidebarGroupContent>
 
@@ -173,7 +169,7 @@ export function PlantFilters(props:
                     <IconX style={{ display: 'initial' }} className="w-4 h-4 mr-1" />
                     Reset
                 </Button>
-                <Button type="submit" onClick={() => props.onApplyFilters(filters)} disabled={searchDisabled}>
+                <Button type="submit" onClick={() => props.onApplyFilters(props.filters)} disabled={searchDisabled}>
                     <IconSearch style={{ display: 'initial' }} className="w-4 h-4 mr-1" />
                     Rechercher
                 </Button>
