@@ -9,7 +9,7 @@ import { createSearchParams, plantApiInstance } from '@/api/plant-api';
 import { Plant } from '@/types/plant';
 import { getPlantType, PlantType } from "@/types/plantType";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { IconArrowsHorizontal, IconArrowsVertical, IconSlash, IconWorld } from "@tabler/icons-react";
+import { IconArrowsHorizontal, IconArrowsVertical, IconExternalLink, IconSlash, IconWorld } from "@tabler/icons-react";
 
 import {
     HoverCard,
@@ -363,9 +363,23 @@ export default function PlantPage() {
                                             Plus d'informations
                                         </div>
                                         <div className='mt-4'>
-                                            <div className='text-ms'>
-                                                {plant.vascanID && <Link className='font-medium text-blue-600 dark:text-blue-500 hover:underline' href={`https://data.canadensys.net/vascan/taxon/${plant.vascanID}`} target='_blank'>Base de données des plantes vasculaires du Canada (VASCAN)</Link>}
-                                            </div>
+
+                                            {plant.vascanID &&
+                                                <div className='pt-1'>
+                                                    <Link className='flex items-center text-blue-600 dark:text-blue-500 hover:underline' href={`https://data.canadensys.net/vascan/taxon/${plant.vascanID}`} target='_blank'>
+                                                        <IconExternalLink className="w-4 h-4 opacity-60 mr-2" />
+                                                        Base de données des plantes vasculaires du Canada (VASCAN)
+                                                    </Link>
+                                                </div>
+                                            }
+                                            {plant.urlJardin2M &&
+                                                <div className='pt-1'>
+                                                    <Link className='flex items-center text-blue-600 dark:text-blue-500 hover:underline' href={plant.urlJardin2M} target='_blank'>
+                                                        <IconExternalLink className="w-4 h-4 opacity-60 mr-2" />
+                                                        Jardin Deux-Montagnes
+                                                    </Link>
+                                                </div>
+                                            }
                                         </div>
                                     </div>
 

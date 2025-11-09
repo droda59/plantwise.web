@@ -31,4 +31,5 @@ export interface Plant {
     functionalGroup?: FunctionalGroupValue;
 
     vascanID?: string;
+    urlJardin2M?: string;
 }

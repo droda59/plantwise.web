@@ -31,6 +31,7 @@ export class PlantFactory {
             functionalGroup: data.functionalGroup,
 
             vascanID: data.vascanID,
+            urlJardin2M: data.urlJardin2M,
         };
     }
 }
