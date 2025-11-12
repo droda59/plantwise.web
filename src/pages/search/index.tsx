@@ -61,8 +61,8 @@ function SearchPage() {
     }, [searchParams]);
 
     const fetchPlants = async (filters?: Filters) => {
-        setFilteredPlants([]);
         setLoading(true);
+        setFilteredPlants([]);
 
         const data = await plantApiInstance.getPlants(filters);
 
@@ -110,13 +110,15 @@ function SearchPage() {
                             : `${filteredPlants.length} plante${filteredPlants.length > 1 ? 's' : ''} trouvée${filteredPlants.length > 1 ? 's' : ''}`
                         } />
 
-                        {!filteredPlants.length && (
+                        {loading ? (
+                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className='text-lg'>
+                                Chargement des résultats, veuillez patienter...
+                            </motion.div>
+                        ) : !filteredPlants.length ? (
                             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className='text-lg'>
                                 Aucune plante ne correspond. Essayez d'élargir les filtres.
                             </motion.div>
-                        )}
-
-                        {!loading && filteredPlants.length > 0 &&
+                        ) : (
                             <AnimatePresence mode='popLayout'>
                                 <div className='grid gap-4 grid-cols-2'>
                                     {groups?.map(([key, values]) =>
@@ -126,7 +128,7 @@ function SearchPage() {
                                     )}
                                 </div>
                             </AnimatePresence>
-                        }
+                        )}
                     </div>
                 </div>
             </SidebarInset>
