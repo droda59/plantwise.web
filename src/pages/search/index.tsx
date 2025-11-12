@@ -18,6 +18,7 @@ import {
 import { SectionTitle } from '@/components/section-title';
 import "@/styles/globals.css";
 import SearchLayout from './search-layout';
+import { Spinner } from '@/components/ui/spinner';
 
 function SearchPage() {
     const router = useRouter();
@@ -105,14 +106,24 @@ function SearchPage() {
             <SidebarInset>
                 <div className="@container/main gap-2 items-center px-6 overflow-auto block">
                     <div className="flex flex-col gap-6 py-6 w-full">
-                        <SectionTitle title='Résultats' icon={IconSearch} subtitle={loading
-                            ? 'Chargement des plantes...'
-                            : `${filteredPlants.length} plante${filteredPlants.length > 1 ? 's' : ''} trouvée${filteredPlants.length > 1 ? 's' : ''}`
-                        } />
+                        <SectionTitle title='Résultats' icon={IconSearch}>
+                            <div className='flex items-center text-sm text-muted-foreground'>
+                                {loading ?
+                                    <>
+                                        <Spinner className='mr-1' />
+                                        <p>Chargement des résultats...</p>
+                                    </>
+                                    : <p>{`${filteredPlants.length} plante${filteredPlants.length > 1 ? 's' : ''} trouvée${filteredPlants.length > 1 ? 's' : ''}`}</p>
+                                }
+                            </div>
+                        </SectionTitle>
 
                         {loading ? (
                             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className='text-lg'>
-                                Chargement des résultats, veuillez patienter...
+                                <div className="flex items-center">
+                                    <Spinner className='mr-2' />
+                                    <span>Chargement des résultats, veuillez patienter...</span>
+                                </div>
                             </motion.div>
                         ) : !filteredPlants.length ? (
                             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className='text-lg'>
