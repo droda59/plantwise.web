@@ -6,7 +6,7 @@ import { Icon, IconProps } from "@tabler/icons-react";
 
 export function FilterItemSelect(props: {
     name: string,
-    title: string,
+    title: any,
     placeholder: string,
     icon: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<Icon>>,
     options: any[],

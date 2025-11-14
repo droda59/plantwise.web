@@ -13,6 +13,7 @@ import { FilterItemSlider } from "@/components/filter-item-slider";
 import { HardinessZone, ZONES } from "@/types/hardiness-zone";
 import { formatSizeChip } from "@/lib/utils";
 import { SUNCONDITIONS, SunConditionValue } from "@/types/sun-condition";
+import { SunInfo } from "@/components/hover-cards/sun-info";
 
 export function PlantFilters(props:
     {
@@ -60,7 +61,13 @@ export function PlantFilters(props:
 
                         <FilterItemSelect
                             name='sun'
-                            title='Ensoleillement'
+                            title={() =>
+                                <SunInfo>
+                                    <div className='cursor-help'>
+                                        <span>Ensoleillement</span>
+                                    </div>
+                                </SunInfo>
+                            }
                             placeholder='Tous'
                             icon={IconSun}
                             options={SUNCONDITIONS}
