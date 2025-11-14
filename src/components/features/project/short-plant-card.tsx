@@ -16,7 +16,7 @@ export const ShortPlantCard = ({ plant, count }: { plant: Plant, count: number }
                 <CardHeader className="pb-0">
                     <div className='flex'>
                         <div className="grow">
-                            <CardTitle className="text-md">
+                            <CardTitle className="text-base">
                                 <Link href={`/plant/${plant.code}`}>
                                     <span className='italic'>{plant.species || plant.genus}</span>
                                     {plant.cultivar && <span>&nbsp;'{plant.cultivar}'</span>}

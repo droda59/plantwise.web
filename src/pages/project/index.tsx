@@ -187,7 +187,7 @@ export default function ProjectPage() {
                                     )
                                     : Object.entries(groupedPlants || {}).map(([key, values], i) => (
                                         <div key={key} className='mt-4'>
-                                            <h1 className='text-lg font-semibold'>
+                                            <h1 className='text-xl font-semibold'>
                                                 {getPlantType(key as PlantTypeValue).label}
                                             </h1>
                                             {values?.map((plant, j) => (
