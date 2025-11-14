@@ -1,4 +1,10 @@
-export function SectionTitle({ icon: Icon, title, children }) {
+interface SectionTitleProps {
+    icon: any;
+    title: string;
+    children?: React.ReactNode;
+}
+
+export function SectionTitle({ icon: Icon, title, children }: SectionTitleProps) {
     return (
         <div className="flex items-center justify-between gap-4 mb-4">
             <div className="flex items-center gap-2">
