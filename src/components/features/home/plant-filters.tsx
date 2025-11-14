@@ -14,6 +14,7 @@ import { HardinessZone, ZONES } from "@/types/hardiness-zone";
 import { formatSizeChip } from "@/lib/utils";
 import { SUNCONDITIONS, SunConditionValue } from "@/types/sun-condition";
 import { SunInfo } from "@/components/hover-cards/sun-info";
+import { HardinessZoneInfo } from "@/components/hover-cards/hardiness-zone-info";
 
 export function PlantFilters(props:
     {
@@ -51,7 +52,11 @@ export function PlantFilters(props:
                         <SidebarGroupLabel>Critères du site</SidebarGroupLabel>
                         <FilterItemSelect
                             name='zone'
-                            title='Zone'
+                            title={() =>
+                                <HardinessZoneInfo>
+                                    <div className='cursor-help'>Zone</div>
+                                </HardinessZoneInfo>
+                            }
                             placeholder='Toutes'
                             icon={IconWorld}
                             options={ZONES}
@@ -63,9 +68,7 @@ export function PlantFilters(props:
                             name='sun'
                             title={() =>
                                 <SunInfo>
-                                    <div className='cursor-help'>
-                                        <span>Ensoleillement</span>
-                                    </div>
+                                    <div className='cursor-help'>Ensoleillement</div>
                                 </SunInfo>
                             }
                             placeholder='Tous'

@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import Image from 'next/image';
 
 import { createSearchParams, plantApiInstance } from '@/api/plant-api';
 import { Plant } from '@/types/plant';
@@ -11,11 +10,6 @@ import { getPlantType, PlantType } from "@/types/plantType";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { IconArrowsHorizontal, IconArrowsVertical, IconExternalLink, IconSlash, IconWorld } from "@tabler/icons-react";
 
-import {
-    HoverCard,
-    HoverCardContent,
-    HoverCardTrigger,
-} from "@/components/ui/hover-card"
 import { CodeChip } from '@/components/code-chip';
 import { FunctionalGroup, getFunctionalGroup } from '@/types/functional-groups';
 import { Badge } from '@/components/ui/badge';
@@ -24,6 +18,10 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbS
 import { getHardinessZone, HardinessZone } from '@/types/hardiness-zone';
 import { SizeChip } from '@/components/size-chip';
 import { formatMonthChip, speciesFirstWord } from '@/lib/utils';
+import { HardinessZoneInfo, PlantZoneInfo } from '@/components/hover-cards/hardiness-zone-info';
+import { FunctionalGroupInfo } from '@/components/hover-cards/functional-group-info';
+import { NativeInfo, NaturalizedInfo } from '@/components/hover-cards/native-info';
+import { SunInfo } from '@/components/hover-cards/sun-info';
 
 const sunToleranceMap = {
     full: 'Plein soleil',
@@ -36,132 +34,6 @@ const VSeparator = () => (
         orientation="vertical"
         className="mr-4 data-[orientation=vertical]:h-4"
     />
-);
-
-const HoverCardHardinessZone = ({ children }: { children: React.ReactNode }) => (
-    <HoverCard>
-        <HoverCardTrigger asChild>
-            {children}
-        </HoverCardTrigger>
-        <HoverCardContent className='w-180 rounded-sm'>
-            <div className="flex justify-between gap-4">
-                <div className="space-y-1">
-                    <h4 className="text-sm font-semibold">Zones de rusticité</h4>
-                    <div className='flex'>
-                        <Image
-                            src='/carte-zones-rusticite-quebec-plantes.jpg'
-                            width={300}
-                            height={200}
-                            alt='Carte des zones de rusticité' />
-                        <div className='ml-2'>
-                            <p className="text-sm">
-                                La rusticité est une cote attribuée aux plantes vivaces basée sur leur capacité à résister au froid.
-                                <br />
-                                Les zones sont classées de 0 à 9 en fonction de diverses conditions climatiques, comme la température, les précipitations et la durée de la période de gel.
-                                <br />
-                                <br />
-                                La zone 0 couvre les régions les plus froides du nord du pays, la zone 9 couvre les parties les plus chaudes de l'île de Vancouver.
-                            </p>
-                            <div className="mt-2 text-muted-foreground text-xs">
-                                Source : Gouvernement du Canada
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </HoverCardContent>
-    </HoverCard >
-);
-
-const HoverCardPlantZone = ({ children, zone }: { children: React.ReactNode, zone?: HardinessZone }) => (
-    <HoverCard>
-        <HoverCardTrigger asChild>
-            {children}
-        </HoverCardTrigger>
-        {!!zone && (
-            <HoverCardContent className={`w-80 border-${zone.colorHex} rounded-sm`}>
-                <div className="flex justify-between gap-4">
-                    <div className="space-y-1">
-                        <h4 className="text-sm font-semibold">Zone de rusticité {zone.value}</h4>
-                        <p className="text-sm">
-                            {zone.label}
-                        </p>
-                        <div className="mt-2 text-muted-foreground text-xs">
-                            Source : Gouvernement du Canada
-                        </div>
-                    </div>
-                </div>
-            </HoverCardContent>
-        )}
-    </HoverCard>
-);
-
-const HoverCardFunctionalGroup = ({ children, group }: { children: React.ReactNode, group: FunctionalGroup }) => (
-    <HoverCard>
-        <HoverCardTrigger asChild>
-            {children}
-        </HoverCardTrigger>
-        <HoverCardContent className={`w-80 border-${group.color} rounded-sm`}>
-            <div className="flex justify-between gap-4">
-                <div className="space-y-1">
-                    <h4 className="text-sm font-semibold">Groupe {group.value}</h4>
-                    <p className="text-sm">
-                        {group.description}
-                    </p>
-                    <div className="text-xs">
-                        ex. {group.species}
-                    </div>
-                    <div className="mt-2 text-muted-foreground text-xs">
-                        Source : Jour de la Terre
-                    </div>
-                </div>
-            </div>
-        </HoverCardContent>
-    </HoverCard>
-);
-
-const HoverCardNative = ({ children }: { children: React.ReactNode }) => (
-    <HoverCard>
-        <HoverCardTrigger asChild>
-            {children}
-        </HoverCardTrigger>
-        <HoverCardContent className="w-80 rounded-sm">
-            <div className="flex justify-between gap-4">
-                <div className="space-y-1">
-                    <h4 className="text-sm font-semibold">Plante indigène</h4>
-                    <p className="text-sm">
-                        Plante qui pousse dans une zone donnée de l'aire de répartition globale de son espèce, sans intervention humaine.
-                        <br />
-                        En Amérique du Nord, on fait référence aux espèces qui existaient sur le continent avant la colonisation européenne.
-                    </p>
-                    <div className="mt-2 text-muted-foreground text-xs">
-                        Source : Aiglon Indigo
-                    </div>
-                </div>
-            </div>
-        </HoverCardContent>
-    </HoverCard>
-);
-
-const HoverCardNaturalized = ({ children }: { children: React.ReactNode }) => (
-    <HoverCard>
-        <HoverCardTrigger asChild>
-            {children}
-        </HoverCardTrigger>
-        <HoverCardContent className="w-80 rounded-sm">
-            <div className="flex justify-between gap-4">
-                <div className="space-y-1">
-                    <h4 className="text-sm font-semibold">Plante naturalisée</h4>
-                    <p className="text-sm">
-                        Plante bien établie dans une zone différente de l'aire de répartition globale de son espèce après y avoir été introduite dans le cadre d'activités humaines et qui est en mesure de survivre et de se reproduire sans aide.
-                    </p>
-                    <div className="mt-2 text-muted-foreground text-xs">
-                        Source : Aiglon Indigo
-                    </div>
-                </div>
-            </div>
-        </HoverCardContent>
-    </HoverCard>
 );
 
 const GeneralInfoRow = ({ label, children }: { label: string, children: React.ReactNode }) => (
@@ -266,10 +138,10 @@ export default function PlantPage() {
                                         <Badge className='flex grow items-center overflow-hidden p-4 pr-1 mr-2 rounded-sm' variant='outline'>
                                             <div className='flex grow [&>svg]:size-8 [&>svg]:shrink-0'><IconWorld /></div>
                                             <div className='flex-col grow'>
-                                                <HoverCardHardinessZone>
+                                                <HardinessZoneInfo>
                                                     <div className="font-light text-xs cursor-help">Zone de rusticité</div>
-                                                </HoverCardHardinessZone>
-                                                <HoverCardPlantZone zone={zone}>
+                                                </HardinessZoneInfo>
+                                                <PlantZoneInfo zone={zone}>
                                                     <div className="flex items-center font-medium text-lg cursor-help">
                                                         <Separator
                                                             orientation="vertical"
@@ -281,7 +153,7 @@ export default function PlantPage() {
                                                         />
                                                         {zone?.value || 'Inconnue'}
                                                     </div>
-                                                </HoverCardPlantZone>
+                                                </PlantZoneInfo>
                                             </div>
                                         </Badge>
                                         <Badge className='flex grow items-center overflow-hidden p-4 pr-1 mx-2 rounded-sm' variant='outline'>
@@ -309,28 +181,31 @@ export default function PlantPage() {
                                             <tbody>
                                                 {plant.isNative && (
                                                     <GeneralInfoRow label='Statut'>
-                                                        <HoverCardNative>
+                                                        <NativeInfo>
                                                             <span className='cursor-help'>Indigène</span>
-                                                        </HoverCardNative>
+                                                        </NativeInfo>
                                                     </GeneralInfoRow>
                                                 )}
                                                 {plant.isNaturalized && (
                                                     <GeneralInfoRow label='Statut'>
-                                                        <HoverCardNaturalized>
+                                                        <NaturalizedInfo>
                                                             <span className='cursor-help'>Naturalisé</span>
-                                                        </HoverCardNaturalized>
+                                                        </NaturalizedInfo>
                                                     </GeneralInfoRow>
                                                 )}
                                                 {!!functionalGroup && (
                                                     <GeneralInfoRow label='Groupe fonctionnel'>
-                                                        <HoverCardFunctionalGroup group={functionalGroup}>
+                                                        <FunctionalGroupInfo group={functionalGroup}>
                                                             <span className='cursor-help'>{functionalGroup.value} - {functionalGroup.label}</span>
-                                                        </HoverCardFunctionalGroup>
+                                                        </FunctionalGroupInfo>
                                                     </GeneralInfoRow>
                                                 )}
                                                 {!!plant.sunTolerance?.length && (
                                                     <GeneralInfoRow label='Tolérance au soleil'>
-                                                        <span>{plant.sunTolerance.map(s => sunToleranceMap[s]).join(', ')}</span>
+                                                        <SunInfo>
+                                                            <span className='cursor-help'>{plant.sunTolerance.map(s => sunToleranceMap[s]).join(', ')}</span>
+                                                        </SunInfo>
+
                                                     </GeneralInfoRow>
                                                 )}
                                                 {!!plant.bloom?.length && (

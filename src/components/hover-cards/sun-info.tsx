@@ -7,6 +7,7 @@ export const SunInfo = ({ children }: { children: React.ReactNode }) => (
         </HoverCardTrigger>
         <HoverCardContent className="w-80 rounded-sm">
             <div className="flex flex-col justify-between gap-2">
+                <h3 className="text-base font-semibold">Ensoleillement</h3>
                 <div className="mt-1">
                     <h4 className="text-sm font-semibold">Plein soleil</h4>
                     <p className="text-xs">
@@ -25,10 +26,8 @@ export const SunInfo = ({ children }: { children: React.ReactNode }) => (
                         Moins de 3h de soleil par jour.
                     </p>
                 </div>
-                <div className="mt-1">
-                    <div className="text-muted-foreground text-xs">
-                        Source : Espace pour la vie, Monstera
-                    </div>
+                <div className="mt-1 text-muted-foreground text-xs">
+                    Source : Espace pour la vie, Monstera
                 </div>
             </div>
         </HoverCardContent>
