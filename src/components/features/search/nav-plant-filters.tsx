@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { IconArrowsHorizontal, IconArrowsVertical, IconDroplet, IconDropletFilled, IconFeather, IconFlower, IconPalette, IconPlant, IconSalt, IconSandbox, IconSearch, IconSun, IconTrees, IconWorld, IconX } from "@tabler/icons-react";
+import { IconArrowsHorizontal, IconArrowsVertical, IconFeather, IconFlower, IconPlant, IconSearch, IconSun, IconTrees, IconWorld, IconX } from "@tabler/icons-react";
 
 import { SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
@@ -32,44 +32,50 @@ export function NavPlantFilters(props:
         setSearchDisabled(isDefaultFilters);
     }, [filters]);
 
+    const handleSearch = (event: React.FormEvent) => {
+        event.preventDefault();
+        props.onApplyFilters(filters);
+    };
+
     return (
         <SidebarGroup>
-            <SidebarGroupContent className="flex flex-col gap-2 p-2">
-                <SidebarMenu>
-                    <SidebarMenuItem>
-                        <IconSearch className="w-4 h-4 absolute left-2 top-1/2 -translate-y-1/2 opacity-60" />
-                        <Input name='q' className="pl-8" placeholder="nom commun, latin..." value={filters.q || ""} onChange={(e) => setFilters(f => ({ ...f, q: e.target.value }))} />
-                    </SidebarMenuItem>
-                </SidebarMenu>
-            </SidebarGroupContent>
+            <form onSubmit={handleSearch}>
+                <SidebarGroupContent className="flex flex-col gap-2 p-2">
+                    <SidebarMenu>
+                        <SidebarMenuItem>
+                            <IconSearch className="w-4 h-4 absolute left-2 top-1/2 -translate-y-1/2 opacity-60" />
+                            <Input name='q' className="pl-8" placeholder="nom commun, latin..." value={filters.q || ""} onChange={(e) => setFilters(f => ({ ...f, q: e.target.value }))} />
+                        </SidebarMenuItem>
+                    </SidebarMenu>
+                </SidebarGroupContent>
 
-            <SidebarGroupContent className="flex flex-col gap-2 p-2">
-                <SidebarMenu>
-                    <SidebarGroupLabel>Critères du site</SidebarGroupLabel>
-                    <FilterItemSelect
-                        name='zone'
-                        title='Zone'
-                        placeholder='Toutes'
-                        icon={IconWorld}
-                        options={ZONES}
-                        value={filters.zone}
-                        labelFormatter={(t: HardinessZone) => `${t.value} (${t.label})`}
-                        setValue={v => setFilters(f => ({ ...f, zone: v || undefined }))} />
+                <SidebarGroupContent className="flex flex-col gap-2 p-2">
+                    <SidebarMenu>
+                        <SidebarGroupLabel>Critères du site</SidebarGroupLabel>
+                        <FilterItemSelect
+                            name='zone'
+                            title='Zone'
+                            placeholder='Toutes'
+                            icon={IconWorld}
+                            options={ZONES}
+                            value={filters.zone}
+                            labelFormatter={(t: HardinessZone) => `${t.value} (${t.label})`}
+                            setValue={v => setFilters(f => ({ ...f, zone: v || undefined }))} />
 
-                    <FilterItemSelect
-                        name='sun'
-                        title='Ensoleillement'
-                        placeholder='Tous'
-                        icon={IconSun}
-                        options={SUNCONDITIONS}
-                        sorter={(a: { value: SunConditionValue }) => ({
-                            'full': 1,
-                            'partial': 2,
-                            'shade': 3,
-                        }[a.value])}
-                        value={filters.sunConditions}
-                        setValue={v => setFilters(f => ({ ...f, sunConditions: v || undefined }))} />
-                    {/* 
+                        <FilterItemSelect
+                            name='sun'
+                            title='Ensoleillement'
+                            placeholder='Tous'
+                            icon={IconSun}
+                            options={SUNCONDITIONS}
+                            sorter={(a: { value: SunConditionValue }) => ({
+                                'full': 1,
+                                'partial': 2,
+                                'shade': 3,
+                            }[a.value])}
+                            value={filters.sunConditions}
+                            setValue={v => setFilters(f => ({ ...f, sunConditions: v || undefined }))} />
+                        {/* 
                     <FilterItemSelect
                         title='Présence de sels'
                         disabled
@@ -78,7 +84,7 @@ export function NavPlantFilters(props:
                         options={SALTS}
                         setValue={v => setFilters(f => ({ ...f, saltConditions: v || undefined }))} />
  */}
-                    {/* 
+                        {/* 
                     <FilterItemCheckbox
                         title='Sujet à la sécheresse'
                         disabled
@@ -86,7 +92,7 @@ export function NavPlantFilters(props:
                         icon={IconDroplet}
                         setValue={v => setFilters(f => ({ ...f, droughtTolerant: v || undefined }))} />
  */}
-                    {/* 
+                        {/* 
                     <FilterItemCheckbox
                         title="Sujet à l'excès d'eau"
                         disabled
@@ -94,32 +100,32 @@ export function NavPlantFilters(props:
                         icon={IconDropletFilled}
                         setValue={v => setFilters(f => ({ ...f, floodTolerant: v || undefined }))} />
                          */}
-                </SidebarMenu>
-            </SidebarGroupContent>
-            <SidebarGroupContent className="flex flex-col gap-2 p-2">
-                <SidebarMenu>
-                    <SidebarGroupLabel>Critères de la plante</SidebarGroupLabel>
-                    <FilterItemSelect
-                        name='type'
-                        title='Type'
-                        placeholder='Tous'
-                        icon={IconPlant}
-                        options={PLANTTYPES}
-                        sorter={(a, b) => a['label'].localeCompare(b['label'])}
-                        value={filters.type}
-                        setValue={v => setFilters(f => ({ ...f, type: v || undefined }))} />
+                    </SidebarMenu>
+                </SidebarGroupContent>
+                <SidebarGroupContent className="flex flex-col gap-2 p-2">
+                    <SidebarMenu>
+                        <SidebarGroupLabel>Critères de la plante</SidebarGroupLabel>
+                        <FilterItemSelect
+                            name='type'
+                            title='Type'
+                            placeholder='Tous'
+                            icon={IconPlant}
+                            options={PLANTTYPES}
+                            sorter={(a, b) => a['label'].localeCompare(b['label'])}
+                            value={filters.type}
+                            setValue={v => setFilters(f => ({ ...f, type: v || undefined }))} />
 
-                    <FilterItemSelect
-                        name='group'
-                        title='Groupe fonct.'
-                        placeholder='Tous'
-                        icon={IconTrees}
-                        options={FUNCTIONALGROUPS}
-                        value={filters.functionalGroup}
-                        labelFormatter={(t: FunctionalGroup) => `${t.value} - ${t.label}`}
-                        disabled={!['.', '1 AR', '1b ARB', '2 CON', '3 ARBU'].includes(filters.type ?? '')}
-                        setValue={v => setFilters(f => ({ ...f, functionalGroup: v || undefined }))} />
-                    {/* 
+                        <FilterItemSelect
+                            name='group'
+                            title='Groupe fonct.'
+                            placeholder='Tous'
+                            icon={IconTrees}
+                            options={FUNCTIONALGROUPS}
+                            value={filters.functionalGroup}
+                            labelFormatter={(t: FunctionalGroup) => `${t.value} - ${t.label}`}
+                            disabled={!['.', '1 AR', '1b ARB', '2 CON', '3 ARBU'].includes(filters.type ?? '')}
+                            setValue={v => setFilters(f => ({ ...f, functionalGroup: v || undefined }))} />
+                        {/* 
                     <FilterItemSelect
                         title='Couleur'
                         disabled
@@ -128,57 +134,58 @@ export function NavPlantFilters(props:
                         options={COLORS}
                         setValue={v => setFilters(f => ({ ...f, color: v || undefined }))} />
  */}
-                    <FilterItemSelect
-                        name='bloom'
-                        title='Floraison'
-                        placeholder="Toute l'année"
-                        icon={IconFlower}
-                        options={MONTHS}
-                        sorter={a => Number(a)}
-                        value={filters.bloom}
-                        setValue={v => setFilters(f => ({ ...f, bloom: v || undefined }))} />
+                        <FilterItemSelect
+                            name='bloom'
+                            title='Floraison'
+                            placeholder="Toute l'année"
+                            icon={IconFlower}
+                            options={MONTHS}
+                            sorter={a => Number(a)}
+                            value={filters.bloom}
+                            setValue={v => setFilters(f => ({ ...f, bloom: v || undefined }))} />
 
-                    <FilterItemSlider
-                        name='height'
-                        title='Hauteur'
-                        min={0}
-                        max={3000}
-                        steps={10}
-                        icon={IconArrowsVertical}
-                        value={filters.height}
-                        labelFormatter={formatSizeChip}
-                        setValue={v => setFilters(f => ({ ...f, height: v as [number, number] }))} />
+                        <FilterItemSlider
+                            name='height'
+                            title='Hauteur'
+                            min={0}
+                            max={3000}
+                            steps={10}
+                            icon={IconArrowsVertical}
+                            value={filters.height}
+                            labelFormatter={formatSizeChip}
+                            setValue={v => setFilters(f => ({ ...f, height: v as [number, number] }))} />
 
-                    <FilterItemSlider
-                        name='spread'
-                        title='Largeur'
-                        min={0}
-                        max={3000}
-                        steps={10}
-                        icon={IconArrowsHorizontal}
-                        value={filters.spread}
-                        labelFormatter={formatSizeChip}
-                        setValue={v => setFilters(f => ({ ...f, spread: v as [number, number] }))} />
+                        <FilterItemSlider
+                            name='spread'
+                            title='Largeur'
+                            min={0}
+                            max={3000}
+                            steps={10}
+                            icon={IconArrowsHorizontal}
+                            value={filters.spread}
+                            labelFormatter={formatSizeChip}
+                            setValue={v => setFilters(f => ({ ...f, spread: v as [number, number] }))} />
 
-                    <FilterItemCheckbox
-                        title='Espèce indigène'
-                        id='native'
-                        icon={IconFeather}
-                        value={filters.native}
-                        setValue={v => setFilters(f => ({ ...f, native: v || undefined }))} />
-                </SidebarMenu>
-            </SidebarGroupContent>
+                        <FilterItemCheckbox
+                            title='Espèce indigène'
+                            id='native'
+                            icon={IconFeather}
+                            value={filters.native}
+                            setValue={v => setFilters(f => ({ ...f, native: v || undefined }))} />
+                    </SidebarMenu>
+                </SidebarGroupContent>
 
-            <SidebarGroupContent className="flex gap-2 p-2">
-                <Button style={{ display: 'initial' }} className="flex-col grow" variant="outline" onClick={props.onResetFilters}>
-                    <IconX style={{ display: 'initial' }} className="w-4 h-4 mr-1" />
-                    Reset
-                </Button>
-                <Button style={{ display: 'initial' }} className="flex-col grow" type="submit" onClick={() => props.onApplyFilters(filters)} disabled={searchDisabled}>
-                    <IconSearch style={{ display: 'initial' }} className="w-4 h-4 mr-1" />
-                    Rechercher
-                </Button>
-            </SidebarGroupContent>
+                <SidebarGroupContent className="flex gap-2 p-2">
+                    <Button type="button" style={{ display: 'initial' }} className="flex-col grow" variant="outline" onClick={props.onResetFilters}>
+                        <IconX style={{ display: 'initial' }} className="w-4 h-4 mr-1" />
+                        Reset
+                    </Button>
+                    <Button type="submit" style={{ display: 'initial' }} className="flex-col grow" disabled={searchDisabled}>
+                        <IconSearch style={{ display: 'initial' }} className="w-4 h-4 mr-1" />
+                        Rechercher
+                    </Button>
+                </SidebarGroupContent>
+            </form>
         </SidebarGroup >
     );
 }
