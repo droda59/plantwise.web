@@ -53,15 +53,13 @@ export const FilterItemMultiSelect = ({
                 <DropdownMenuTrigger asChild className="grow">
                     <Button
                         variant="outline"
-                        className="w-full flex items-center justify-between rounded-xs border-input data-[placeholder]:text-muted-foreground [&_svg:not([class*='text-'])]:text-muted-foreground dark:bg-input/10 dark:hover:bg-input/30 flex w-fit"
+                        className="w-full flex items-center justify-between rounded-xs border-input dark:bg-input/10 dark:hover:bg-input/30 flex w-fit overflow-hidden shrink-1"
                     >
-                        <div>
-                            {selectedValues?.length
-                                ? selectedValues.length === options.length
-                                    ? placeholder
-                                    : options.filter(value => isOptionSelected(value.value)).map(value => value.label).join(', ')
-                                : placeholder}
-                        </div>
+                        {selectedValues?.length
+                            ? selectedValues.length === options.length
+                                ? <div className="text-muted-foreground">{placeholder}</div>
+                                : options.filter(value => isOptionSelected(value.value)).map(value => value.label).join(', ')
+                            : <div className="text-muted-foreground">{placeholder}</div>}
                         <ChevronDown className="h-4 w-4 opacity-50" />
                     </Button>
                 </DropdownMenuTrigger>
