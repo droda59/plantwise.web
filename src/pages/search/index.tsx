@@ -31,6 +31,12 @@ function SearchPage() {
     useEffect(() => {
         if (!searchParams) return;
 
+        const sunParams = searchParams.get('sun');
+        var sunConditions = DEFAULT_FILTERS.sunConditions;
+        if (sunParams) {
+            sunConditions = sunParams.split(',');
+        }
+
         const heightMin = searchParams.get('heightMin');
         const heightMax = searchParams.get('heightMax');
         const spreadMin = searchParams.get('spreadMin');
@@ -45,7 +51,7 @@ function SearchPage() {
         setFilters({
             q: searchParams.get('q') || DEFAULT_FILTERS.q,
             zone: searchParams.get('zone') || DEFAULT_FILTERS.zone,
-            sunConditions: searchParams.get('sun') || DEFAULT_FILTERS.sunConditions,
+            sunConditions,
             // droughtTolerant: searchParams.get('droughtTolerant') ? true : DEFAULT_FILTERS.droughtTolerant,
             // floodTolerant: searchParams.get('floodTolerant') ? true : DEFAULT_FILTERS.floodTolerant,
 

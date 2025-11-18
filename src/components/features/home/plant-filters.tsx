@@ -12,9 +12,10 @@ import { FilterItemCheckbox } from "@/components/filter-item-checkbox";
 import { FilterItemSlider } from "@/components/filter-item-slider";
 import { HardinessZone, ZONES } from "@/types/hardiness-zone";
 import { formatSizeChip } from "@/lib/utils";
-import { SUNCONDITIONS, SunConditionValue } from "@/types/sun-condition";
+import { SUNCONDITIONS } from "@/types/sun-condition";
 import { SunInfo } from "@/components/hover-cards/sun-info";
 import { HardinessZoneInfo } from "@/components/hover-cards/hardiness-zone-info";
+import { FilterItemMultiSelect } from "@/components/filter-item-multi-select";
 
 export function PlantFilters(props:
     {
@@ -64,23 +65,18 @@ export function PlantFilters(props:
                             labelFormatter={(t: HardinessZone) => `${t.value} (${t.label})`}
                             setValue={v => props.onChangeFilters({ ...props.filters, zone: v || undefined })} />
 
-                        <FilterItemSelect
-                            name='sun'
+                        <FilterItemMultiSelect
                             title={() =>
                                 <SunInfo>
                                     <div className='cursor-help'>Ensoleillement</div>
                                 </SunInfo>
                             }
-                            placeholder='Tous'
                             icon={IconSun}
+                            placeholder="Tous"
                             options={SUNCONDITIONS}
-                            sorter={(a: { value: SunConditionValue }) => ({
-                                'full': 1,
-                                'partial': 2,
-                                'shade': 3,
-                            }[a.value])}
-                            value={props.filters.sunConditions}
-                            setValue={v => props.onChangeFilters({ ...props.filters, sunConditions: v || undefined })} />
+                            selectedValues={props.filters.sunConditions}
+                            setSelectedValues={v => props.onChangeFilters({ ...props.filters, sunConditions: v || undefined })} />
+
                         {/* 
                     <FilterItemSelect
                         title='Présence de sels'

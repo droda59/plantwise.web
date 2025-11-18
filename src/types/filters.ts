@@ -1,54 +1,20 @@
+import { formatMonthChip } from "@/lib/utils";
 import { ValueLabelPair } from "./value-label";
 
 export const COLORS = ["blanc", "jaune", "orange", "rouge", "rose", "mauve", "bleu", "vert", "rouge automnal"];
 export const SALTS = ["haute", "moyenne", "faible"];
 
-export const MONTHS: Array<ValueLabelPair<string>> = [
-    {
-        value: '1',
-        label: "Janvier",
-    }, {
-        value: '2',
-        label: "Février",
-    }, {
-        value: '3',
-        label: "Mars",
-    }, {
-        value: '4',
-        label: "Avril",
-    }, {
-        value: '5',
-        label: "Mai",
-    }, {
-        value: '6',
-        label: "Juin",
-    }, {
-        value: '7',
-        label: "Juillet",
-    }, {
-        value: '8',
-        label: "Août",
-    }, {
-        value: '9',
-        label: "Septembre",
-    }, {
-        value: '10',
-        label: "Octobre",
-    }, {
-        value: '11',
-        label: "Novembre",
-    }, {
-        value: '12',
-        label: "Décembre",
-    }
-];
+export const MONTHS: Array<ValueLabelPair<string>> = [...Array(12).keys()].map(m => ({
+    value: (m + 1).toString(),
+    label: formatMonthChip(m + 1)
+}));
 
 export interface Filters {
     q?: string;
 
     // Critères du site
     zone?: string;
-    sunConditions?: string;
+    sunConditions?: string[];
     // saltConditions?: string;
     // droughtTolerant?: boolean;
     // floodTolerant?: boolean;
