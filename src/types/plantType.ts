@@ -31,7 +31,9 @@ export const PLANTTYPES: Array<PlantType> = [
         value: "5 GRAM",
         label: "Graminée",
         color: 'wheat',
-    }, {
+    },
+    /*
+    {
         value: "6 GRMP",
         label: "Grimpante",
         color: 'wheat',
@@ -56,6 +58,7 @@ export const PLANTTYPES: Array<PlantType> = [
         label: "Mousse",
         color: 'blue',
     }
+    */
 ];
 
 export function getPlantType(value: PlantTypeValue): PlantType {
