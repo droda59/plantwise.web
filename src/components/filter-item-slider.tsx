@@ -38,7 +38,8 @@ export function FilterItemSlider(props: {
                     min={props.min}
                     max={props.max}
                     step={props.steps || 1}
-                    defaultValue={[props.value && props.value[0] || props.min, props.value && props.value[1] || props.max]}
+                    value={props.value}
+                    defaultValue={props.value}
                     onValueChange={props.setValue}
                 />
             </div>
