@@ -1,6 +1,6 @@
 import { ValueLabelPair } from "./value-label";
 
-export type HardinessZoneValue = '0a' | '0b' | '1a' | '1b' | '2a' | '2b' | '3a' | '3b' | '4a' | '4b' | '5a' | '5b' | '6a' | '6b' | '7a' | '7b' | '8a' | '8b' | '9a';
+export type HardinessZoneValue = '0a' | '0b' | '1a' | '1b' | '2a' | '2b' | '3a' | '3b' | '4a' | '4b' | '5a' | '5b' | '6a' | '6b'; // | '7a' | '7b' | '8a' | '8b' | '9a';
 
 export interface HardinessZone extends ValueLabelPair<HardinessZoneValue> {
     colorHex: string,
@@ -63,7 +63,10 @@ export const ZONES: Array<HardinessZone> = [
         value: "6b",
         label: "London ON",
         colorHex: '#f19e38',
-    }, {
+    },
+];
+/*
+    {
         value: "7a",
         label: "Toronto ON",
         colorHex: '#f19e9c',
@@ -85,6 +88,7 @@ export const ZONES: Array<HardinessZone> = [
         colorHex: '#ea48f7',
     },
 ];
+*/
 
 export function getHardinessZone(value?: string): HardinessZone | undefined {
     if (!value) return;
