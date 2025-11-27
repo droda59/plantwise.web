@@ -1,3 +1,5 @@
+'use client';
+
 import { IconArrowRight } from "@tabler/icons-react"
 
 import Link from "next/link"
@@ -48,6 +50,11 @@ export function SiteHeader({ className }: { className?: string }) {
                     </Link>
                 </h1>
                 <div className="ml-auto flex items-center gap-2">
+                    <Link className='text-sm' href='/functional-groups'>Groupes fonctionnels</Link>
+                    <Separator
+                        orientation="vertical"
+                        className="mr-2 ml-2 data-[orientation=vertical]:h-4"
+                    />
                     <Link className='text-sm' href='/genus'>Par genre</Link>
                     <Separator
                         orientation="vertical"
