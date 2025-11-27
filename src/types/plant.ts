@@ -6,8 +6,15 @@ import { SunConditionValue } from './sun-condition';
 export interface Plant {
     id?: string;
     code: string;
-
     type: PlantTypeValue;
+
+    family: string;
+    genus: string;
+    species?: string;
+    cultivar?: string;
+    note?: string;
+    synonym?: string;
+    commonName: string;
 
     zone?: HardinessZoneValue;
     isNative?: boolean;
@@ -19,16 +26,9 @@ export interface Plant {
     // saltTolerance?: 'haute' | 'moyenne' | 'faible';
     sunTolerance?: Array<SunConditionValue>;
     bloom?: number[];
-
-    family: string;
-    genus: string;
-    species?: string;
-    cultivar?: string;
-    note?: string;
-    synonym?: string;
-    commonName: string;
-
     functionalGroup?: FunctionalGroupValue;
+
+    remarks?: string;
 
     vascanID?: string;
     urlJardin2M?: string;

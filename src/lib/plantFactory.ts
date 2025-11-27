@@ -6,8 +6,15 @@ export class PlantFactory {
         return {
             id: data.id,
             code: data.code,
-
             type: data.type,
+
+            family: data.family,
+            genus: data.genus,
+            species: data.species,
+            cultivar: data.cultivar,
+            note: data.note,
+            synonym: data.synonym,
+            commonName: data.commonName,
 
             zone: data.zone,
             isNative: data.native === 'i',
@@ -19,16 +26,9 @@ export class PlantFactory {
             // saltTolerance: data.saltTolerance || undefined,
             sunTolerance: !!data.sunTolerance ? String(data.sunTolerance).split(',').map(s => s.trim() as SunConditionValue) : [],
             bloom: !!data.bloom ? String(data.bloom).split(',').map(b => Number(b.trim())) : [],
-
-            family: data.family,
-            genus: data.genus,
-            species: data.species,
-            cultivar: data.cultivar,
-            note: data.note,
-            synonym: data.synonym,
-            commonName: data.commonName,
-
             functionalGroup: data.functionalGroup,
+
+            remarks: data.remarks,
 
             vascanID: data.vascanID,
             urlJardin2M: data.urlJardin2M,
