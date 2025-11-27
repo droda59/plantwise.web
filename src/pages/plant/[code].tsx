@@ -8,7 +8,7 @@ import { createSearchParams, plantApiInstance } from '@/api/plant-api';
 import { Plant } from '@/types/plant';
 import { getPlantType, PlantType } from "@/types/plantType";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { IconArrowsHorizontal, IconArrowsVertical, IconExternalLink, IconSlash, IconWorld } from "@tabler/icons-react";
+import { IconArrowsHorizontal, IconArrowsVertical, IconExternalLink, IconLeaf, IconSlash, IconWorld } from "@tabler/icons-react";
 
 import { CodeChip } from '@/components/code-chip';
 import { FunctionalGroup, getFunctionalGroup } from '@/types/functional-groups';
@@ -113,7 +113,23 @@ export default function PlantPage() {
                         {!!plant && (
                             <Card className="shadow-none rounded-xs relative">
                                 <CardHeader className="">
-                                    {type && <h2 className='text-lg text-muted-foreground'>{type.label}</h2>}
+                                    <div className='flex justify-end'>
+                                        {type && <h2 className='flex-grow text-lg text-muted-foreground'>{type.label}</h2>}
+                                        {plant.isNative && (
+                                            <NativeInfo>
+                                                <span className='cursor-help'>
+                                                    <IconLeaf className='text-green-400' title='Indigène' />
+                                                </span>
+                                            </NativeInfo>
+                                        )}
+                                        {plant.isNaturalized && (
+                                            <NaturalizedInfo>
+                                                <span className='cursor-help'>
+                                                    <IconLeaf className='text-amber-400' title='Naturalisé' />
+                                                </span>
+                                            </NaturalizedInfo>
+                                        )}
+                                    </div>
                                     <div className='flex mt-2'>
                                         <CodeChip plant={plant} />
                                         <div className="grow ml-4">
@@ -171,48 +187,14 @@ export default function PlantPage() {
                                             </div>
                                         </Badge>
                                     </div>
+
                                     <Separator className='mt-8' />
                                     <div className='flex-col mt-8'>
                                         <div className='text-xl font-semibold'>
-                                            Informations générales
+                                            Classification
                                         </div>
-
                                         <table className="table-auto w-full mt-4 text-ms">
                                             <tbody>
-                                                {plant.isNative && (
-                                                    <GeneralInfoRow label='Statut'>
-                                                        <NativeInfo>
-                                                            <span className='cursor-help'>Indigène</span>
-                                                        </NativeInfo>
-                                                    </GeneralInfoRow>
-                                                )}
-                                                {plant.isNaturalized && (
-                                                    <GeneralInfoRow label='Statut'>
-                                                        <NaturalizedInfo>
-                                                            <span className='cursor-help'>Naturalisé</span>
-                                                        </NaturalizedInfo>
-                                                    </GeneralInfoRow>
-                                                )}
-                                                {!!functionalGroup && (
-                                                    <GeneralInfoRow label='Groupe fonctionnel'>
-                                                        <FunctionalGroupInfo group={functionalGroup}>
-                                                            <span className='cursor-help'>{functionalGroup.value} - {functionalGroup.label}</span>
-                                                        </FunctionalGroupInfo>
-                                                    </GeneralInfoRow>
-                                                )}
-                                                {!!plant.sunTolerance?.length && (
-                                                    <GeneralInfoRow label='Tolérance au soleil'>
-                                                        <SunInfo>
-                                                            <span className='cursor-help'>{plant.sunTolerance.map(s => sunToleranceMap[s]).join(', ')}</span>
-                                                        </SunInfo>
-
-                                                    </GeneralInfoRow>
-                                                )}
-                                                {!!plant.bloom?.length && (
-                                                    <GeneralInfoRow label='Floraison'>
-                                                        <span>{plant.bloom.map(b => formatMonthChip(b)).join(', ')}</span>
-                                                    </GeneralInfoRow>
-                                                )}
                                                 {!!plant.family && (
                                                     <GeneralInfoRow label='Famille'>
                                                         <i>{plant.family}</i>
@@ -235,14 +217,59 @@ export default function PlantPage() {
                                     <Separator className='mt-8' />
                                     <div className='flex-col mt-8'>
                                         <div className='text-xl font-semibold'>
+                                            Informations horticoles
+                                        </div>
+                                        <table className="table-auto w-full mt-4 text-ms">
+                                            <tbody>
+                                                {!!plant.sunTolerance?.length && (
+                                                    <GeneralInfoRow label='Tolérance au soleil'>
+                                                        <SunInfo>
+                                                            <span className='cursor-help'>{plant.sunTolerance.map(s => sunToleranceMap[s]).join(', ')}</span>
+                                                        </SunInfo>
+                                                    </GeneralInfoRow>
+                                                )}
+                                                {!!plant.bloom?.length && (
+                                                    <GeneralInfoRow label='Floraison'>
+                                                        <span>{plant.bloom.map(b => formatMonthChip(b)).join(', ')}</span>
+                                                    </GeneralInfoRow>
+                                                )}
+                                                {!!functionalGroup && (
+                                                    <GeneralInfoRow label='Groupe fonctionnel'>
+                                                        <FunctionalGroupInfo group={functionalGroup}>
+                                                            <span className='cursor-help'>{functionalGroup.value} - {functionalGroup.label}</span>
+                                                        </FunctionalGroupInfo>
+                                                    </GeneralInfoRow>
+                                                )}
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    {plant.remarks && (
+                                        <>
+                                            <Separator className='mt-8' />
+                                            <div className='flex-col mt-8'>
+                                                <div className='text-xl font-semibold'>
+                                                    Remarques
+                                                </div>
+                                                <div className='mt-4'>
+                                                    <div className='pt-1'>
+                                                        {plant.remarks}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </>
+                                    )}
+
+                                    <Separator className='mt-8' />
+                                    <div className='flex-col mt-8'>
+                                        <div className='text-xl font-semibold'>
                                             Plus d'informations
                                         </div>
                                         <div className='mt-4'>
-
                                             {plant.vascanID &&
                                                 <div className='pt-1'>
                                                     <Link className='flex items-center text-blue-600 dark:text-blue-500 hover:underline' href={`https://data.canadensys.net/vascan/taxon/${plant.vascanID}`} target='_blank'>
-                                                        <IconExternalLink className="w-4 h-4 opacity-60 mr-2" />
+                                                        <IconExternalLink className="opacity-60 mr-2" size={16} />
                                                         Base de données des plantes vasculaires du Canada (VASCAN)
                                                     </Link>
                                                 </div>
@@ -250,7 +277,7 @@ export default function PlantPage() {
                                             {plant.urlJardin2M &&
                                                 <div className='pt-1'>
                                                     <Link className='flex items-center text-blue-600 dark:text-blue-500 hover:underline' href={plant.urlJardin2M} target='_blank'>
-                                                        <IconExternalLink className="w-4 h-4 opacity-60 mr-2" />
+                                                        <IconExternalLink className="opacity-60 mr-2" size={16} />
                                                         Jardin Deux-Montagnes
                                                     </Link>
                                                 </div>
