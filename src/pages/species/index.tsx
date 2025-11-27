@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
-import { IconSlash } from '@tabler/icons-react';
+import { IconSearch, IconSlash } from '@tabler/icons-react';
 import { speciesApiInstance } from '@/api/species-api';
 import { createSearchParams } from '@/api/plant-api';
 import { Separator } from '@/components/ui/separator';
@@ -92,15 +92,20 @@ export default function SpeciesPage() {
                                 {Object.entries(filteredGroupedList || {}).map(([key, values], i) =>
                                     key && (
                                         <div key={i}>
-                                            <h1 className='text-xl font-semibold'>
-                                                <Link href={`/genus/${key}`}><i>{key}</i></Link>
-                                            </h1>
-                                            <div className='grid grid-cols-2 mt-8'>
+                                            <h2 className='text-xl font-semibold'>
+                                                <i>{key}</i>
+                                            </h2>
+                                            <div className='grid grid-cols-2 mt-4'>
                                                 {/* TODO Ajouter species vide pour chercher les Malus sp. */}
                                                 {values?.map((s, j) => (
                                                     <div key={j}>
                                                         {!s.species && <Link key={j} href={`/search?${createSearchParams({ genus: s.genus }).toString()}`}><i>{s.genus} sp.</i> <span className='text-muted text-sm'>({s.count})</span></Link>}
-                                                        {s.species && <Link key={j} href={`/search?${createSearchParams({ species: s.species }).toString()}`}><i>{speciesFirstWord(s.species)}</i> <span className='text-muted text-sm'>({s.count})</span></Link>}
+                                                        {s.species &&
+                                                            <Link key={j} className='flex items-center hover:underline' href={`/search?${createSearchParams({ species: s.species }).toString()}`}>
+                                                                <IconSearch className="w-4 h-4 opacity-40 mr-2" />
+                                                                <i>{speciesFirstWord(s.species)}</i>&nbsp;<span className='text-muted text-sm'>({s.count})</span>
+                                                            </Link>
+                                                        }
                                                     </div>
                                                 ))}
                                             </div>

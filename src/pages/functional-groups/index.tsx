@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { getFunctionalGroup } from '@/types/functional-groups';
 import { groupApiInstance } from '@/api/group-api';
 import { createSearchParams } from '@/api/plant-api';
+import { Separator } from '@/components/ui/separator';
 
 type GroupEntry = { functionalGroup: string, genus: string, count: number };
 
@@ -26,18 +27,20 @@ const FunctionalGroupSection = ({ group, values }: SectionProps) => {
     }).toString();
 
     return (
-        <div className='mt-8'>
-            <h2 className='text-xl font-bold'>{functionalGroup.value} - {functionalGroup.label}</h2>
+        <div>
+            <Separator className='my-8' />
+
+            <h2 className='text-xl font-semibold'>{functionalGroup.value} - {functionalGroup.label}</h2>
             <div className='mt-4'>{functionalGroup.description}</div>
             <div className='mt-2 text-sm italic'>ex. {functionalGroup.species}</div>
 
-            <div className='mt-4'>
+            <div className='mt-8'>
                 <h3 className='text-lg font-semibold'>Genres</h3>
-                <div className='grid grid-cols-2 mt-2'>
+                <div className='grid grid-cols-2 mt-4'>
                     {values?.map((s, j) => (
                         <div key={`genus-${j}`}>
                             <Link className='flex items-center hover:underline' href={`/search?${createGenusSearchParams(s.genus)}`}>
-                                <IconSearch className="w-4 h-4 opacity-60 mr-2" />
+                                <IconSearch className="w-4 h-4 opacity-40 mr-2" />
                                 <i>{s.genus}</i>&nbsp;<span className='text-muted text-sm'>({s.count})</span>
                             </Link>
                         </div>
@@ -111,7 +114,7 @@ export default function FunctionalGroupListPage() {
                                 <div className='mt-4'>Source: <a className='text-blue-600 dark:text-blue-500 hover:underline' href='https://paqlab.uqam.ca/approche-fonctionnelle.php' target='_blank'>PaqLab</a></div>
                             </div>
 
-                            <div className='flex flex-col mt-4'>
+                            <div className='flex flex-col'>
                                 {Object.entries(filteredList || {}).sort().map(([key, values], i) =>
                                     key && (
                                         <FunctionalGroupSection key={`group-${i}`} group={key} values={values} />

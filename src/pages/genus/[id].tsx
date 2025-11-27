@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { genusApiInstance } from '@/api/genus-api';
-import { IconSlash } from '@tabler/icons-react';
+import { IconSearch, IconSlash } from '@tabler/icons-react';
 import { createSearchParams } from '@/api/plant-api';
 import Link from 'next/link';
 import { speciesFirstWord } from '@/lib/utils';
@@ -82,7 +82,12 @@ export default function GenusPage() {
                                 {filteredList?.map((s, i) => (
                                     <div key={i}>
                                         {!s.species?.length && <span key={i}><i>{genus} sp.</i> <span className='text-muted text-sm'>({s.count})</span></span>}
-                                        {!!s.species?.length && <Link key={i} href={`/search?${createSearchParams({ species: s.species }).toString()}`}><i>{speciesFirstWord(s.species)}</i> <span className='text-muted text-sm'>({s.count})</span></Link>}
+                                        {!!s.species?.length &&
+                                            <Link key={i} className='flex items-center hover:underline' href={`/search?${createSearchParams({ species: s.species }).toString()}`}>
+                                                <IconSearch className="w-4 h-4 opacity-40 mr-2" />
+                                                <i>{speciesFirstWord(s.species)}</i>&nbsp;<span className='text-muted text-sm'>({s.count})</span>
+                                            </Link>
+                                        }
                                     </div>
                                 ))}
                             </div>
