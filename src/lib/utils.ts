@@ -33,3 +33,7 @@ export function speciesFirstWord(fullName: string): string {
 
     return shortGenre;
 }
+
+export function capitalizeFirstLetter(value: string): string {
+    return String(value).charAt(0).toUpperCase() + String(value).toLowerCase().slice(1);
+}

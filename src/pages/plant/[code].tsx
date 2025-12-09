@@ -17,7 +17,7 @@ import { Separator } from '@/components/ui/separator';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { getHardinessZone, HardinessZone } from '@/types/hardiness-zone';
 import { SizeChip } from '@/components/size-chip';
-import { formatMonthChip, speciesFirstWord } from '@/lib/utils';
+import { capitalizeFirstLetter, formatMonthChip, speciesFirstWord } from '@/lib/utils';
 import { HardinessZoneInfo, PlantZoneInfo } from '@/components/hover-cards/hardiness-zone-info';
 import { FunctionalGroupInfo } from '@/components/hover-cards/functional-group-info';
 import { NativeInfo } from '@/components/hover-cards/native-info';
@@ -32,12 +32,23 @@ const VSeparator = () => (
     />
 );
 
+const Capitalized = ({ children }: { children: React.ReactNode }) => {
+    if (typeof children === "string") {
+        return (
+            <span>{capitalizeFirstLetter(children)}</span>
+        );
+    }
+    return children;
+};
+
 const GeneralInfoRow = ({ label, children }: { label: string, children: React.ReactNode }) => (
     <tr>
         <td className='p-1 pl-2 text-sm'>{label}</td>
         <td className='flex items-center'>
             <VSeparator />
-            {children}
+            <Capitalized>
+                {children}
+            </Capitalized>
         </td>
     </tr>
 );
@@ -213,28 +224,47 @@ export default function PlantPage() {
                                                 {!!plant.sunTolerance?.length && (
                                                     <GeneralInfoRow label='Tolérance au soleil'>
                                                         <SunInfo>
-                                                            <span className='cursor-help'>{plant.sunTolerance.map(s => getSunConditionValue(s)).join(', ')}</span>
+                                                            <span className='cursor-help'>
+                                                                <Capitalized>
+                                                                    {plant.sunTolerance.map(s => getSunConditionValue(s)).join(', ')}
+                                                                </Capitalized>
+                                                            </span>
                                                         </SunInfo>
                                                     </GeneralInfoRow>
                                                 )}
                                                 {!!plant.soilHumidity?.length && (
                                                     <GeneralInfoRow label='Humidité du sol'>
-                                                        <span>{plant.soilHumidity.map(s => getSoilHumidityValue(s)).join(', ')}</span>
+                                                        {plant.soilHumidity.map(s => getSoilHumidityValue(s)).join(', ')}
                                                     </GeneralInfoRow>
                                                 )}
                                                 {!!plant.soilRichness?.length && (
                                                     <GeneralInfoRow label='Matière du sol'>
-                                                        <span>{plant.soilRichness.map(s => getSoilRichnessValue(s)).join(', ')}</span>
+                                                        {plant.soilRichness.map(s => getSoilRichnessValue(s)).join(', ')}
                                                     </GeneralInfoRow>
                                                 )}
                                                 {!!plant.soilStructure?.length && (
                                                     <GeneralInfoRow label='Structure du sol'>
-                                                        <span>{plant.soilStructure.map(s => getSoilStructureValue(s)).join(', ')}</span>
+                                                        {plant.soilStructure.map(s => getSoilStructureValue(s)).join(', ')}
+                                                    </GeneralInfoRow>
+                                                )}
+                                                {!!plant.groundSaltTolerance && (
+                                                    <GeneralInfoRow label='Tolérance aux sels de déglaçage'>
+                                                        {plant.groundSaltTolerance}
+                                                    </GeneralInfoRow>
+                                                )}
+                                                {!!plant.airSaltTolerance && (
+                                                    <GeneralInfoRow label='Tolérance aux embruns salins'>
+                                                        {plant.airSaltTolerance}
+                                                    </GeneralInfoRow>
+                                                )}
+                                                {!!plant.soilAcidity && (
+                                                    <GeneralInfoRow label='Acidité du sol'>
+                                                        {plant.soilAcidity}
                                                     </GeneralInfoRow>
                                                 )}
                                                 {!!plant.bloom?.length && (
                                                     <GeneralInfoRow label='Floraison'>
-                                                        <span>{plant.bloom.map(b => formatMonthChip(b)).join(', ')}</span>
+                                                        {plant.bloom.map(b => formatMonthChip(b)).join(', ')}
                                                     </GeneralInfoRow>
                                                 )}
                                                 {!!plant.plantationDistance && (
