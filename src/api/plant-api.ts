@@ -2,8 +2,8 @@ import { PlantFactory } from "@/lib/plantFactory";
 import { Filters } from "@/types/filters";
 import { Plant } from "@/types/plant";
 
-// const apiURL = 'https://plantwise-api.onrender.com';
-const apiURL = 'http://localhost:3000';
+const apiURL = 'https://plantwise-api.onrender.com';
+// const apiURL = 'http://localhost:3000';
 
 export function createSearchParams(filters?: Filters) {
     const params = new URLSearchParams();
@@ -17,7 +17,7 @@ export function createSearchParams(filters?: Filters) {
 
         filters.type && filters.type !== '.' && params.set('type', filters.type);
         filters.functionalGroup && filters.functionalGroup !== '.' && params.set('functionalGroup', filters.functionalGroup);
-        // filters.color && filters.color !== '.' && params.set('color', filters.color);
+        filters.grouping && filters.grouping !== '.' && params.set('grouping', filters.grouping);
         filters.bloom && filters.bloom !== '.' && params.set('bloom', filters.bloom);
 
         if (filters.height) {

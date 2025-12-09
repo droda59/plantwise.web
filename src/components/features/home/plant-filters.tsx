@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { IconArrowsHorizontal, IconArrowsVertical, IconFeather, IconFlower, IconPlant, IconSearch, IconSun, IconTrees, IconWorld, IconX } from "@tabler/icons-react";
+import { IconArrowsHorizontal, IconArrowsVertical, IconCategory, IconFeather, IconFlower, IconPlant, IconSearch, IconSun, IconTrees, IconWorld, IconX } from "@tabler/icons-react";
 
 import { SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ import { SUNCONDITIONS } from "@/types/sun-condition";
 import { SunInfo } from "@/components/hover-cards/sun-info";
 import { HardinessZoneInfo } from "@/components/hover-cards/hardiness-zone-info";
 import { FilterItemMultiSelect } from "@/components/filter-item-multi-select";
+import { GROUPINGS } from "@/types/grouping";
 
 export function PlantFilters(props:
     {
@@ -126,15 +127,16 @@ export function PlantFilters(props:
                             labelFormatter={(t: FunctionalGroup) => `${t.value} - ${t.label}`}
                             disabled={!['.', '1 AR', '1b ARB', '2 CON', '3 ARBU'].includes(props.filters.type ?? '')}
                             setValue={v => props.onChangeFilters({ ...props.filters, functionalGroup: v || undefined })} />
-                        {/* 
-                    <FilterItemSelect
-                        title='Couleur'
-                        disabled
-                        placeholder='Toutes'
-                        icon={IconPalette}
-                        options={COLORS}
-                        setValue={v => props.onChangeFilters({ ...props.filters, color: v || undefined }))} />
- */}
+
+                        <FilterItemSelect
+                            name='grouping'
+                            title='Caractéristique'
+                            placeholder='Tous'
+                            icon={IconCategory}
+                            options={GROUPINGS}
+                            value={props.filters.grouping}
+                            setValue={v => props.onChangeFilters({ ...props.filters, grouping: v || undefined })} />
+
                         <FilterItemSelect
                             name='bloom'
                             title='Floraison'
