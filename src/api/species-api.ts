@@ -1,5 +1,5 @@
-// const apiURL = 'https://plantwise-api.onrender.com';
-const apiURL = 'http://localhost:3000';
+const apiURL = 'https://plantwise-api.onrender.com';
+// const apiURL = 'http://localhost:3000';
 
 export class speciesApi {
     async getSpecies(): Promise<{ genus: string, species: string, count: number }[]> {
