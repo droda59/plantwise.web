@@ -24,7 +24,7 @@ export const SOILHUMIDITY: Array<ValueLabelPair<SoilHumidityValue>> = [
 export type SoilRichnessValue = 'poor' | 'regular' | 'rich';
 
 export const getSoilRichnessValue = (soil: SoilRichnessValue) => ({
-    poor: 'Sec',
+    poor: 'Pauvre',
     regular: 'Normal',
     rich: 'Riche'
 }[soil]);
