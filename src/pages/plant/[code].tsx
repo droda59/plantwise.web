@@ -22,12 +22,8 @@ import { HardinessZoneInfo, PlantZoneInfo } from '@/components/hover-cards/hardi
 import { FunctionalGroupInfo } from '@/components/hover-cards/functional-group-info';
 import { NativeInfo } from '@/components/hover-cards/native-info';
 import { SunInfo } from '@/components/hover-cards/sun-info';
-
-const sunToleranceMap = {
-    full: 'Plein soleil',
-    partial: 'Mi-ombre',
-    shade: 'Ombre'
-};
+import { getSunConditionValue } from '@/types/sun-condition';
+import { getSoilHumidityValue, getSoilRichnessValue, getSoilStructureValue } from '@/types/soil-condition';
 
 const VSeparator = () => (
     <Separator
@@ -217,13 +213,33 @@ export default function PlantPage() {
                                                 {!!plant.sunTolerance?.length && (
                                                     <GeneralInfoRow label='Tolérance au soleil'>
                                                         <SunInfo>
-                                                            <span className='cursor-help'>{plant.sunTolerance.map(s => sunToleranceMap[s]).join(', ')}</span>
+                                                            <span className='cursor-help'>{plant.sunTolerance.map(s => getSunConditionValue(s)).join(', ')}</span>
                                                         </SunInfo>
+                                                    </GeneralInfoRow>
+                                                )}
+                                                {!!plant.soilHumidity?.length && (
+                                                    <GeneralInfoRow label='Humidité du sol'>
+                                                        <span>{plant.soilHumidity.map(s => getSoilHumidityValue(s)).join(', ')}</span>
+                                                    </GeneralInfoRow>
+                                                )}
+                                                {!!plant.soilRichness?.length && (
+                                                    <GeneralInfoRow label='Matière du sol'>
+                                                        <span>{plant.soilRichness.map(s => getSoilRichnessValue(s)).join(', ')}</span>
+                                                    </GeneralInfoRow>
+                                                )}
+                                                {!!plant.soilStructure?.length && (
+                                                    <GeneralInfoRow label='Structure du sol'>
+                                                        <span>{plant.soilStructure.map(s => getSoilStructureValue(s)).join(', ')}</span>
                                                     </GeneralInfoRow>
                                                 )}
                                                 {!!plant.bloom?.length && (
                                                     <GeneralInfoRow label='Floraison'>
                                                         <span>{plant.bloom.map(b => formatMonthChip(b)).join(', ')}</span>
+                                                    </GeneralInfoRow>
+                                                )}
+                                                {!!plant.plantationDistance && (
+                                                    <GeneralInfoRow label='Distance de plantation HQ'>
+                                                        <SizeChip size={plant.plantationDistance} />
                                                     </GeneralInfoRow>
                                                 )}
                                                 {!!functionalGroup && (
@@ -245,9 +261,7 @@ export default function PlantPage() {
                                                     Remarques
                                                 </div>
                                                 <div className='mt-4'>
-                                                    <div className='pt-1'>
-                                                        {plant.remarks}
-                                                    </div>
+                                                    {plant.remarks}
                                                 </div>
                                             </div>
                                         </>
@@ -259,11 +273,11 @@ export default function PlantPage() {
                                             Plus d'informations
                                         </div>
                                         <div className='mt-4'>
-                                            {plant.vascanID &&
+                                            {plant.hydroID &&
                                                 <div className='pt-1'>
-                                                    <Link className='flex items-center text-blue-600 dark:text-blue-500 hover:underline' href={`https://data.canadensys.net/vascan/taxon/${plant.vascanID}`} target='_blank'>
+                                                    <Link className='flex items-center text-blue-600 dark:text-blue-500 hover:underline' href={`https://arbres.hydroquebec.com/fiche-arbre-arbuste/${plant.hydroID}`} target='_blank'>
                                                         <IconExternalLink className="opacity-60 mr-2" size={16} />
-                                                        Base de données des plantes vasculaires du Canada (VASCAN)
+                                                        Hydro-Québec - Le bon arbre au bon endroit
                                                     </Link>
                                                 </div>
                                             }
@@ -272,6 +286,14 @@ export default function PlantPage() {
                                                     <Link className='flex items-center text-blue-600 dark:text-blue-500 hover:underline' href={plant.referenceUrl} target='_blank'>
                                                         <IconExternalLink className="opacity-60 mr-2" size={16} />
                                                         Jardin Deux-Montagnes
+                                                    </Link>
+                                                </div>
+                                            }
+                                            {plant.vascanID &&
+                                                <div className='pt-1'>
+                                                    <Link className='flex items-center text-blue-600 dark:text-blue-500 hover:underline' href={`https://data.canadensys.net/vascan/taxon/${plant.vascanID}`} target='_blank'>
+                                                        <IconExternalLink className="opacity-60 mr-2" size={16} />
+                                                        Base de données des plantes vasculaires du Canada (VASCAN)
                                                     </Link>
                                                 </div>
                                             }
@@ -284,7 +306,9 @@ export default function PlantPage() {
                                             Images
                                         </div>
 
-                                        <iframe id='images' width='100%' height='600' src={`https://www.bing.com/images/search?q=${plant.species || plant.genus} ${plant.cultivar}`} />
+                                        <div className='mt-4'>
+                                            <iframe id='images' width='100%' height='600' src={`https://www.bing.com/images/search?q=${plant.species || plant.genus} ${plant.cultivar}`} />
+                                        </div>
                                     </div>
                                 </CardContent>
                             </Card>

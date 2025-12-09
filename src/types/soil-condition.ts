@@ -3,9 +3,9 @@ import { ValueLabelPair } from "./value-label";
 export type SoilHumidityValue = 'dry' | 'regular' | 'wet';
 
 export const getSoilHumidityValue = (soil: SoilHumidityValue) => ({
-    dry: 'Sol sec',
-    regular: 'Sol normal',
-    wet: 'Sol humide'
+    dry: 'Sec',
+    regular: 'Normal',
+    wet: 'Humide'
 }[soil]);
 
 export const SOILHUMIDITY: Array<ValueLabelPair<SoilHumidityValue>> = [
@@ -24,9 +24,9 @@ export const SOILHUMIDITY: Array<ValueLabelPair<SoilHumidityValue>> = [
 export type SoilRichnessValue = 'poor' | 'regular' | 'rich';
 
 export const getSoilRichnessValue = (soil: SoilRichnessValue) => ({
-    poor: 'Sol sec',
-    regular: 'Sol normal',
-    rich: 'Sol humide'
+    poor: 'Sec',
+    regular: 'Normal',
+    rich: 'Humide'
 }[soil]);
 
 export const SOILRICHNESS: Array<ValueLabelPair<SoilRichnessValue>> = [
@@ -45,9 +45,9 @@ export const SOILRICHNESS: Array<ValueLabelPair<SoilRichnessValue>> = [
 export type SoilStructureValue = 'sandy' | 'regular' | 'heavy';
 
 export const getSoilStructureValue = (soil: SoilStructureValue) => ({
-    sandy: 'Sol sablonneux',
-    regular: 'Sol meuble',
-    heavy: 'Sol lourd'
+    sandy: 'Sablonneux',
+    regular: 'Meuble',
+    heavy: 'Lourd'
 }[soil]);
 
 export const SOILSTRUCTURE: Array<ValueLabelPair<SoilStructureValue>> = [
