@@ -33,7 +33,7 @@ export interface Plant {
 
     bloom?: number[];
     functionalGroup?: FunctionalGroupValue;
-    grouping: string;
+    grouping?: string;
 
     remarks?: string;
 
