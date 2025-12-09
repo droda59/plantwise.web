@@ -20,7 +20,7 @@ import { SizeChip } from '@/components/size-chip';
 import { formatMonthChip, speciesFirstWord } from '@/lib/utils';
 import { HardinessZoneInfo, PlantZoneInfo } from '@/components/hover-cards/hardiness-zone-info';
 import { FunctionalGroupInfo } from '@/components/hover-cards/functional-group-info';
-import { NativeInfo, NaturalizedInfo } from '@/components/hover-cards/native-info';
+import { NativeInfo } from '@/components/hover-cards/native-info';
 import { SunInfo } from '@/components/hover-cards/sun-info';
 
 const sunToleranceMap = {
@@ -121,13 +121,6 @@ export default function PlantPage() {
                                                     <IconLeaf className='text-green-400' title='Indigène' />
                                                 </span>
                                             </NativeInfo>
-                                        )}
-                                        {plant.isNaturalized && (
-                                            <NaturalizedInfo>
-                                                <span className='cursor-help'>
-                                                    <IconLeaf className='text-amber-400' title='Naturalisé' />
-                                                </span>
-                                            </NaturalizedInfo>
                                         )}
                                     </div>
                                     <div className='flex mt-2'>
@@ -274,9 +267,9 @@ export default function PlantPage() {
                                                     </Link>
                                                 </div>
                                             }
-                                            {plant.urlJardin2M &&
+                                            {plant.referenceUrl &&
                                                 <div className='pt-1'>
-                                                    <Link className='flex items-center text-blue-600 dark:text-blue-500 hover:underline' href={plant.urlJardin2M} target='_blank'>
+                                                    <Link className='flex items-center text-blue-600 dark:text-blue-500 hover:underline' href={plant.referenceUrl} target='_blank'>
                                                         <IconExternalLink className="opacity-60 mr-2" size={16} />
                                                         Jardin Deux-Montagnes
                                                     </Link>

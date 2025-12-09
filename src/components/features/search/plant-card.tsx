@@ -75,11 +75,6 @@ const NativeBadge = ({ plant }: PlantInfo) =>
         <Badge variant='outline' className="ml-1 border-green-400 text-card-foreground rounded-xs">Indigène</Badge>
     );
 
-const NaturalizedBadge = ({ plant }: PlantInfo) =>
-    plant.isNaturalized && (
-        <Badge variant='outline' className="ml-1 border-amber-400 text-card-foreground rounded-xs">Naturalisé</Badge>
-    );
-
 const SunInfo = ({ plant }: PlantInfo) => (
     <div className='flex items-center overflow-hidden [&>svg]:size-4 [&>svg]:shrink-0'>
         <span className="font-light">Soleil</span>&nbsp;
@@ -139,7 +134,6 @@ export const PlantCard = ({ plant }: PlantInfo) => {
                         <TypeBadge plant={plant} />
                         <FunctionGroupBadge plant={plant} />
                         <NativeBadge plant={plant} />
-                        <NaturalizedBadge plant={plant} />
                     </div>
                     <div className='text-sm text-muted grid grid-cols-2 mt-2'>
                         <div className='flex-col'>
@@ -183,7 +177,6 @@ export const PlantListCard = ({ plants }: { plants: Plant[]; }) => {
                     <TypeBadge plant={firstPlant} />
                     <FunctionGroupBadge plant={firstPlant} />
                     <NativeBadge plant={firstPlant} />
-                    <NaturalizedBadge plant={firstPlant} />
                 </div>
 
                 {isExpanded && plants?.map((e, i) => (

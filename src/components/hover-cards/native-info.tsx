@@ -22,24 +22,3 @@ export const NativeInfo = ({ children }: { children: React.ReactNode }) => (
         </HoverCardContent>
     </HoverCard>
 );
-
-export const NaturalizedInfo = ({ children }: { children: React.ReactNode }) => (
-    <HoverCard>
-        <HoverCardTrigger asChild>
-            {children}
-        </HoverCardTrigger>
-        <HoverCardContent className="w-80 rounded-sm">
-            <div className="flex flex-col justify-between gap-2">
-                <h3 className="text-base font-semibold">Plante naturalisée</h3>
-                <div className="mt-1">
-                    <p className="text-xs">
-                        Plante bien établie dans une zone différente de l'aire de répartition globale de son espèce après y avoir été introduite dans le cadre d'activités humaines et qui est en mesure de survivre et de se reproduire sans aide.
-                    </p>
-                </div>
-                <div className="mt-1 text-muted-foreground text-xs">
-                    Source : Aiglon Indigo
-                </div>
-            </div>
-        </HoverCardContent>
-    </HoverCard>
-);

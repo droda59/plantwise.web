@@ -38,9 +38,6 @@ export const ShortPlantCard = ({ plant, count }: { plant: Plant, count: number }
                         {plant.isNative && (
                             <Badge variant="secondary" className="ml-1 text-emerald-700 rounded-xs">Indigène</Badge>
                         )}
-                        {plant.isNaturalized && (
-                            <Badge variant="secondary" className="ml-1 text-amber-700 rounded-xs">Naturalisé</Badge>
-                        )}
                     </div>
                     <div className='flex'>
                         x {count}

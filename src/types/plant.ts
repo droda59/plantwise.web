@@ -1,6 +1,7 @@
 import { FunctionalGroupValue } from './functional-groups';
 import { HardinessZoneValue } from './hardiness-zone';
 import { PlantTypeValue } from './plantType';
+import { SoilHumidityValue, SoilRichnessValue, SoilStructureValue } from './soil-condition';
 import { SunConditionValue } from './sun-condition';
 
 export interface Plant {
@@ -18,18 +19,25 @@ export interface Plant {
 
     zone?: HardinessZoneValue;
     isNative?: boolean;
-    isNaturalized?: boolean;
     height?: number; // m (approx)
     spread?: number; // m (approx)
-    // droughtTolerant?: boolean;
-    // floodTolerant?: boolean;
-    // saltTolerance?: 'haute' | 'moyenne' | 'faible';
+    plantationDistance?: number; // m (approx)
+
     sunTolerance?: Array<SunConditionValue>;
+    soilHumidity?: Array<SoilHumidityValue>;
+    soilRichness?: Array<SoilRichnessValue>;
+    soilStructure?: Array<SoilStructureValue>;
+    groundSaltTolerance?: string;
+    airSaltTolerance?: string;
+    soilAcidity?: string;
+
     bloom?: number[];
     functionalGroup?: FunctionalGroupValue;
+    grouping: string;
 
     remarks?: string;
 
     vascanID?: string;
-    urlJardin2M?: string;
+    hydroID?: string;
+    referenceUrl?: string;
 }

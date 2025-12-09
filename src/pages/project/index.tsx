@@ -34,9 +34,6 @@ const nativeChartConfig = {
     native: {
         label: 'Indigène',
     },
-    naturalized: {
-        label: 'Naturalisé',
-    },
     other: {
         label: 'Autre',
     }
@@ -91,7 +88,6 @@ export default function ProjectPage() {
     const [typeChartData, setTypeChartData] = useState<TypeChartData[]>();
     const [nativeData, setNativeData] = useState({
         native: 0,
-        naturalized: 0,
         other: 0,
     });
     const [genusChartData, setGenusChartData] = useState<GenusChartData[]>();
@@ -108,16 +104,12 @@ export default function ProjectPage() {
 
             const nativeCounts = {
                 native: 0,
-                naturalized: 0,
                 other: 0,
             };
             var total = 0;
             plantList.forEach(p => {
                 if (p.isNative) {
                     nativeCounts.native += p.quantity;
-                    total += p.quantity;
-                } else if (p.isNaturalized) {
-                    nativeCounts.naturalized += p.quantity;
                     total += p.quantity;
                 } else {
                     nativeCounts.other += p.quantity;
@@ -126,7 +118,6 @@ export default function ProjectPage() {
             });
             const nativeData = {
                 native: ~~((nativeCounts.native / total) * 100),
-                naturalized: ~~((nativeCounts.naturalized / total) * 100),
                 other: ~~((nativeCounts.other / total) * 100),
             };
             setPlantCount(total);
@@ -227,9 +218,6 @@ export default function ProjectPage() {
                                         <div className='flex flex-col'>
                                             <div>
                                                 {nativeData && nativeData.native && <Badge variant='outline' className="text-emerald-700 rounded-xs">{nativeData.native}% d'espèces indigènes</Badge>}
-                                            </div>
-                                            <div>
-                                                {nativeData && nativeData.naturalized && <Badge variant='outline' className="mt-1 text-amber-700 rounded-xs">{nativeData.naturalized} % d'espèces naturalisées</Badge>}
                                             </div>
                                             <div>
                                                 {nativeData && nativeData.other && <Badge variant='outline' className="mt-1 rounded-xs">{nativeData.other}% d'espèces autres</Badge>}
