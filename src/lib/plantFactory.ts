@@ -18,7 +18,7 @@ export class PlantFactory {
             commonName: data.commonName,
 
             zone: data.zone,
-            isNative: data.native === 'i',
+            isNative: !!data.native,
             height: Number(data.height) || 0,
             spread: Number(data.spread) || 0,
             plantationDistance: Number(data.plantationDistance) || 0,
