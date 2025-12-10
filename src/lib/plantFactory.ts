@@ -21,7 +21,7 @@ export class PlantFactory {
             isNative: data.native === 'i',
             height: Number(data.height) || 0,
             spread: Number(data.spread) || 0,
-            plantationDistance: Number(data.spread) || 0,
+            plantationDistance: Number(data.plantationDistance) || 0,
 
             sunTolerance: !!data.sunTolerance ? String(data.sunTolerance).split(',').map(s => s.trim() as SunConditionValue) : [],
             soilHumidity: !!data.soilHumidity ? String(data.soilHumidity).split(',').map(s => s.trim() as SoilHumidityValue) : [],
