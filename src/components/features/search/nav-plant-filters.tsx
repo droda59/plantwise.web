@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { IconArrowsHorizontal, IconArrowsVertical, IconCar, IconCategory, IconFeather, IconFlower, IconPlant, IconSalt, IconSearch, IconSun, IconTrees, IconWorld, IconX } from "@tabler/icons-react";
+import { IconArrowsHorizontal, IconArrowsVertical, IconCar, IconCategory, IconDroplet, IconDropletFilled, IconFeather, IconFlower, IconPlant, IconSalt, IconSearch, IconSun, IconTrees, IconWorld, IconX } from "@tabler/icons-react";
 
 import { SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
@@ -96,22 +96,19 @@ export function NavPlantFilters(props:
                             value={filters.airSalt}
                             setValue={v => setFilters(f => ({ ...f, airSalt: v || undefined }))} />
 
-                        {/* 
-                    <FilterItemCheckbox
-                        title='Sujet à la sécheresse'
-                        disabled
-                        id='droughtTolerant'
-                        icon={IconDroplet}
-                        setValue={v => setFilters(f => ({ ...f, droughtTolerant: v || undefined }))} />
- */}
-                        {/* 
-                    <FilterItemCheckbox
-                        title="Sujet à l'excès d'eau"
-                        disabled
-                        id='floodTolerant'
-                        icon={IconDropletFilled}
-                        setValue={v => setFilters(f => ({ ...f, floodTolerant: v || undefined }))} />
-                         */}
+                        <FilterItemCheckbox
+                            title='Sujet à la sécheresse'
+                            id='drought'
+                            icon={IconDroplet}
+                            value={filters.drought}
+                            setValue={v => setFilters(f => ({ ...f, drought: v || undefined }))} />
+
+                        <FilterItemCheckbox
+                            title="Sujet à l'inondation"
+                            id='flood'
+                            icon={IconDropletFilled}
+                            value={filters.flood}
+                            setValue={v => setFilters(f => ({ ...f, flood: v || undefined }))} />
                     </SidebarMenu>
                 </SidebarGroupContent>
                 <SidebarGroupContent className="flex flex-col gap-2 p-2">

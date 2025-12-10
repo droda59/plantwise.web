@@ -13,8 +13,8 @@ export function createSearchParams(filters?: Filters) {
         filters.sunConditions && filters.sunConditions.length && params.set('sun', filters.sunConditions.join(','));
         filters.groundSalt && params.set('groundSalt', 'true');
         filters.airSalt && params.set('airSalt', 'true');
-        // filters.droughtTolerant && params.set('droughtTolerant', 'true');
-        // filters.floodTolerant && params.set('floodTolerant', 'true');
+        filters.drought && params.set('drought', 'true');
+        filters.flood && params.set('flood', 'true');
 
         filters.type && filters.type !== '.' && params.set('type', filters.type);
         filters.functionalGroup && filters.functionalGroup !== '.' && params.set('functionalGroup', filters.functionalGroup);

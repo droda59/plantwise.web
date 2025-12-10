@@ -6,7 +6,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import { PlantCard, PlantListCard } from '@/components/features/search/plant-card';
 import { IconSearch } from '@tabler/icons-react';
-
 import { createSearchParams, plantApiInstance } from '@/api/plant-api';
 import { Plant } from '@/types/plant';
 import { DEFAULT_FILTERS, Filters } from '@/types/filters';
@@ -54,6 +53,8 @@ function SearchPage() {
             sunConditions,
             groundSalt: searchParams.get('groundSalt') ? true : DEFAULT_FILTERS.groundSalt,
             airSalt: searchParams.get('airSalt') ? true : DEFAULT_FILTERS.airSalt,
+            drought: searchParams.get('drought') ? true : DEFAULT_FILTERS.airSalt,
+            flood: searchParams.get('flood') ? true : DEFAULT_FILTERS.airSalt,
 
             type: searchParams.get('type') || DEFAULT_FILTERS.type,
             functionalGroup: searchParams.get('functionalGroup') || DEFAULT_FILTERS.functionalGroup,

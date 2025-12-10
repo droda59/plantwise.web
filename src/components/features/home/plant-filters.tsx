@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { IconArrowsHorizontal, IconArrowsVertical, IconCar, IconCategory, IconFeather, IconFlower, IconPlant, IconSalt, IconSearch, IconSun, IconTrees, IconWorld, IconX } from "@tabler/icons-react";
+import { IconArrowsHorizontal, IconArrowsVertical, IconCar, IconCategory, IconDroplet, IconDropletFilled, IconFeather, IconFlower, IconPlant, IconSalt, IconSearch, IconSun, IconTrees, IconWorld, IconX } from "@tabler/icons-react";
 
 import { SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
@@ -92,22 +92,19 @@ export function PlantFilters(props:
                             value={props.filters.airSalt}
                             setValue={v => props.onChangeFilters({ ...props.filters, airSalt: v || undefined })} />
 
-                        {/* 
-                    <FilterItemCheckbox
-                        title='Sujet à la sécheresse'
-                        disabled
-                        id='droughtTolerant'
-                        icon={IconDroplet}
-                        setValue={v => props.onChangeFilters({ ...props.filters, droughtTolerant: v || undefined })} />
- */}
-                        {/* 
-                    <FilterItemCheckbox
-                        title="Sujet à l'excès d'eau"
-                        disabled
-                        id='floodTolerant'
-                        icon={IconDropletFilled}
-                        setValue={v => props.onChangeFilters({ ...props.filters, floodTolerant: v || undefined })} /> 
-*/}
+                        <FilterItemCheckbox
+                            title='Sujet à la sécheresse'
+                            id='drought'
+                            icon={IconDroplet}
+                            value={props.filters.drought}
+                            setValue={v => props.onChangeFilters({ ...props.filters, drought: v || undefined })} />
+
+                        <FilterItemCheckbox
+                            title="Sujet à l'inondation"
+                            id='flood'
+                            icon={IconDropletFilled}
+                            value={props.filters.flood}
+                            setValue={v => props.onChangeFilters({ ...props.filters, flood: v || undefined })} />
                     </SidebarMenu>
 
                     <SidebarMenu className='pl-2 mr-16'>

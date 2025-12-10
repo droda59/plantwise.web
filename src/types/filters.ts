@@ -14,6 +14,8 @@ export interface Filters {
     sunConditions?: string[];
     groundSalt?: boolean;
     airSalt?: boolean;
+    drought?: boolean;
+    flood?: boolean;
 
     // Critères de la plante
     type?: string;
@@ -36,6 +38,8 @@ export const DEFAULT_FILTERS: Filters = {
     sunConditions: undefined,
     groundSalt: undefined,
     airSalt: undefined,
+    drought: undefined,
+    flood: undefined,
 
     // Critères de la plante
     type: undefined,
