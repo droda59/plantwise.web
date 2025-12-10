@@ -12,6 +12,8 @@ export interface Filters {
     // Critères du site
     zone?: string;
     sunConditions?: string[];
+    groundSalt?: boolean;
+    airSalt?: boolean;
 
     // Critères de la plante
     type?: string;
@@ -32,6 +34,8 @@ export const DEFAULT_FILTERS: Filters = {
     // Critères du site
     zone: undefined,
     sunConditions: undefined,
+    groundSalt: undefined,
+    airSalt: undefined,
 
     // Critères de la plante
     type: undefined,

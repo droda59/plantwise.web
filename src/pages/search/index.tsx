@@ -52,6 +52,8 @@ function SearchPage() {
             q: searchParams.get('q') || DEFAULT_FILTERS.q,
             zone: searchParams.get('zone') || DEFAULT_FILTERS.zone,
             sunConditions,
+            groundSalt: searchParams.get('groundSalt') ? true : DEFAULT_FILTERS.groundSalt,
+            airSalt: searchParams.get('airSalt') ? true : DEFAULT_FILTERS.airSalt,
 
             type: searchParams.get('type') || DEFAULT_FILTERS.type,
             functionalGroup: searchParams.get('functionalGroup') || DEFAULT_FILTERS.functionalGroup,

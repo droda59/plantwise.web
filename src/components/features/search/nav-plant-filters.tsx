@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { IconArrowsHorizontal, IconArrowsVertical, IconCategory, IconFeather, IconFlower, IconPlant, IconSearch, IconSun, IconTrees, IconWorld, IconX } from "@tabler/icons-react";
+import { IconArrowsHorizontal, IconArrowsVertical, IconCar, IconCategory, IconFeather, IconFlower, IconPlant, IconSalt, IconSearch, IconSun, IconTrees, IconWorld, IconX } from "@tabler/icons-react";
 
 import { SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
@@ -82,15 +82,20 @@ export function NavPlantFilters(props:
                             selectedValues={filters.sunConditions}
                             setSelectedValues={v => setFilters({ ...props.filters, sunConditions: v || undefined })} />
 
-                        {/* 
-                    <FilterItemSelect
-                        title='Présence de sels'
-                        disabled
-                        placeholder='Tous'
-                        icon={IconSalt}
-                        options={SALTS}
-                        setValue={v => setFilters(f => ({ ...f, saltConditions: v || undefined }))} />
- */}
+                        <FilterItemCheckbox
+                            title='Présence de sels de déglaçage'
+                            id='groundSalt'
+                            icon={IconSalt}
+                            value={filters.groundSalt}
+                            setValue={v => setFilters(f => ({ ...f, groundSalt: v || undefined }))} />
+
+                        <FilterItemCheckbox
+                            title="Présence d'embruns salins"
+                            id='airSalt'
+                            icon={IconCar}
+                            value={filters.airSalt}
+                            setValue={v => setFilters(f => ({ ...f, airSalt: v || undefined }))} />
+
                         {/* 
                     <FilterItemCheckbox
                         title='Sujet à la sécheresse'

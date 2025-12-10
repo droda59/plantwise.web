@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { IconArrowsHorizontal, IconArrowsVertical, IconCategory, IconFeather, IconFlower, IconPlant, IconSearch, IconSun, IconTrees, IconWorld, IconX } from "@tabler/icons-react";
+import { IconArrowsHorizontal, IconArrowsVertical, IconCar, IconCategory, IconFeather, IconFlower, IconPlant, IconSalt, IconSearch, IconSun, IconTrees, IconWorld, IconX } from "@tabler/icons-react";
 
 import { SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
@@ -78,15 +78,20 @@ export function PlantFilters(props:
                             selectedValues={props.filters.sunConditions}
                             setSelectedValues={v => props.onChangeFilters({ ...props.filters, sunConditions: v || undefined })} />
 
-                        {/* 
-                    <FilterItemSelect
-                        title='Présence de sels'
-                        disabled
-                        placeholder='Tous'
-                        icon={IconSalt}
-                        options={SALTS}
-                        setValue={v => props.onChangeFilters({ ...props.filters, saltConditions: v || undefined })} />
- */}
+                        <FilterItemCheckbox
+                            title='Présence de sels de déglaçage'
+                            id='groundSalt'
+                            icon={IconSalt}
+                            value={props.filters.groundSalt}
+                            setValue={v => props.onChangeFilters({ ...props.filters, groundSalt: v || undefined })} />
+
+                        <FilterItemCheckbox
+                            title="Présence d'embruns salins"
+                            id='airSalt'
+                            icon={IconCar}
+                            value={props.filters.airSalt}
+                            setValue={v => props.onChangeFilters({ ...props.filters, airSalt: v || undefined })} />
+
                         {/* 
                     <FilterItemCheckbox
                         title='Sujet à la sécheresse'
