@@ -180,7 +180,7 @@ export function PlantFilters(props:
                 </SidebarGroupContent>
 
                 <SidebarFooter className="grid grid-cols-2 gap-6 mt-4">
-                    <Button type='button' variant="outline" onClick={props.onResetFilters}>
+                    <Button type='button' disabled={searchDisabled} variant="outline" onClick={props.onResetFilters}>
                         <IconX style={{ display: 'initial' }} className="w-4 h-4 mr-1" />
                         Reset
                     </Button>

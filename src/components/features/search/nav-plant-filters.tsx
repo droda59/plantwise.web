@@ -185,7 +185,7 @@ export function NavPlantFilters(props:
                 </SidebarGroupContent>
 
                 <SidebarGroupContent className="flex gap-2 p-2">
-                    <Button type="button" style={{ display: 'initial' }} className="flex-col grow" variant="outline" onClick={props.onResetFilters}>
+                    <Button type="button" style={{ display: 'initial' }} className="flex-col grow" variant="outline" onClick={props.onResetFilters} disabled={searchDisabled}>
                         <IconX style={{ display: 'initial' }} className="w-4 h-4 mr-1" />
                         Reset
                     </Button>
