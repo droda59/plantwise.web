@@ -130,14 +130,13 @@ export function PlantFilters(props:
                             disabled={!['.', '1 AR', '1b ARB', '2 CON', '3 ARBU'].includes(props.filters.type ?? '')}
                             setValue={v => props.onChangeFilters({ ...props.filters, functionalGroup: v || undefined })} />
 
-                        <FilterItemSelect
-                            name='grouping'
+                        <FilterItemMultiSelect
                             title='Caractéristique'
-                            placeholder='Tous'
                             icon={IconCategory}
+                            placeholder="Tous"
                             options={GROUPINGS}
-                            value={props.filters.grouping}
-                            setValue={v => props.onChangeFilters({ ...props.filters, grouping: v || undefined })} />
+                            selectedValues={props.filters.grouping}
+                            setSelectedValues={v => props.onChangeFilters({ ...props.filters, grouping: v || undefined })} />
 
                         <FilterItemSelect
                             name='bloom'

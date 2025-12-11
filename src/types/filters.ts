@@ -20,7 +20,7 @@ export interface Filters {
     // Critères de la plante
     type?: string;
     functionalGroup?: string;
-    grouping?: string;
+    grouping?: string[];
     bloom?: string;
     height?: [number, number];
     spread?: [number, number];

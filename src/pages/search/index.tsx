@@ -36,6 +36,12 @@ function SearchPage() {
             sunConditions = sunParams.split(',');
         }
 
+        const groupingParams = searchParams.get('grouping');
+        var groupingConditions = DEFAULT_FILTERS.grouping;
+        if (groupingParams) {
+            groupingConditions = groupingParams.split(',');
+        }
+
         const heightMin = searchParams.get('heightMin');
         const heightMax = searchParams.get('heightMax');
         const spreadMin = searchParams.get('spreadMin');
@@ -58,7 +64,7 @@ function SearchPage() {
 
             type: searchParams.get('type') || DEFAULT_FILTERS.type,
             functionalGroup: searchParams.get('functionalGroup') || DEFAULT_FILTERS.functionalGroup,
-            grouping: searchParams.get('grouping') || DEFAULT_FILTERS.grouping,
+            grouping: groupingConditions,
             bloom: searchParams.get('bloom') || DEFAULT_FILTERS.bloom,
             height,
             spread,

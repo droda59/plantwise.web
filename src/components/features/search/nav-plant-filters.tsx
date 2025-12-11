@@ -135,14 +135,13 @@ export function NavPlantFilters(props:
                             disabled={!['.', '1 AR', '1b ARB', '2 CON', '3 ARBU'].includes(filters.type ?? '')}
                             setValue={v => setFilters(f => ({ ...f, functionalGroup: v || undefined }))} />
 
-                        <FilterItemSelect
-                            name='grouping'
+                        <FilterItemMultiSelect
                             title='Caractéristique'
-                            placeholder='Tous'
                             icon={IconCategory}
+                            placeholder="Tous"
                             options={GROUPINGS}
-                            value={props.filters.grouping}
-                            setValue={v => setFilters({ ...props.filters, grouping: v || undefined })} />
+                            selectedValues={filters.grouping}
+                            setSelectedValues={v => setFilters({ ...props.filters, grouping: v || undefined })} />
 
                         <FilterItemSelect
                             name='bloom'
