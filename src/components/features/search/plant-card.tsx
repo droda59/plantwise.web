@@ -180,8 +180,8 @@ export const PlantListCard = ({ plants }: { plants: Plant[]; }) => {
                 </div>
 
                 {isExpanded && plants?.map((e, i) => (
-                    <motion.div layout initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}>
-                        <div key={i} className='mt-2 px-4 py-2 flex hover:bg-accent'>
+                    <motion.div key={i} layout initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}>
+                        <div className='mt-2 px-4 py-2 flex hover:bg-accent'>
                             <div className='grow'>
                                 <div className="grow text-sm">
                                     <PlantLink plant={e} reduce />

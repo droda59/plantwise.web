@@ -3,10 +3,12 @@
 import { IconArrowRight } from "@tabler/icons-react"
 
 import Link from "next/link"
-import { Separator } from "./ui/separator"
 import { Input } from "./ui/input"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
+import { VSeparator } from '@/components/vertical-separator';
+import { useProject } from "./project-context";
+import { Badge } from "./ui/badge";
 
 interface FormElements extends HTMLFormControlsCollection {
     quickAccessCode: HTMLInputElement
@@ -17,6 +19,7 @@ interface QuickAccessCodeFormElement extends HTMLFormElement {
 
 export function SiteHeader({ className }: { className?: string }) {
     const router = useRouter();
+    const { projectPlants } = useProject();
 
     function handleQuickAccessSearch(event: React.FormEvent<QuickAccessCodeFormElement>) {
         event.preventDefault();
@@ -50,21 +53,24 @@ export function SiteHeader({ className }: { className?: string }) {
                     </Link>
                 </h1>
                 <div className="ml-auto flex items-center gap-2">
+                    <Link className={cn('text-sm', !projectPlants.length && 'text-muted-foreground')} href='/project' style={!projectPlants.length ? { pointerEvents: 'none' } : {}}>
+                        Projet
+                        {projectPlants.length > 0 &&
+                            <Badge
+                                className="h-5 min-w-5 rounded-full px-1 ml-2 font-mono tabular-nums"
+                                variant="outline"
+                            >
+                                {projectPlants.length > 99 ? '99+' : projectPlants.length}
+                            </Badge>
+                        }
+                    </Link>
+                    <VSeparator />
                     <Link className='text-sm' href='/functional-groups'>Groupes fonctionnels</Link>
-                    <Separator
-                        orientation="vertical"
-                        className="mr-2 ml-2 data-[orientation=vertical]:h-4"
-                    />
+                    <VSeparator />
                     <Link className='text-sm' href='/genus'>Par genre</Link>
-                    <Separator
-                        orientation="vertical"
-                        className="mr-2 ml-2 data-[orientation=vertical]:h-4"
-                    />
+                    <VSeparator />
                     <Link className='text-sm' href='/species'>Par espèce</Link>
-                    <Separator
-                        orientation="vertical"
-                        className="mr-2 ml-2 data-[orientation=vertical]:h-4"
-                    />
+                    <VSeparator />
                     <form onSubmit={handleQuickAccessSearch} className='flex mr-2 ml-2 relative'>
                         <IconArrowRight className="w-4 h-4 absolute right-2 top-1/2 -translate-y-1/2 opacity-60" />
                         <Input id='quickAccessCode' className="pl-2 max-w-24" placeholder="Code" />

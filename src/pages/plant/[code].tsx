@@ -24,13 +24,7 @@ import { NativeInfo } from '@/components/hover-cards/native-info';
 import { SunInfo } from '@/components/hover-cards/sun-info';
 import { getSunConditionValue } from '@/types/sun-condition';
 import { getSoilHumidityValue, getSoilRichnessValue, getSoilStructureValue } from '@/types/soil-condition';
-
-const VSeparator = () => (
-    <Separator
-        orientation="vertical"
-        className="mr-4 data-[orientation=vertical]:h-4"
-    />
-);
+import { VSeparator } from '@/components/vertical-separator';
 
 const Capitalized = ({ children }: { children: React.ReactNode }) => {
     if (typeof children === "string") {

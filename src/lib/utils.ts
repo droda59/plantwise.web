@@ -1,3 +1,4 @@
+import { Plant } from "@/types/plant";
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -32,6 +33,10 @@ export function speciesFirstWord(fullName: string): string {
     const shortGenre = fullName.replace(/.* /, `${fullName[0]}. `);
 
     return shortGenre;
+}
+
+export function getFullPlantName(plant: Plant, reduce: boolean = false): string {
+    return `${plant.species ? reduce ? speciesFirstWord(plant.species) : plant.species : plant.genus} ${plant.cultivar ? `'${plant.cultivar}'` : ''} ${plant.note ? `(${plant.note})` : ''}`.trim();
 }
 
 export function capitalizeFirstLetter(value: string): string {
