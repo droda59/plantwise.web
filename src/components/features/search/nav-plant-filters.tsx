@@ -17,6 +17,7 @@ import { SunInfo } from "@/components/hover-cards/sun-info";
 import { HardinessZoneInfo } from "@/components/hover-cards/hardiness-zone-info";
 import { FilterItemMultiSelect } from "@/components/filter-item-multi-select";
 import { GROUPINGS } from "@/types/grouping";
+import { HoverInfo } from "@/components/hover-cards/hover-info";
 
 export function NavPlantFilters(props:
     {
@@ -59,9 +60,10 @@ export function NavPlantFilters(props:
                         <FilterItemSelect
                             name='zone'
                             title={() =>
-                                <HardinessZoneInfo>
-                                    <div className='cursor-help'>Zone</div>
-                                </HardinessZoneInfo>
+                                <HoverInfo
+                                    trigger={<div>Zone</div>}
+                                    content={<HardinessZoneInfo />}
+                                    className='w-180' />
                             }
                             placeholder='Toutes'
                             icon={IconWorld}
@@ -72,9 +74,9 @@ export function NavPlantFilters(props:
 
                         <FilterItemMultiSelect
                             title={() =>
-                                <SunInfo>
-                                    <div className='cursor-help'>Ensoleillement</div>
-                                </SunInfo>
+                                <HoverInfo
+                                    trigger={<div>Ensoleillement</div>}
+                                    content={<SunInfo />} />
                             }
                             icon={IconSun}
                             placeholder="Tous"

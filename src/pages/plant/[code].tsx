@@ -25,6 +25,7 @@ import { SunInfo } from '@/components/hover-cards/sun-info';
 import { getSunConditionValue } from '@/types/sun-condition';
 import { getSoilHumidityValue, getSoilRichnessValue, getSoilStructureValue } from '@/types/soil-condition';
 import { VSeparator } from '@/components/vertical-separator';
+import { HoverInfo } from '@/components/hover-cards/hover-info';
 
 const Capitalized = ({ children }: { children: React.ReactNode }) => {
     if (typeof children === "string") {
@@ -117,11 +118,9 @@ export default function PlantPage() {
                                     <div className='flex justify-end'>
                                         {type && <h2 className='flex-grow text-lg text-muted-foreground'>{type.label}</h2>}
                                         {plant.isNative && (
-                                            <NativeInfo>
-                                                <span className='cursor-help'>
-                                                    <IconLeaf className='text-green-400' title='Indigène' />
-                                                </span>
-                                            </NativeInfo>
+                                            <HoverInfo
+                                                trigger={<IconLeaf className='text-green-400' title='Indigène' />}
+                                                content={<NativeInfo />} />
                                         )}
                                     </div>
                                     <div className='flex mt-2'>
@@ -148,22 +147,24 @@ export default function PlantPage() {
                                         <Badge className='flex grow items-center overflow-hidden p-4 pr-1 mr-2 rounded-sm' variant='outline'>
                                             <div className='flex grow [&>svg]:size-8 [&>svg]:shrink-0'><IconWorld /></div>
                                             <div className='flex-col grow'>
-                                                <HardinessZoneInfo>
-                                                    <div className="font-light text-xs cursor-help">Zone de rusticité</div>
-                                                </HardinessZoneInfo>
-                                                <PlantZoneInfo zone={zone}>
-                                                    <div className="flex items-center font-medium text-lg cursor-help">
-                                                        <Separator
-                                                            orientation="vertical"
-                                                            className='mr-2 data-[orientation=vertical]:h-4'
-                                                            style={{
-                                                                backgroundColor: zone?.colorHex,
-                                                                width: '8px'
-                                                            }}
-                                                        />
-                                                        {zone?.value || 'Inconnue'}
-                                                    </div>
-                                                </PlantZoneInfo>
+                                                <HoverInfo
+                                                    trigger={<div className="font-light text-xs">Zone de rusticité</div>}
+                                                    content={<HardinessZoneInfo />}
+                                                    className='w-180' />
+                                                <HoverInfo
+                                                    trigger={
+                                                        <div className="flex items-center font-medium text-lg">
+                                                            <Separator
+                                                                orientation="vertical"
+                                                                className='mr-2 data-[orientation=vertical]:h-4'
+                                                                style={{
+                                                                    backgroundColor: zone?.colorHex,
+                                                                    width: '8px'
+                                                                }}
+                                                            />
+                                                            {zone?.value || 'Inconnue'}
+                                                        </div>}
+                                                    content={zone && <PlantZoneInfo zone={zone} />} />
                                             </div>
                                         </Badge>
                                         <Badge className='flex grow items-center overflow-hidden p-4 pr-1 mx-2 rounded-sm' variant='outline'>
@@ -217,13 +218,13 @@ export default function PlantPage() {
                                             <tbody>
                                                 {!!plant.sunTolerance?.length && (
                                                     <GeneralInfoRow label='Tolérance au soleil'>
-                                                        <SunInfo>
-                                                            <span className='cursor-help'>
+                                                        <HoverInfo
+                                                            trigger={
                                                                 <Capitalized>
                                                                     {plant.sunTolerance.map(s => getSunConditionValue(s)).join(', ')}
                                                                 </Capitalized>
-                                                            </span>
-                                                        </SunInfo>
+                                                            }
+                                                            content={<SunInfo />} />
                                                     </GeneralInfoRow>
                                                 )}
                                                 {!!plant.soilHumidity?.length && (
@@ -268,9 +269,10 @@ export default function PlantPage() {
                                                 )}
                                                 {!!functionalGroup && (
                                                     <GeneralInfoRow label='Groupe fonctionnel'>
-                                                        <FunctionalGroupInfo group={functionalGroup}>
-                                                            <span className='cursor-help'>{functionalGroup.value} - {functionalGroup.label}</span>
-                                                        </FunctionalGroupInfo>
+                                                        <HoverInfo
+                                                            trigger={<span className='cursor-help'>{functionalGroup.value} - {functionalGroup.label}</span>}
+                                                            content={<FunctionalGroupInfo group={functionalGroup} />}
+                                                            className={`border-${functionalGroup.color}`} />
                                                     </GeneralInfoRow>
                                                 )}
                                             </tbody>
