@@ -14,7 +14,6 @@ import {
     SidebarInset,
     SidebarProvider,
 } from "@/components/ui/sidebar"
-import { SectionTitle } from '@/components/section-title';
 import "@/styles/globals.css";
 import SearchLayout from './search-layout';
 import { Spinner } from '@/components/ui/spinner';
@@ -120,17 +119,18 @@ function SearchPage() {
             <SidebarInset>
                 <div className="@container/main gap-2 items-center px-6 overflow-auto block">
                     <div className="flex flex-col gap-6 py-6 w-full">
-                        <SectionTitle title='Résultats' icon={IconSearch}>
-                            <div className='flex items-center text-sm text-muted-foreground'>
-                                {loading ?
-                                    <>
-                                        <Spinner className='mr-1' />
-                                        <p>Chargement des résultats...</p>
-                                    </>
-                                    : <p>{`${filteredPlants.length} plante${filteredPlants.length > 1 ? 's' : ''} trouvée${filteredPlants.length > 1 ? 's' : ''}`}</p>
+                        <div className="flex items-center justify-between gap-4 mb-4">
+
+                            <h2 className='text-xl font-semibold flex items-center gap-2'>
+                                <IconSearch className="w-5 h-5" />
+                                Résultats
+                                {!loading &&
+                                    <span className='text-muted font-light text-sm'>
+                                        {`${filteredPlants.length} plante${filteredPlants.length > 1 ? 's' : ''} trouvée${filteredPlants.length > 1 ? 's' : ''}`}
+                                    </span>
                                 }
-                            </div>
-                        </SectionTitle>
+                            </h2>
+                        </div>
 
                         {loading ? (
                             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className='text-lg'>

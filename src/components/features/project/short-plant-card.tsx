@@ -1,15 +1,16 @@
+'use client';
+
+import React from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Plant } from "@/types/plant";
-import { getPlantType } from "@/types/plantType";
 import { CodeChip } from "@/components/code-chip";
+import { FunctionalGroupBadge } from "@/components/badges/functional-group-badge";
+import { NativeBadge } from "@/components/badges/native-badge";
 
-export const ShortPlantCard = ({ plant, count }: { plant: Plant, count: number }) => {
-    const type = getPlantType(plant.type);
-
+export const ShortPlantCard = ({ plant }: { plant: Plant }) => {
     return (
         <motion.div layout initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}>
             <Card className="shadow-sm hover:shadow-lg transition rounded-xs py-4 gap-2">
@@ -31,16 +32,8 @@ export const ShortPlantCard = ({ plant, count }: { plant: Plant, count: number }
                 </CardHeader>
                 <CardContent className="flex">
                     <div className="flex grow">
-                        {type && <Badge variant="secondary" className='rounded-xs'>{type.label}</Badge>}
-                        {!!plant.functionalGroup && (
-                            <Badge variant="secondary" className="ml-1 rounded-xs">Groupe&nbsp;{plant.functionalGroup}</Badge>
-                        )}
-                        {plant.isNative && (
-                            <Badge variant="secondary" className="ml-1 text-emerald-700 rounded-xs">Indigène</Badge>
-                        )}
-                    </div>
-                    <div className='flex'>
-                        x {count}
+                        <FunctionalGroupBadge group={plant.functionalGroup} />
+                        <NativeBadge isNative={plant.isNative} />
                     </div>
                 </CardContent>
             </Card>

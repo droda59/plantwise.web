@@ -5,16 +5,13 @@ import { Plant } from "@/types/plant";
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { toast } from "sonner";
 
-export interface ProjectPlant extends Plant {
-    quantity: number;
-}
+export interface ProjectPlant extends Plant { }
 
 interface ProjectContextType {
     projectPlants: ProjectPlant[];
     findInProject: (code: string) => ProjectPlant | undefined;
-    addToProject: (plant: Plant, quantity: number) => void;
-    removeFromProject: (code: string) => void;
-    updateQuantity: (code: string, quantity: number) => void;
+    addToProject: (plant: Plant) => void;
+    removeFromProject: (plant: Plant) => void;
     clearCart: () => void;
 }
 
@@ -38,48 +35,32 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
         localStorage.setItem("project", JSON.stringify(projectPlants));
     }, [projectPlants]);
 
-    const addToProject = (plant: Plant, quantity: number) => {
-        setProjectPlants((prev) => {
-            const existing = prev.find((item) => item.code === plant.code);
-            if (existing) {
-                return prev.map((item) =>
-                    item.code === plant.code ? { ...item, quantity: quantity } : item
-                );
-            }
-            return [...prev, { ...plant, quantity }];
-        });
+    const addToProject = (plant: Plant) => {
+        const existing = projectPlants.find((item) => item.code === plant.code);
+        if (!existing) {
+            setProjectPlants((prev) => {
+                return [...prev, { ...plant }];
+            });
+        }
         showToast('Plante ajoutée au projet', plant);
     };
 
-    const removeFromProject = (code: string) => {
-        setProjectPlants((prev) => prev.filter((item) => item.code !== code));
+    const removeFromProject = (plant: Plant) => {
+        const existing = projectPlants.find((item) => item.code === plant.code);
+        if (existing) {
+            setProjectPlants((prev) => prev.filter((item) => item.code !== plant.code));
+            showToast('Plante retirée du projet', plant);
+        }
     };
 
     const findInProject = (code: string): ProjectPlant | undefined => {
         return projectPlants.find((item) => item.code === code);
     }
 
-    const updateQuantity = (code: string, quantity: number) => {
-        const plant = findInProject(code);
-        if (!plant) return;
-
-        if (quantity === 0) {
-            removeFromProject(code)
-            showToast('Plante retirée du projet', plant);
-        } else {
-            setProjectPlants((prev) =>
-                prev.map((item) =>
-                    item.code === code ? { ...item, quantity: Math.max(1, quantity) } : item
-                )
-            );
-            showToast('Plante modifiée au projet', plant);
-        }
-    };
-
     const clearCart = () => setProjectPlants([]);
 
     return (
-        <ProjectContext.Provider value={{ projectPlants, findInProject, addToProject, removeFromProject, updateQuantity, clearCart }}>
+        <ProjectContext.Provider value={{ projectPlants, findInProject, addToProject, removeFromProject, clearCart }}>
             {children}
         </ProjectContext.Provider>
     );
