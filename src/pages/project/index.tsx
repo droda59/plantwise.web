@@ -6,10 +6,12 @@ import { ShortPlantCard } from '@/components/features/project/short-plant-card';
 import {
     ChartConfig,
     ChartContainer,
+    ChartLegend,
+    ChartLegendContent,
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart"
-import { LabelList, Pie, PieChart, RadialBar, RadialBarChart } from 'recharts';
+import { Bar, BarChart, CartesianGrid, LabelList, Pie, PieChart, RadialBar, RadialBarChart, XAxis } from 'recharts';
 
 import { getPlantType, PLANTTYPES, PlantTypeValue } from '@/types/plantType';
 import { FUNCTIONALGROUPS, getFunctionalGroup } from '@/types/functional-groups';
@@ -17,10 +19,25 @@ import { Badge } from '@/components/ui/badge';
 import { ProjectPlant, useProject } from '@/components/project-context';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
+import ProjectLayout from './project-layout';
+import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuItem, SidebarProvider } from '@/components/ui/sidebar';
+import { FilterSidebar } from '@/components/features/search/filter-sidebar';
+import { DEFAULT_FILTERS, Filters } from '@/types/filters';
+import { SectionTitle } from '@/components/section-title';
+import { IconFilter, IconLeaf, IconSearch, IconTrees, IconTrendingUp } from '@tabler/icons-react';
+import { Spinner } from '@/components/ui/spinner';
+import { motion } from 'framer-motion';
+import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 interface ChartData {
     count: number,
     fill: string,
+};
+
+interface NativeChartData extends ChartData {
+    native: string
 };
 
 interface TypeChartData extends ChartData {
@@ -31,11 +48,17 @@ const typeChartConfig: Record<string, typeof PLANTTYPES[number]> = {};
 PLANTTYPES.forEach(p => typeChartConfig[p.value] = p);
 
 const nativeChartConfig = {
+    title: {
+        label: 'Indigènes vs Exotiques',
+    },
     native: {
         label: 'Indigène',
+        color: 'var(--color-green-400)'
     },
     other: {
-        label: 'Autre',
+        label: 'Exotique',
+        /* color: '#f8cb35' */
+        color: 'var(--color-text-muted)',
     }
 } satisfies ChartConfig;
 
@@ -54,10 +77,15 @@ interface GroupChartData extends ChartData {
 };
 
 const groupChartConfig = {
-    count: {
-        label: "Nombre",
-        color: "var(--chart-1)",
+    title: {
+        label: 'Groupes fonctionnels',
     },
+    ...FUNCTIONALGROUPS.map(g => ({
+        [g.value]: {
+            label: g.value,
+            color: `var(--color-${g.color || 'text-muted'}`,
+        }
+    })).reduce((acc, curr) => ({ ...acc, ...curr }), {}),
 } satisfies ChartConfig;
 
 function getRandomColor() {
@@ -79,67 +107,55 @@ const monthLookup = (month: number) => ({
     12: 'd'
 }[month]);
 
-export default function ProjectPage() {
+function ProjectPage() {
     const { projectPlants, clearCart } = useProject();
 
     const [plantList, setPlantList] = useState<ProjectPlant[]>([]);
     const [groupedPlants, setGroupedPlants] = useState<Partial<Record<PlantTypeValue, ProjectPlant[]>>>({});
-    const [plantCount, setPlantCount] = useState<number>(0);
-    const [typeChartData, setTypeChartData] = useState<TypeChartData[]>();
+    // const [typeChartData, setTypeChartData] = useState<TypeChartData[]>();
+    const [nativeChartData, setNativeChartData] = useState<NativeChartData[]>();
     const [nativeData, setNativeData] = useState({
         native: 0,
         other: 0,
     });
-    const [genusChartData, setGenusChartData] = useState<GenusChartData[]>();
     const [groupChartData, setGroupChartData] = useState<GroupChartData[]>();
+    const [genusChartData, setGenusChartData] = useState<GenusChartData[]>();
 
     useEffect(() => {
         if (plantList.length) {
             const groupedTypes = Object.groupBy(plantList, plant => plant.type);
             setGroupedPlants(groupedTypes);
 
+            /*
             setTypeChartData(Object.entries(groupedTypes).map(([key, values]) => ({
                 type: key, count: (values ?? []).reduce((a, b) => a + 1, 0), fill: getPlantType(key as PlantTypeValue).color
             })));
+            */
 
-            const nativeCounts = {
-                native: 0,
+            const nativeData = {
+                native: ~~((plantList.filter(p => p.isNative).length / plantList.length) * 100),
                 other: 0,
             };
-            var total = 0;
-            plantList.forEach(p => {
-                if (p.isNative) {
-                    nativeCounts.native++;
-                    total++;
-                } else {
-                    nativeCounts.other++;
-                    total++;
-                }
-            });
-            const nativeData = {
-                native: ~~((nativeCounts.native / total) * 100),
-                other: ~~((nativeCounts.other / total) * 100),
-            };
-            setPlantCount(total);
+            nativeData.other = 100 - nativeData.native;
             setNativeData(nativeData);
+            setNativeChartData(Object.entries(nativeData).map(([key, count]) => ({
+                native: key,
+                count,
+                fill: nativeChartConfig[key as keyof typeof nativeChartConfig].color
+            })));
+
+            const groupedGroups = Object.groupBy(plantList, plant => plant.functionalGroup ?? 'unknown');
+            const data = FUNCTIONALGROUPS.map(g => ({
+                group: g.value,
+                count: groupedGroups[g.value]?.length ?? 0,
+                fill: groupChartConfig[g.value as keyof typeof groupChartConfig].color
+            }));
+            setGroupChartData(data);
 
             const groupedGenus = Object.groupBy(plantList, plant => plant.genus);
             setGenusChartData(Object.entries(groupedGenus).map(([key, values]) => ({
                 genus: key, count: (values ?? []).reduce((a, b) => a + 1, 0), fill: getRandomColor()
             })));
-
-            const groupedGroups = Object.groupBy(plantList, plant => plant.functionalGroup ?? 'unknown');
-            const data = [] as GroupChartData[];
-            FUNCTIONALGROUPS.forEach(g => {
-                var count = 0;
-                if (groupedGroups[g.value]) {
-                    for (const entry of groupedGroups[g.value] ?? []) {
-                        count++;
-                    }
-                }
-                data.push({ group: g.value, count, fill: getFunctionalGroup(g.value)?.colorHex ?? "#cccccc" });
-            });
-            setGroupChartData(data);
         }
     }, [plantList]);
 
@@ -147,6 +163,167 @@ export default function ProjectPage() {
         setPlantList(projectPlants);
     }, [projectPlants]);
 
+    return (
+        <SidebarProvider
+            style={
+                {
+                    "--sidebar-width": "calc(var(--spacing) * 100)",
+                    "--header-height": "calc(var(--spacing) * 12)",
+                } as React.CSSProperties
+            }
+        >
+            <Sidebar collapsible="offcanvas" variant="inset" >
+                <SidebarContent>
+                    {Object.entries(groupedPlants || {})
+                        .sort((a, b) => a[0].localeCompare(b[0]))
+                        .map(([key, values], i) => (
+                            <SidebarGroup key={key}>
+                                <SidebarGroupContent className="flex flex-col gap-2 p-2">
+                                    <SidebarMenu>
+                                        <h2 className='text-xl font-semibold flex items-center gap-2'>
+                                            {React.createElement(getPlantType(key as PlantTypeValue).icon)}
+                                            {getPlantType(key as PlantTypeValue).label}
+                                            <span className='text-muted font-light text-sm'>({values?.length})</span>
+                                        </h2>
+
+                                        {values?.map((plant, j) => (
+                                            <div key={j} className='mt-2'>
+                                                <ShortPlantCard plant={plant} />
+                                            </div>
+                                        ))}
+                                    </SidebarMenu>
+                                </SidebarGroupContent>
+                            </SidebarGroup>
+                        ))}
+                </SidebarContent>
+            </Sidebar >
+            <SidebarInset>
+                <div className="@container/main flex flex-1 flex-col gap-2">
+                    <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+                        <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
+                            {/*
+                            <Card className="@container/card">
+                                <CardHeader>
+                                    <CardDescription>Ratio de types</CardDescription>
+                                    <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+                                        $1,250.00
+                                    </CardTitle>
+                                    <CardAction>
+                                        <Badge variant="outline">
+                                            <IconTrendingUp />
+                                            +12.5%
+                                        </Badge>
+                                    </CardAction>
+                                </CardHeader>
+                                <CardContent>
+                                    <ChartContainer config={typeChartConfig}>
+                                        <PieChart>
+                                            <ChartTooltip
+                                                cursor={false}
+                                                content={
+                                                    <ChartTooltipContent hideLabel />
+                                                }
+                                            />
+                                            <Pie data={typeChartData} dataKey="count" nameKey="type" />
+                                            <ChartLegend content={<ChartLegendContent />} />
+                                        </PieChart>
+                                    </ChartContainer>
+                                </CardContent>
+                                <CardFooter className="flex-col items-start gap-1.5 text-sm">
+                                    <div className="line-clamp-1 flex gap-2 font-medium">
+                                        Trending up this month <IconTrendingUp className="size-4" />
+                                    </div>
+                                    <div className="text-muted-foreground">
+                                        Visitors for the last 6 months
+                                    </div>
+                                </CardFooter>
+                            </Card>
+                            */}
+
+                            <Card className="@container/card">
+                                <CardHeader>
+                                    <CardTitle className="text-2xl font-semibold tabular-nums">
+                                        Ratio d'indigènes
+                                    </CardTitle>
+                                    <CardAction>
+                                        <IconLeaf className='text-green-400' />
+                                    </CardAction>
+                                </CardHeader>
+                                <CardContent className='grow'>
+                                    <ChartContainer config={nativeChartConfig}
+                                        className="aspect-square">
+                                        <PieChart>
+                                            <ChartTooltip
+                                                cursor={false}
+                                                content={
+                                                    <ChartTooltipContent indicator='line' labelKey='title' />
+                                                }
+                                            />
+                                            <Pie data={nativeChartData} dataKey="count" nameKey="native" />
+                                        </PieChart>
+                                    </ChartContainer>
+                                </CardContent>
+                                <CardFooter className="flex-col items-start gap-1.5 text-sm">
+                                    <div className="line-clamp-1 flex gap-2 font-medium text-green-400">
+                                        {nativeData.native}% d'espèces indigènes
+                                    </div>
+                                    <div className="text-muted-foreground">
+                                        {nativeData.other}% d'espèces exotiques ou naturalisées
+                                    </div>
+                                </CardFooter>
+                            </Card>
+
+                            <Card className="@container/card">
+                                <CardHeader>
+                                    <CardTitle className="text-2xl font-semibold tabular-nums">
+                                        Groupes fonctionnels
+                                    </CardTitle>
+                                    <CardAction>
+                                        <IconTrees />
+                                    </CardAction>
+                                </CardHeader>
+                                <CardContent className='grow'>
+                                    <ChartContainer config={groupChartConfig} className='aspect-square'>
+                                        <BarChart data={groupChartData}>
+                                            <CartesianGrid vertical={false} />
+                                            <XAxis
+                                                dataKey="group"
+                                                tickLine={false}
+                                                tickMargin={10}
+                                                axisLine={false}
+                                            />
+                                            <ChartTooltip
+                                                cursor={false}
+                                                content={
+                                                    <ChartTooltipContent indicator='line' labelKey='title' nameKey='group' />
+                                                }
+                                                wrapperClassName='rounded-sm border border-border shadow-md'
+                                            />
+                                            <Bar dataKey="count" radius={4} />
+                                        </BarChart>
+                                    </ChartContainer>
+                                </CardContent>
+                                <CardFooter className="flex-col items-start gap-1.5 text-sm">
+                                    <div className="line-clamp-1 flex gap-2 font-medium">
+                                        Groupes fonctionnels non couverts : {(groupChartData || []).filter((value) => value.count === 0).map(value => value.group).join(', ')}
+                                    </div>
+                                    <div className="text-muted-foreground">
+                                        <Link className='flex items-center text-blue-600 dark:text-blue-500 hover:underline' href='/functional-groups'>
+                                            Plus d'informations
+                                        </Link>
+                                    </div>
+                                </CardFooter>
+                            </Card>
+
+                        </div>
+                    </div>
+                </div>
+            </SidebarInset>
+        </SidebarProvider>
+    );
+}
+
+{ /*
     return (
         <div className="flex min-h-svh justify-center p-6 md:p-10">
             <main className="w-full max-w-xl min-w-200">
@@ -163,7 +340,7 @@ export default function ProjectPage() {
                     </h1>
                     {Object.values(groupedPlants).length > 0 &&
                         <div className="text-sm text-muted-foreground">
-                            {plantCount} plantes
+                            {projectPlants.length} plantes
                         </div>
                     }
                     <div className="grid">
@@ -330,3 +507,10 @@ export default function ProjectPage() {
         </div>
     );
 }
+*/}
+
+ProjectPage.getLayout = (page: any) => {
+    return <ProjectLayout>{page}</ProjectLayout>
+};
+
+export default ProjectPage;

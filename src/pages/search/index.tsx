@@ -120,7 +120,6 @@ function SearchPage() {
                 <div className="@container/main gap-2 items-center px-6 overflow-auto block">
                     <div className="flex flex-col gap-6 py-6 w-full">
                         <div className="flex items-center justify-between gap-4 mb-4">
-
                             <h2 className='text-xl font-semibold flex items-center gap-2'>
                                 <IconSearch className="w-5 h-5" />
                                 Résultats

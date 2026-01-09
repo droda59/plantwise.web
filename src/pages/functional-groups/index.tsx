@@ -32,7 +32,7 @@ const FunctionalGroupSection = ({ group, values }: SectionProps) => {
 
             <h2 className='text-xl font-semibold'>{functionalGroup.value} - {functionalGroup.label}</h2>
             <div className='mt-4'>{functionalGroup.description}</div>
-            <div className='mt-2 text-sm italic'>ex. {functionalGroup.species}</div>
+            <div className='mt-2 text-sm italic text-muted-foreground'>ex. {functionalGroup.species}</div>
 
             <div className='mt-8'>
                 <h3 className='text-lg font-semibold'>Genres</h3>

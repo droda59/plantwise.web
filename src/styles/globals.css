@@ -148,7 +148,7 @@
 
     --primary: var(--color-highlight);
 
-    --background: var(--color-accent);
+    --background: var(--gray-component);
     --foreground: var(--color-accent);
 
     --text-color: var(--color-text);
