@@ -252,3 +252,29 @@ body {
 .codechip button:hover span {
     display: none;
 }
+
+.bloom-calendar th,
+.bloom-calendar td {
+    border: 1px solid var(--border);
+}
+
+.bloom-calendar td.bloom-month:nth-child(1 of .bloom-month)>div {
+    float: right;
+    width: 75%;
+    border-bottom-left-radius: 12px;
+    border-top-left-radius: 12px;
+    margin-right: -1px;
+    padding-right: 1px;
+}
+
+.bloom-calendar td.bloom-month:nth-last-child(1 of .bloom-month)>div {
+    width: 75%;
+    border-bottom-right-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+.bloom-calendar td.bloom-month:nth-child(1 of .bloom-month).solo>div {
+    width: 50%;
+    margin-left: 25%;
+    float: left;
+}

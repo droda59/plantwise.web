@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { IconArrowsHorizontal, IconArrowsVertical, IconCar, IconCategory, IconDroplet, IconDropletFilled, IconFeather, IconFlower, IconPlant, IconSalt, IconSearch, IconSun, IconTrees, IconWorld, IconX } from "@tabler/icons-react";
+import { IconArrowsHorizontal, IconArrowsVertical, IconCar, IconCategory, IconDroplet, IconDropletFilled, IconFeather, IconFlower, IconLeaf, IconPlant, IconSalt, IconSearch, IconSun, IconTrees, IconWorld, IconX } from "@tabler/icons-react";
 
 import { SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
@@ -175,7 +175,7 @@ export function PlantFilters(props:
                         <FilterItemCheckbox
                             title='Espèce indigène'
                             id='native'
-                            icon={IconFeather}
+                            icon={IconLeaf}
                             value={props.filters.native}
                             setValue={v => props.onChangeFilters({ ...props.filters, native: v || undefined })} />
                     </SidebarMenu>

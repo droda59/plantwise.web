@@ -6,30 +6,25 @@ import { ShortPlantCard } from '@/components/features/project/short-plant-card';
 import {
     ChartConfig,
     ChartContainer,
-    ChartLegend,
-    ChartLegendContent,
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart"
-import { Bar, BarChart, CartesianGrid, LabelList, Pie, PieChart, RadialBar, RadialBarChart, XAxis } from 'recharts';
+import { Bar, BarChart, CartesianGrid, Pie, PieChart, XAxis } from 'recharts';
 
 import { getPlantType, PLANTTYPES, PlantTypeValue } from '@/types/plantType';
-import { FUNCTIONALGROUPS, getFunctionalGroup } from '@/types/functional-groups';
+import { FUNCTIONALGROUPS } from '@/types/functional-groups';
 import { Badge } from '@/components/ui/badge';
 import { ProjectPlant, useProject } from '@/components/project-context';
-import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import ProjectLayout from './project-layout';
-import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuItem, SidebarProvider } from '@/components/ui/sidebar';
-import { FilterSidebar } from '@/components/features/search/filter-sidebar';
-import { DEFAULT_FILTERS, Filters } from '@/types/filters';
-import { SectionTitle } from '@/components/section-title';
-import { IconFilter, IconLeaf, IconSearch, IconTrees, IconTrendingUp } from '@tabler/icons-react';
-import { Spinner } from '@/components/ui/spinner';
-import { motion } from 'framer-motion';
-import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarInset, SidebarMenu, SidebarProvider } from '@/components/ui/sidebar';
+import { IconLeaf, IconTrees } from '@tabler/icons-react';
+import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
-import { cn } from '@/lib/utils';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { EllipsisVerticalIcon } from 'lucide-react';
 
 interface ChartData {
     count: number,
@@ -83,7 +78,7 @@ const groupChartConfig = {
     ...FUNCTIONALGROUPS.map(g => ({
         [g.value]: {
             label: g.value,
-            color: `var(--color-${g.color || 'text-muted'}`,
+            color: `var(--color-${g.color || 'text-muted'})`,
         }
     })).reduce((acc, curr) => ({ ...acc, ...curr }), {}),
 } satisfies ChartConfig;
@@ -92,19 +87,20 @@ function getRandomColor() {
     return '#' + Math.floor(Math.random() * 16777215).toString(16);
 }
 
+const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 const monthLookup = (month: number) => ({
-    1: 'j',
-    2: 'f',
-    3: 'm',
-    4: 'a',
-    5: 'm',
-    6: 'j',
-    7: 'j',
-    8: 'a',
-    9: 's',
-    10: 'o',
-    11: 'n',
-    12: 'd'
+    1: 'jan',
+    2: 'fév',
+    3: 'mar',
+    4: 'avr',
+    5: 'mai',
+    6: 'jun',
+    7: 'jui',
+    8: 'aou',
+    9: 'sep',
+    10: 'oct',
+    11: 'nov',
+    12: 'déc'
 }[month]);
 
 function ProjectPage() {
@@ -198,9 +194,9 @@ function ProjectPage() {
                 </SidebarContent>
             </Sidebar >
             <SidebarInset>
-                <div className="@container/main flex flex-1 flex-col gap-2">
+                <div className="@container/main gap-2 items-center px-6 overflow-auto block">
                     <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-                        <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
+                        <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs @xl/main:grid-cols-2 @5xl/main:grid-cols-2">
                             {/*
                             <Card className="@container/card">
                                 <CardHeader>
@@ -250,8 +246,7 @@ function ProjectPage() {
                                     </CardAction>
                                 </CardHeader>
                                 <CardContent className='grow'>
-                                    <ChartContainer config={nativeChartConfig}
-                                        className="aspect-square">
+                                    <ChartContainer config={nativeChartConfig} className="">
                                         <PieChart>
                                             <ChartTooltip
                                                 cursor={false}
@@ -283,7 +278,7 @@ function ProjectPage() {
                                     </CardAction>
                                 </CardHeader>
                                 <CardContent className='grow'>
-                                    <ChartContainer config={groupChartConfig} className='aspect-square'>
+                                    <ChartContainer config={groupChartConfig} className=''>
                                         <BarChart data={groupChartData}>
                                             <CartesianGrid vertical={false} />
                                             <XAxis
@@ -315,199 +310,177 @@ function ProjectPage() {
                                 </CardFooter>
                             </Card>
 
+                            {/*
+                            <Card className="@container/card">
+                                <CardHeader>
+                                    <CardTitle className="text-2xl font-semibold tabular-nums">
+                                        Genres utilisés
+                                    </CardTitle>
+                                    <CardAction>
+                                        <IconTrees />
+                                    </CardAction>
+                                </CardHeader>
+                                <CardContent className='grow'>
+                                    <ChartContainer config={genusChartConfig}>
+                                        <PieChart>
+                                            <ChartTooltip
+                                                cursor={false}
+                                                content={
+                                                    <ChartTooltipContent />
+                                                }
+                                            />
+                                            <Pie data={genusChartData} dataKey="count" nameKey="genus" />
+                                        </PieChart>
+                                    </ChartContainer>
+                                </CardContent>
+                                <CardFooter className="flex-col items-start gap-1.5 text-sm">
+                                    <div className="line-clamp-1 flex gap-2 font-medium">
+                                        Groupes fonctionnels non couverts : {(groupChartData || []).filter((value) => value.count === 0).map(value => value.group).join(', ')}
+                                    </div>
+                                    <div className="text-muted-foreground">
+                                        <Link className='flex items-center text-blue-600 dark:text-blue-500 hover:underline' href='/functional-groups'>
+                                            Plus d'informations
+                                        </Link>
+                                    </div>
+                                </CardFooter>
+                            </Card>
+                            */}
+                        </div>
+
+                        <div className="grid grid-cols-1 gap-4 @4xl/page:grid-cols-[2fr_1fr] px-4">
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle className="text-3xl font-bold tracking-tight">
+                                        Calendrier des floraisons
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <table className='w-full bloom-calendar'>
+                                        <thead className='table-auto'>
+                                            <tr>
+                                                <th>&nbsp;</th>
+                                                {months.map((month, i) => (
+                                                    <th key={`header-${month}`} className='px-1'>
+                                                        {monthLookup(month)}
+                                                    </th>
+                                                ))}
+                                            </tr>
+                                        </thead>
+                                        <tbody className='table-auto'>
+                                            {plantList.map((plant, j) => (
+                                                <tr key={j}>
+                                                    <th className='w-1/4 text-xs text-right pr-2'>
+                                                        <Link href={`/plant/${plant.code}`} className='hover:underline'>
+                                                            <span className='italic'>{plant.species || plant.genus}</span>
+                                                            {plant.cultivar && <span>&nbsp;'{plant.cultivar}'</span>}
+                                                            {plant.note && <span>&nbsp;({plant.note})</span>}
+                                                        </Link>
+                                                    </th>
+                                                    {plant.bloom?.length === 0 ? (
+                                                        months.map((month, i) => (
+                                                            <td className='w-[6.25%] py-1'>&nbsp;</td>
+                                                        ))
+                                                    )
+                                                        : (
+                                                            <>
+                                                                {plant.bloom && plant.bloom.length !== 0 &&
+                                                                    months.slice(0, plant.bloom[0] - 1).map(() => (
+                                                                        <td className='w-[6.25%] py-2' />
+                                                                    ))}
+                                                                {plant.bloom && plant.bloom.map(month => (
+                                                                    <td className={`w-[6.25%] py-2 bloom-month ${plant.bloom?.length === 1 && 'solo'}`}><div className='h-4 bg-accent-foreground'>&nbsp;</div></td>
+                                                                ))}
+                                                                {plant.bloom && plant.bloom.length !== 0 &&
+                                                                    months.slice(plant.bloom[plant.bloom.length - 1]).map(() => (
+                                                                        <td className='w-[6.25%] py-2' />
+                                                                    ))}
+                                                            </>
+                                                        )}
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </CardContent>
+                            </Card>
+                        </div>
+
+                        <div className="grid grid-cols-1 gap-4 @4xl/page:grid-cols-[2fr_1fr] px-4">
+                            <Card className="flex w-full flex-col gap-4">
+                                <CardHeader className="flex flex-row items-center justify-between">
+                                    <Tabs defaultValue="all">
+                                        <TabsList className="w-full @3xl/page:w-fit">
+                                            <TabsTrigger value="all">Familles</TabsTrigger>
+                                            <TabsTrigger value="in-stock">Genres</TabsTrigger>
+                                        </TabsList>
+                                    </Tabs>
+                                </CardHeader>
+                                <CardContent>
+                                    <Table>
+                                        <TableHeader>
+                                            <TableRow>
+                                                <TableHead>Product</TableHead>
+                                                <TableHead className="text-right">Price</TableHead>
+                                                <TableHead className="text-right">Stock</TableHead>
+                                                <TableHead>Status</TableHead>
+                                                <TableHead>Date Added</TableHead>
+                                                <TableHead />
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody className="**:data-[slot=table-cell]:py-2.5">
+                                            {plantList.map((plant) => (
+                                                <TableRow key={plant.code}>
+                                                    <TableCell className="font-medium">
+                                                        <span className='italic'>{plant.species || plant.genus}</span>
+                                                        {plant.cultivar && <span>&nbsp;'{plant.cultivar}'</span>}
+                                                        {plant.note && <span>&nbsp;({plant.note})</span>}
+                                                    </TableCell>
+                                                    <TableCell className="text-right">
+                                                        ${plant.family}
+                                                    </TableCell>
+                                                    <TableCell className="text-right">{plant.genus}</TableCell>
+                                                    <TableCell>
+                                                        <Badge
+                                                            variant="secondary"
+                                                            className={
+                                                                plant.isNative
+                                                                    ? "text-green-400"
+                                                                    : "text-muted-foreground"
+                                                            }
+                                                        >
+                                                            {plant.isNative ? "Indigène" : "Exotique"}
+                                                        </Badge>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <DropdownMenu>
+                                                            <DropdownMenuTrigger asChild>
+                                                                <Button variant="ghost" size="icon" className="size-6">
+                                                                    <EllipsisVerticalIcon />
+                                                                </Button>
+                                                            </DropdownMenuTrigger>
+                                                            <DropdownMenuContent align="end">
+                                                                <DropdownMenuItem variant="destructive">
+                                                                    Delete
+                                                                </DropdownMenuItem>
+                                                            </DropdownMenuContent>
+                                                        </DropdownMenu>
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </CardContent>
+                                <CardFooter className="flex flex-col items-center justify-between border-t pt-6 @3xl/page:flex-row">
+                                    <div className="text-muted-foreground hidden text-sm @3xl/page:block">
+                                    </div>
+                                </CardFooter>
+                            </Card>
                         </div>
                     </div>
                 </div>
             </SidebarInset>
-        </SidebarProvider>
+        </SidebarProvider >
     );
 }
-
-{ /*
-    return (
-        <div className="flex min-h-svh justify-center p-6 md:p-10">
-            <main className="w-full max-w-xl min-w-200">
-                <div className='flex-col'>
-                    <h1 className="text-3xl">
-                        <div className='flex items-center'>
-                            <div className='grow'>
-                                Sommaire du projet
-                            </div>
-                            {Object.values(groupedPlants).length > 0 &&
-                                <Button className="ml-2" onClick={clearCart}>Vider</Button>
-                            }
-                        </div>
-                    </h1>
-                    {Object.values(groupedPlants).length > 0 &&
-                        <div className="text-sm text-muted-foreground">
-                            {projectPlants.length} plantes
-                        </div>
-                    }
-                    <div className="grid">
-                        <div className='grid grid-cols-2 mt-2 ml-2'>
-                            <div className='flex-col'>
-                                {!Object.values(groupedPlants).length
-                                    ? (
-                                        <span className='text-lg'>
-                                            Le projet ne contient aucune plante
-                                        </span>
-                                    )
-                                    : Object.entries(groupedPlants || {})
-                                        .sort((a, b) => a[0].localeCompare(b[0]))
-                                        .map(([key, values], i) => (
-                                            <div key={key} className='mt-8'>
-                                                <h2 className='text-xl font-semibold flex items-center gap-2'>
-                                                    {React.createElement(getPlantType(key as PlantTypeValue).icon)}
-                                                    {getPlantType(key as PlantTypeValue).label}
-                                                    <span className='text-muted font-light text-sm'>({values?.length})</span>
-                                                </h2>
-                                                {values?.map((plant, j) => (
-                                                    <div key={j} className='mt-2'>
-                                                        <ShortPlantCard plant={plant} />
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        ))}
-                            </div>
-                            {Object.values(groupedPlants).length > 0 &&
-                                <div className='flex-col ml-8'>
-                                    <div className='flex-col mt-8'>
-                                        <div className='text-xl font-semibold'>
-                                            Ratio de types
-                                        </div>
-                                        <div className='mt-4'>
-                                            <ChartContainer config={typeChartConfig}>
-                                                <PieChart>
-                                                    <ChartTooltip
-                                                        cursor={false}
-                                                        content={
-                                                            <ChartTooltipContent hideLabel />
-                                                        }
-                                                    />
-                                                    <Pie data={typeChartData} dataKey="count" nameKey="type" />
-                                                </PieChart>
-                                            </ChartContainer>
-                                        </div>
-                                    </div>
-
-                                    <Separator className='mt-8' />
-                                    <div className='flex-col mt-8'>
-                                        <div className='text-xl font-semibold'>
-                                            Statistiques d'indigènes
-                                        </div>
-                                        <div className='mt-4'>
-                                            <div className='flex flex-col'>
-                                                <div>
-                                                    {nativeData && <Badge variant='outline' className="text-green-400">{nativeData.native}% d'espèces indigènes</Badge>}
-                                                </div>
-                                                <div>
-                                                    {nativeData && <Badge variant='outline'>{nativeData.other}% d'espèces autres</Badge>}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <Separator className='mt-8' />
-                                    <div className='flex-col mt-8'>
-                                        <div className='text-xl font-semibold'>
-                                            Ratio de genres
-                                        </div>
-                                        <div className='mt-4'>
-                                            <ChartContainer config={genusChartConfig}>
-                                                <PieChart>
-                                                    <ChartTooltip
-                                                        cursor={false}
-                                                        content={
-                                                            <ChartTooltipContent />
-                                                        }
-                                                    />
-                                                    <Pie data={genusChartData} dataKey="count" nameKey="genus" />
-                                                </PieChart>
-                                            </ChartContainer>
-                                        </div>
-                                    </div>
-
-                                    <Separator className='mt-8' />
-                                    <div className='flex-col mt-8'>
-                                        <div className='text-xl font-semibold'>
-                                            Groupes fonctionnels
-                                        </div>
-                                        <div className='mt-4'>
-                                            <ChartContainer
-                                                config={groupChartConfig}
-                                                className="aspect-square"
-                                            >
-                                                <RadialBarChart
-                                                    data={groupChartData}
-                                                    startAngle={180}
-                                                    endAngle={0}
-                                                    innerRadius={20}
-                                                    outerRadius={160}
-                                                >
-                                                    <ChartTooltip
-                                                        cursor={false}
-                                                        content={<ChartTooltipContent hideLabel nameKey="group" />}
-                                                    />
-                                                    <RadialBar dataKey="count" background>
-                                                        <LabelList
-                                                            position="middle"
-                                                            dataKey="group"
-                                                            className="fill-primary"
-                                                            fontSize={10}
-                                                        />
-                                                    </RadialBar>
-                                                </RadialBarChart>
-                                            </ChartContainer>
-                                        </div>
-                                    </div>
-
-                                    <Separator className='mt-8' />
-                                    <div className='flex-col mt-8'>
-                                        <div className='text-xl font-semibold'>
-                                            Calendrier des floraisons
-                                        </div>
-                                        <div className='mt-4'>
-                                            <table>
-                                                <thead className='table-auto'>
-                                                    <tr>
-                                                        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((month, i) => (
-                                                            <td key={`header-${month}`} className='px-1'>
-                                                                {month === 0
-                                                                    ? (<div>&nbsp;</div>)
-                                                                    : (<div>{monthLookup(month)}</div>)}
-                                                            </td>
-                                                        ))}
-                                                    </tr>
-                                                </thead>
-                                                <tbody className='table-auto'>
-                                                    {plantList.map((plant, j) => (
-                                                        <tr key={j}>
-                                                            {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((month, i) => (
-                                                                <td className='px-1'>
-                                                                    {month === 0
-                                                                        ? <div className='text-xs'>{plant.code}</div>
-                                                                        : <div className='flex justify-center items-center'>
-                                                                            {plant.bloom?.includes(month) ? 'X' : '-'}
-                                                                        </div>
-                                                                    }
-                                                                </td>
-                                                            ))}
-                                                        </tr>
-                                                    ))}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </div>
-    );
-}
-*/}
 
 ProjectPage.getLayout = (page: any) => {
     return <ProjectLayout>{page}</ProjectLayout>
