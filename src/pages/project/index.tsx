@@ -7,7 +7,7 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart"
-import { Bar, BarChart, CartesianGrid, Pie, PieChart, XAxis } from 'recharts';
+import { Area, AreaChart, Bar, BarChart, CartesianGrid, Pie, PieChart, XAxis, YAxis } from 'recharts';
 
 import { getPlantType, PLANTTYPES, PlantTypeValue } from '@/types/plant-type';
 import { FUNCTIONALGROUPS } from '@/types/functional-groups';
@@ -15,7 +15,7 @@ import { ProjectPlant, useProject } from '@/components/project-context';
 import { Button } from '@/components/ui/button';
 import ProjectLayout from './project-layout';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider } from '@/components/ui/sidebar';
-import { IconClipboardList, IconLeaf, IconMinus, IconTrees, IconX } from '@tabler/icons-react';
+import { IconArrowsVertical, IconClipboardList, IconLeaf, IconMinus, IconTrees, IconX } from '@tabler/icons-react';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableHeaderRow, TableRow } from '@/components/ui/table';
@@ -25,7 +25,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Label } from '@/components/ui/label';
 import { SectionTitle } from '@/components/section-title';
 import { Switch } from '@/components/ui/switch';
-import { PlantLink } from '@/components/plant-link';
+import { PlantLink, PlantName } from '@/components/plant-link';
+import { Plant } from '@/types/plant';
 
 interface ChartData {
     count: number,
@@ -50,6 +51,13 @@ const nativeChartConfig = {
         color: 'var(--color-text-muted)',
     }
 } satisfies ChartConfig;
+
+const heightChartConfig = {
+} satisfies ChartConfig;
+
+interface HeightChartData extends ChartData {
+    code: string,
+};
 
 interface GroupChartData extends ChartData {
     group: string,
@@ -91,6 +99,7 @@ function ProjectPage() {
         other: 0,
     });
     const [groupChartData, setGroupChartData] = useState<GroupChartData[]>();
+    const [heightChartData, setHeightChartData] = useState<HeightChartData[]>();
     const [groupedGenus, setGroupedGenus] = useState<Partial<Record<string, ProjectPlant[]>>>({});
     const [shownTypes, setShownTypes] = useState<string[]>([]);
 
@@ -123,6 +132,17 @@ function ProjectPage() {
         setGroupedGenus(groupedGenus);
     };
 
+    const setupHeightData = (plants: ProjectPlant[]) => {
+        const plantHeights = plants.map(plant => ({
+            code: plant.code,
+            count: plant.height ?? 0,
+            fill: 'var(--color-accent)',
+        }))
+            .filter(p => p.count > 0)
+            .sort((a, b) => a.count - b.count);
+        setHeightChartData(plantHeights);
+    };
+
     useEffect(() => {
         if (plantList.length) {
             const groupedTypes = Object.groupBy(plantList, plant => plant.type);
@@ -140,6 +160,7 @@ function ProjectPage() {
         setupNativeData(shownPlants);
         setupFunctionalGroupData(shownPlants);
         setupGenusData(shownPlants);
+        setupHeightData(shownPlants);
     }, [shownTypes]);
 
     useEffect(() => {
@@ -207,7 +228,7 @@ function ProjectPage() {
                             <Card className="@container/card">
                                 <CardHeader>
                                     <CardTitle className="text-2xl font-semibold tabular-nums">
-                                        Ratio d'indigènes
+                                        Ratio de plantes indigènes
                                     </CardTitle>
                                     <CardAction>
                                         <IconLeaf className='text-green-400' />
@@ -281,83 +302,84 @@ function ProjectPage() {
                             <Card className="@container/card">
                                 <CardHeader>
                                     <CardTitle className="text-2xl font-semibold tabular-nums">
-                                        Groupes fonctionnels
+                                        Hauteurs des végétaux
                                     </CardTitle>
                                     <CardAction>
-                                        <IconTrees />
+                                        <IconArrowsVertical />
                                     </CardAction>
                                 </CardHeader>
-                                <CardContent className='grow'>
-                                    <ChartContainer config={groupChartConfig} className=''>
-                                        <BarChart data={groupChartData}>
+                                <CardContent>
+                                    <ChartContainer config={heightChartConfig}>
+                                        <AreaChart data={heightChartData}
+                                            margin={{
+                                                left: -35,
+                                                right: 0,
+                                            }}
+                                        >
                                             <CartesianGrid vertical={false} />
                                             <XAxis
-                                                dataKey="group"
+                                                dataKey="code"
                                                 tickLine={false}
-                                                tickMargin={10}
+                                                axisLine={false}
+                                                tickMargin={8}
+                                                tickFormatter={(value) => value.slice(0, 3)}
+                                            />
+                                            <YAxis
+                                                dataKey="count"
+                                                tickLine={false}
                                                 axisLine={false}
                                             />
                                             <ChartTooltip
                                                 cursor={false}
+                                                label='title'
                                                 content={
-                                                    <ChartTooltipContent indicator='line' labelKey='title' nameKey='group' />
+                                                    <ChartTooltipContent
+                                                        cursor={false}
+                                                        labelFormatter={(value) => (
+                                                            <PlantName plant={plantList.find(p => p.code === value) as Plant} reduce />
+                                                        )}
+                                                        formatter={(value, name) => (
+                                                            <div className="text-muted-foreground flex min-w-[130px] items-center text-xs">
+                                                                Hauteur
+                                                                <div className="text-foreground ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums">
+                                                                    {value}&nbsp;m
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    />
                                                 }
-                                                wrapperClassName='rounded-sm border border-border shadow-md'
                                             />
-                                            <Bar dataKey="count" radius={4} />
-                                        </BarChart>
+                                            <defs>
+                                                <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
+                                                    <stop
+                                                        offset="5%"
+                                                        stopColor="var(--color-accent)"
+                                                        stopOpacity={0.8}
+                                                    />
+                                                    <stop
+                                                        offset="95%"
+                                                        stopColor="var(--color-accent)"
+                                                        stopOpacity={0.1}
+                                                    />
+                                                </linearGradient>
+                                            </defs>
+                                            <Area
+                                                dataKey="count"
+                                                type="natural"
+                                                fill="url(#fillDesktop)"
+                                                fillOpacity={0.4}
+                                                stroke="var(--color-accent)"
+                                            />
+                                        </AreaChart>
                                     </ChartContainer>
                                 </CardContent>
                                 <CardFooter className="flex-col items-start gap-1.5 text-sm">
                                     <div className="line-clamp-1 flex gap-2 font-medium">
-                                        Groupes fonctionnels non couverts : {(groupChartData || []).filter((value) => value.count === 0).map(value => value.group).join(', ')}
-                                    </div>
-                                    <div className="text-muted-foreground">
-                                        <Link className='flex items-center text-blue-600 dark:text-blue-500 hover:underline' href='/functional-groups'>
-                                            Plus d'informations
-                                        </Link>
-                                    </div>
-                                </CardFooter>
-                            </Card>
-
-                            <Card className="@container/card">
-                                <CardHeader>
-                                    <CardTitle className="text-2xl font-semibold tabular-nums">
-                                        Groupes fonctionnels
-                                    </CardTitle>
-                                    <CardAction>
-                                        <IconTrees />
-                                    </CardAction>
-                                </CardHeader>
-                                <CardContent className='grow'>
-                                    <ChartContainer config={groupChartConfig} className=''>
-                                        <BarChart data={groupChartData}>
-                                            <CartesianGrid vertical={false} />
-                                            <XAxis
-                                                dataKey="group"
-                                                tickLine={false}
-                                                tickMargin={10}
-                                                axisLine={false}
-                                            />
-                                            <ChartTooltip
-                                                cursor={false}
-                                                content={
-                                                    <ChartTooltipContent indicator='line' labelKey='title' nameKey='group' />
-                                                }
-                                                wrapperClassName='rounded-sm border border-border shadow-md'
-                                            />
-                                            <Bar dataKey="count" radius={4} />
-                                        </BarChart>
-                                    </ChartContainer>
-                                </CardContent>
-                                <CardFooter className="flex-col items-start gap-1.5 text-sm">
-                                    <div className="line-clamp-1 flex gap-2 font-medium">
-                                        Groupes fonctionnels non couverts : {(groupChartData || []).filter((value) => value.count === 0).map(value => value.group).join(', ')}
-                                    </div>
-                                    <div className="text-muted-foreground">
-                                        <Link className='flex items-center text-blue-600 dark:text-blue-500 hover:underline' href='/functional-groups'>
-                                            Plus d'informations
-                                        </Link>
+                                        Hauteur moyenne de
+                                        <span className='text-foreground'>
+                                            {(((heightChartData || []).reduce((sum, p) => sum + p.count, 0)) / (heightChartData?.length || 0)).toFixed(1)}
+                                            &nbsp;m
+                                        </span>
                                     </div>
                                 </CardFooter>
                             </Card>
