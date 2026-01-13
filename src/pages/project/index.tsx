@@ -15,8 +15,8 @@ import { FUNCTIONALGROUPS } from '@/types/functional-groups';
 import { ProjectPlant, useProject } from '@/components/project-context';
 import { Button } from '@/components/ui/button';
 import ProjectLayout from './project-layout';
-import { Sidebar, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuItem, SidebarProvider } from '@/components/ui/sidebar';
-import { IconClipboardList, IconLeaf, IconMinus, IconTrees } from '@tabler/icons-react';
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider } from '@/components/ui/sidebar';
+import { IconClipboardList, IconLeaf, IconMinus, IconTrees, IconX } from '@tabler/icons-react';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableHeaderRow, TableRow } from '@/components/ui/table';
@@ -169,26 +169,42 @@ function ProjectPage() {
                         </SidebarMenuItem>
                     </SidebarMenu>
                 </SidebarHeader>
-                <SidebarGroup>
-                    <SidebarGroupContent className="flex flex-col gap-2 p-2">
-                        <SidebarMenu>
-                            {PLANTTYPES
-                                .sort((a, b) => a.value.localeCompare(b.value))
-                                .map((type) => (
-                                    <SidebarMenuItem key={`sidebar-type-${type.value}`}>
-                                        <div className='flex items-center px-2 py-1'>
-                                            <div className={`flex items-center gap-2 my-1 grow ${groupedPlants[type.value]?.length ? '' : 'text-muted'}`}>
-                                                {React.createElement(type.icon)}
-                                                {type.label}
-                                                {groupedPlants[type.value]?.length && <span className='text-muted font-light text-sm'>({groupedPlants[type.value]?.length})</span>}
+                <SidebarContent>
+                    <SidebarGroup>
+                        <SidebarGroupContent className="flex flex-col gap-2 p-2">
+                            <SidebarMenu>
+                                {PLANTTYPES
+                                    .sort((a, b) => a.value.localeCompare(b.value))
+                                    .map((type) => (
+                                        <SidebarMenuItem key={`sidebar-type-${type.value}`}>
+                                            <div className='flex items-center px-2 py-1'>
+                                                <div className={`flex items-center gap-2 my-1 grow ${groupedPlants[type.value]?.length ? '' : 'text-muted'}`}>
+                                                    {React.createElement(type.icon)}
+                                                    {type.label}
+                                                    {groupedPlants[type.value]?.length && <span className='text-muted font-light text-sm'>({groupedPlants[type.value]?.length})</span>}
+                                                </div>
+                                                <Switch checked={shownTypes.includes(type.value)} id={type.value} disabled={!groupedPlants[type.value]?.length} onCheckedChange={checked => checked ? setShownTypes([...shownTypes, type.value]) : setShownTypes(shownTypes.filter(t => t !== type.value))} />
                                             </div>
-                                            <Switch checked={shownTypes.includes(type.value)} id={type.value} disabled={!groupedPlants[type.value]?.length} onCheckedChange={checked => checked ? setShownTypes([...shownTypes, type.value]) : setShownTypes(shownTypes.filter(t => t !== type.value))} />
-                                        </div>
-                                    </SidebarMenuItem>
-                                ))}
-                        </SidebarMenu>
-                    </SidebarGroupContent>
-                </SidebarGroup>
+                                        </SidebarMenuItem>
+                                    ))}
+                            </SidebarMenu>
+                        </SidebarGroupContent>
+                    </SidebarGroup>
+                </SidebarContent>
+                <SidebarFooter>
+                    <SidebarGroup>
+                        <SidebarGroupContent>
+                            <SidebarMenu>
+                                <SidebarMenuItem>
+                                    <SidebarMenuButton className='cursor-pointer text-destructive hover:text-destructive/50' onClick={() => clearCart()} disabled={projectPlants.length === 0}>
+                                        <IconX />
+                                        <span>Vider le projet</span>
+                                    </SidebarMenuButton>
+                                </SidebarMenuItem>
+                            </SidebarMenu>
+                        </SidebarGroupContent>
+                    </SidebarGroup>
+                </SidebarFooter>
             </Sidebar >
             <SidebarInset>
                 <div className="@container/main gap-2 items-center px-6 overflow-auto block">
@@ -458,7 +474,7 @@ function ProjectPage() {
                                                 <TabsTrigger value="families">Familles</TabsTrigger>
                                             </TabsList>
 
-                                            <Button variant="destructive" size="sm" className='cursor-pointer' onClick={() => clearCart()}>
+                                            <Button variant="destructive" size="sm" className='cursor-pointer' onClick={() => clearCart()} disabled={projectPlants.length === 0}>
                                                 Supprimer tout
                                             </Button>
                                         </div>
