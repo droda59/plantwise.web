@@ -18,14 +18,15 @@ import { ProjectPlant, useProject } from '@/components/project-context';
 import { Button } from '@/components/ui/button';
 import ProjectLayout from './project-layout';
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarInset, SidebarMenu, SidebarProvider } from '@/components/ui/sidebar';
-import { IconLeaf, IconTrees } from '@tabler/icons-react';
+import { IconLeaf, IconMinus, IconTrees } from '@tabler/icons-react';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { EllipsisVerticalIcon } from 'lucide-react';
+import { ArrowUpDownIcon, EllipsisVerticalIcon, ListFilterIcon } from 'lucide-react';
 import { cn, getFullPlantName } from '@/lib/utils';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface ChartData {
     count: number,
@@ -83,7 +84,6 @@ const groupChartConfig = {
         }
     })).reduce((acc, curr) => ({ ...acc, ...curr }), {}),
 } satisfies ChartConfig;
-console.log(groupChartConfig);
 
 function getRandomColor() {
     return '#' + Math.floor(Math.random() * 16777215).toString(16);
@@ -106,7 +106,7 @@ const monthLookup = (month: number) => ({
 }[month]);
 
 function ProjectPage() {
-    const { projectPlants, clearCart } = useProject();
+    const { projectPlants, clearCart, removeFromProject } = useProject();
 
     const [plantList, setPlantList] = useState<ProjectPlant[]>([]);
     const [groupedPlants, setGroupedPlants] = useState<Partial<Record<PlantTypeValue, ProjectPlant[]>>>({});
@@ -362,7 +362,7 @@ function ProjectPage() {
                                             <tr>
                                                 <th>&nbsp;</th>
                                                 {months.map((month, i) => (
-                                                    <th key={`header-${month}`} className='px-1'>
+                                                    <th key={`header-${month}`} className='px-1 text-foreground font-medium'>
                                                         {monthLookup(month)}
                                                     </th>
                                                 ))}
@@ -431,8 +431,9 @@ function ProjectPage() {
                                 <CardHeader className="flex flex-row items-center justify-between">
                                     <Tabs defaultValue="all">
                                         <TabsList className="w-full @3xl/page:w-fit">
-                                            <TabsTrigger value="all">Familles</TabsTrigger>
-                                            <TabsTrigger value="in-stock">Genres</TabsTrigger>
+                                            <TabsTrigger value="all">Végétaux</TabsTrigger>
+                                            <TabsTrigger value="genus">Genres</TabsTrigger>
+                                            <TabsTrigger value="families">Familles</TabsTrigger>
                                         </TabsList>
                                     </Tabs>
                                 </CardHeader>
@@ -440,61 +441,57 @@ function ProjectPage() {
                                     <Table>
                                         <TableHeader>
                                             <TableRow>
-                                                <TableHead>Product</TableHead>
-                                                <TableHead className="text-right">Price</TableHead>
-                                                <TableHead className="text-right">Stock</TableHead>
-                                                <TableHead>Status</TableHead>
-                                                <TableHead>Date Added</TableHead>
-                                                <TableHead />
+                                                <TableHead>Nom</TableHead>
+                                                <TableHead>Type</TableHead>
+                                                <TableHead>Genre</TableHead>
+                                                <TableHead>Famille</TableHead>
+                                                <TableHead>Gr. fonctionnel</TableHead>
+                                                <TableHead>Statut</TableHead>
+                                                <TableHead className='text-right'>Supprimer</TableHead>
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody className="**:data-[slot=table-cell]:py-2.5">
-                                            {plantList.map((plant) => (
-                                                <TableRow key={plant.code}>
-                                                    <TableCell className="font-medium">
-                                                        <span className='italic'>{plant.species || plant.genus}</span>
-                                                        {plant.cultivar && <span>&nbsp;'{plant.cultivar}'</span>}
-                                                        {plant.note && <span>&nbsp;({plant.note})</span>}
-                                                    </TableCell>
-                                                    <TableCell className="text-right">
-                                                        ${plant.family}
-                                                    </TableCell>
-                                                    <TableCell className="text-right">{plant.genus}</TableCell>
-                                                    <TableCell>
-                                                        <Badge
-                                                            variant="secondary"
-                                                            className={
-                                                                plant.isNative
-                                                                    ? "text-green-400"
-                                                                    : "text-muted-foreground"
-                                                            }
-                                                        >
-                                                            {plant.isNative ? "Indigène" : "Exotique"}
-                                                        </Badge>
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        <DropdownMenu>
-                                                            <DropdownMenuTrigger asChild>
-                                                                <Button variant="ghost" size="icon" className="size-6">
-                                                                    <EllipsisVerticalIcon />
+                                            {Object.entries(groupedPlants || {})
+                                                .sort((a, b) => a[0].localeCompare(b[0]))
+                                                .map(([key, values], i) =>
+                                                    values?.sort((a, b) => getFullPlantName(a).localeCompare(getFullPlantName(b))).map((plant, j) => (
+                                                        <TableRow key={plant.code}>
+                                                            <TableCell className='font-medium'>
+                                                                <div className='flex-col'>
+                                                                    <Link href={`/plant/${plant.code}`} className='hover:underline block'>
+                                                                        <span className='italic'>{plant.species || plant.genus}</span>
+                                                                        {plant.cultivar && <span>&nbsp;'{plant.cultivar}'</span>}
+                                                                        {plant.note && <span>&nbsp;({plant.note})</span>}
+                                                                    </Link>
+                                                                    <span className='text-muted-foreground text-sm font-light'>{plant.commonName}</span>
+                                                                </div>
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                <div className='flex items-center gap-2'>
+                                                                    {React.createElement(getPlantType(plant.type).icon, { height: 16 })}
+                                                                    {getPlantType(plant.type).label}
+                                                                </div>
+                                                            </TableCell>
+                                                            <TableCell className='italic'>{plant.genus}</TableCell>
+                                                            <TableCell className='italic'>{plant.family}</TableCell>
+                                                            <TableCell>{plant.functionalGroup}</TableCell>
+                                                            <TableCell>
+                                                                <div className={`flex items-center gap-2 ${plant.isNative && 'text-green-400'}`}>
+                                                                    {plant.isNative ? <IconLeaf className='text-green-400' height={16} /> : null}
+                                                                    {plant.isNative ? "Indigène" : "Exotique"}
+                                                                </div>
+                                                            </TableCell>
+                                                            <TableCell className='text-right'>
+                                                                <Button variant='destructive' className='px-1 py-1 cursor-pointer' onClick={() => removeFromProject(plant)}>
+                                                                    <IconMinus />
                                                                 </Button>
-                                                            </DropdownMenuTrigger>
-                                                            <DropdownMenuContent align="end">
-                                                                <DropdownMenuItem variant="destructive">
-                                                                    Delete
-                                                                </DropdownMenuItem>
-                                                            </DropdownMenuContent>
-                                                        </DropdownMenu>
-                                                    </TableCell>
-                                                </TableRow>
-                                            ))}
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    )
+                                                    ))}
                                         </TableBody>
                                     </Table>
                                 </CardContent>
-                                <CardFooter className="flex flex-col items-center justify-between border-t pt-6 @3xl/page:flex-row">
-                                    <div className="text-muted-foreground hidden text-sm @3xl/page:block">
-                                    </div>
-                                </CardFooter>
                             </Card>
                         </div>
                     </div>

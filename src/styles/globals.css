@@ -61,7 +61,7 @@
     --color-frame: #262626;
     --color-text: #f7f5ee;
     --color-text-muted: #82817f;
-
+    --destructive: #E03E3E;
 
     --gray-background: #0d1117;
     /* fond principal */
@@ -147,6 +147,7 @@
     --bg-color: var(--gray-background);
 
     --primary: var(--color-highlight);
+    --destructive: #E03E3E;
 
     --background: var(--gray-component);
     --foreground: var(--color-accent);
