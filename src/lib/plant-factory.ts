@@ -31,7 +31,7 @@ export class PlantFactory {
             airSaltTolerance: data.airSaltTolerance,
             soilAcidity: data.soilAcidity,
 
-            bloom: !!data.bloom ? String(data.bloom).split(',').map(b => Number(b.trim())) : [],
+            bloom: !!data.bloom ? String(data.bloom).split(' ').map(b => Number(b.trim())) : [],
             functionalGroup: data.functionalGroup,
             grouping: data.grouping,
 
