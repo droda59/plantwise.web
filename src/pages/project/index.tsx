@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 
-import { ShortPlantCard } from '@/components/features/project/short-plant-card';
 import {
     ChartConfig,
     ChartContainer,
@@ -11,23 +10,22 @@ import {
 } from "@/components/ui/chart"
 import { Bar, BarChart, CartesianGrid, Pie, PieChart, XAxis } from 'recharts';
 
-import { getPlantType, PLANTTYPES, PlantTypeValue } from '@/types/plantType';
+import { getPlantType, PLANTTYPES, PlantTypeValue } from '@/types/plant-type';
 import { FUNCTIONALGROUPS } from '@/types/functional-groups';
-import { Badge } from '@/components/ui/badge';
 import { ProjectPlant, useProject } from '@/components/project-context';
 import { Button } from '@/components/ui/button';
 import ProjectLayout from './project-layout';
-import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarInset, SidebarMenu, SidebarProvider } from '@/components/ui/sidebar';
-import { IconLeaf, IconMinus, IconTrees } from '@tabler/icons-react';
+import { Sidebar, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuItem, SidebarProvider } from '@/components/ui/sidebar';
+import { IconClipboardList, IconLeaf, IconMinus, IconTrees } from '@tabler/icons-react';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { ArrowUpDownIcon, EllipsisVerticalIcon, ListFilterIcon } from 'lucide-react';
-import { cn, getFullPlantName } from '@/lib/utils';
+import { getFullPlantName } from '@/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
+import { SectionTitle } from '@/components/section-title';
+import { Switch } from '@/components/ui/switch';
 
 interface ChartData {
     count: number,
@@ -36,10 +34,6 @@ interface ChartData {
 
 interface NativeChartData extends ChartData {
     native: string
-};
-
-interface TypeChartData extends ChartData {
-    type: string
 };
 
 const typeChartConfig: Record<string, typeof PLANTTYPES[number]> = {};
@@ -60,16 +54,6 @@ const nativeChartConfig = {
     }
 } satisfies ChartConfig;
 
-interface GenusChartData extends ChartData {
-    genus: string,
-};
-
-const genusChartConfig = {
-    genus: {
-        label: 'Genre',
-    },
-} satisfies ChartConfig;
-
 interface GroupChartData extends ChartData {
     group: string,
 };
@@ -85,10 +69,6 @@ const groupChartConfig = {
         }
     })).reduce((acc, curr) => ({ ...acc, ...curr }), {}),
 } satisfies ChartConfig;
-
-function getRandomColor() {
-    return '#' + Math.floor(Math.random() * 16777215).toString(16);
-}
 
 const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 const monthLookup = (month: number) => ({
@@ -111,54 +91,59 @@ function ProjectPage() {
 
     const [plantList, setPlantList] = useState<ProjectPlant[]>([]);
     const [groupedPlants, setGroupedPlants] = useState<Partial<Record<PlantTypeValue, ProjectPlant[]>>>({});
-    // const [typeChartData, setTypeChartData] = useState<TypeChartData[]>();
     const [nativeChartData, setNativeChartData] = useState<NativeChartData[]>();
     const [nativeData, setNativeData] = useState({
         native: 0,
         other: 0,
     });
     const [groupChartData, setGroupChartData] = useState<GroupChartData[]>();
-    const [genusChartData, setGenusChartData] = useState<GenusChartData[]>();
     const [groupedGenus, setGroupedGenus] = useState<Partial<Record<string, ProjectPlant[]>>>({});
+    const [shownTypes, setShownTypes] = useState<string[]>([]);
+
+    const setupNativeData = (plants: ProjectPlant[]) => {
+        const nativeData = {
+            native: ~~((plants.filter(p => p.isNative).length / plantList.length) * 100),
+            other: 0,
+        };
+        nativeData.other = 100 - nativeData.native;
+        setNativeData(nativeData);
+        setNativeChartData(Object.entries(nativeData).map(([key, count]) => ({
+            native: key,
+            count,
+            fill: nativeChartConfig[key as keyof typeof nativeChartConfig].color
+        })));
+    };
+
+    const setupFunctionalGroupData = (plants: ProjectPlant[]) => {
+        const groupedGroups = Object.groupBy(plants, plant => plant.functionalGroup ?? 'unknown');
+        const data = FUNCTIONALGROUPS.map(g => ({
+            group: g.value,
+            count: groupedGroups[g.value]?.length ?? 0,
+            fill: groupChartConfig[g.value as keyof typeof groupChartConfig].color
+        }));
+        setGroupChartData(data);
+    };
+
+    const setupGenusData = (plants: ProjectPlant[]) => {
+        const groupedGenus = Object.groupBy(plants, plant => plant.genus);
+        setGroupedGenus(groupedGenus);
+    };
 
     useEffect(() => {
         if (plantList.length) {
             const groupedTypes = Object.groupBy(plantList, plant => plant.type);
             setGroupedPlants(groupedTypes);
-
-            /*
-            setTypeChartData(Object.entries(groupedTypes).map(([key, values]) => ({
-                type: key, count: (values ?? []).reduce((a, b) => a + 1, 0), fill: getPlantType(key as PlantTypeValue).color
-            })));
-            */
-
-            const nativeData = {
-                native: ~~((plantList.filter(p => p.isNative).length / plantList.length) * 100),
-                other: 0,
-            };
-            nativeData.other = 100 - nativeData.native;
-            setNativeData(nativeData);
-            setNativeChartData(Object.entries(nativeData).map(([key, count]) => ({
-                native: key,
-                count,
-                fill: nativeChartConfig[key as keyof typeof nativeChartConfig].color
-            })));
-
-            const groupedGroups = Object.groupBy(plantList, plant => plant.functionalGroup ?? 'unknown');
-            const data = FUNCTIONALGROUPS.map(g => ({
-                group: g.value,
-                count: groupedGroups[g.value]?.length ?? 0,
-                fill: groupChartConfig[g.value as keyof typeof groupChartConfig].color
-            }));
-            setGroupChartData(data);
-
-            const groupedGenus = Object.groupBy(plantList, plant => plant.genus);
-            setGroupedGenus(groupedGenus);
-            setGenusChartData(Object.entries(groupedGenus).map(([key, values]) => ({
-                genus: key, count: (values ?? []).reduce((a, b) => a + 1, 0), fill: getRandomColor()
-            })));
+            setShownTypes(Object.keys(groupedTypes));
         }
     }, [plantList]);
+
+    useEffect(() => {
+        const shownPlants = plantList.filter(plant => shownTypes.includes(plant.type));
+
+        setupNativeData(shownPlants);
+        setupFunctionalGroupData(shownPlants);
+        setupGenusData(shownPlants);
+    }, [shownTypes]);
 
     useEffect(() => {
         setPlantList(projectPlants);
@@ -168,79 +153,44 @@ function ProjectPage() {
         <SidebarProvider
             style={
                 {
-                    "--sidebar-width": "calc(var(--spacing) * 100)",
+                    "--sidebar-width": "calc(var(--spacing) * 80)",
                     "--header-height": "calc(var(--spacing) * 12)",
                 } as React.CSSProperties
             }
         >
             <Sidebar collapsible="offcanvas" variant="inset" >
-                <SidebarContent>
-                    {Object.entries(groupedPlants || {})
-                        .sort((a, b) => a[0].localeCompare(b[0]))
-                        .map(([key, values], i) => (
-                            <SidebarGroup key={key}>
-                                <SidebarGroupContent className="flex flex-col gap-2 p-2">
-                                    <SidebarMenu>
-                                        <h2 className='text-xl font-semibold flex items-center gap-2'>
-                                            {React.createElement(getPlantType(key as PlantTypeValue).icon)}
-                                            {getPlantType(key as PlantTypeValue).label}
-                                            <span className='text-muted font-light text-sm'>({values?.length})</span>
-                                        </h2>
-
-                                        {values?.sort((a, b) => getFullPlantName(a).localeCompare(getFullPlantName(b))).map((plant, j) => (
-                                            <div key={j} className='mt-2'>
-                                                <ShortPlantCard plant={plant} />
+                <SidebarHeader>
+                    <SidebarMenu>
+                        <SidebarMenuItem>
+                            <SectionTitle icon={IconClipboardList} title="Projet" />
+                        </SidebarMenuItem>
+                    </SidebarMenu>
+                </SidebarHeader>
+                <SidebarGroup>
+                    <SidebarGroupContent className="flex flex-col gap-2 p-2">
+                        <SidebarMenu>
+                            {PLANTTYPES
+                                .sort((a, b) => a.value.localeCompare(b.value))
+                                .map((type, i) => (
+                                    <SidebarMenuItem>
+                                        <div className='flex items-center px-2 py-1'>
+                                            <div className={`flex items-center gap-2 my-1 grow ${groupedPlants[type.value]?.length ? '' : 'text-muted'}`}>
+                                                {React.createElement(type.icon)}
+                                                {type.label}
+                                                {groupedPlants[type.value]?.length && <span className='text-muted font-light text-sm'>({groupedPlants[type.value]?.length})</span>}
                                             </div>
-                                        ))}
-                                    </SidebarMenu>
-                                </SidebarGroupContent>
-                            </SidebarGroup>
-                        ))}
-                </SidebarContent>
+                                            <Switch checked={shownTypes.includes(type.value)} id={type.value} disabled={!groupedPlants[type.value]?.length} onCheckedChange={checked => checked ? setShownTypes([...shownTypes, type.value]) : setShownTypes(shownTypes.filter(t => t !== type.value))} />
+                                        </div>
+                                    </SidebarMenuItem>
+                                ))}
+                        </SidebarMenu>
+                    </SidebarGroupContent>
+                </SidebarGroup>
             </Sidebar >
             <SidebarInset>
                 <div className="@container/main gap-2 items-center px-6 overflow-auto block">
                     <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
                         <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs @xl/main:grid-cols-2 @5xl/main:grid-cols-2">
-                            {/*
-                            <Card className="@container/card">
-                                <CardHeader>
-                                    <CardDescription>Ratio de types</CardDescription>
-                                    <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-                                        $1,250.00
-                                    </CardTitle>
-                                    <CardAction>
-                                        <Badge variant="outline">
-                                            <IconTrendingUp />
-                                            +12.5%
-                                        </Badge>
-                                    </CardAction>
-                                </CardHeader>
-                                <CardContent>
-                                    <ChartContainer config={typeChartConfig}>
-                                        <PieChart>
-                                            <ChartTooltip
-                                                cursor={false}
-                                                content={
-                                                    <ChartTooltipContent hideLabel />
-                                                }
-                                            />
-                                            <Pie data={typeChartData} dataKey="count" nameKey="type" />
-                                            <ChartLegend content={<ChartLegendContent />} />
-                                        </PieChart>
-                                    </ChartContainer>
-                                </CardContent>
-                                <CardFooter className="flex-col items-start gap-1.5 text-sm">
-                                    <div className="line-clamp-1 flex gap-2 font-medium">
-                                        Trending up this month <IconTrendingUp className="size-4" />
-                                    </div>
-                                    <div className="text-muted-foreground">
-                                        Visitors for the last 6 months
-                                    </div>
-                                </CardFooter>
-                            </Card>
-                            */}
-
                             <Card className="@container/card">
                                 <CardHeader>
                                     <CardTitle className="text-2xl font-semibold tabular-nums">
@@ -314,42 +264,6 @@ function ProjectPage() {
                                     </div>
                                 </CardFooter>
                             </Card>
-
-                            {/*
-                            <Card className="@container/card">
-                                <CardHeader>
-                                    <CardTitle className="text-2xl font-semibold tabular-nums">
-                                        Genres utilisés
-                                    </CardTitle>
-                                    <CardAction>
-                                        <IconTrees />
-                                    </CardAction>
-                                </CardHeader>
-                                <CardContent className='grow'>
-                                    <ChartContainer config={genusChartConfig}>
-                                        <PieChart>
-                                            <ChartTooltip
-                                                cursor={false}
-                                                content={
-                                                    <ChartTooltipContent />
-                                                }
-                                            />
-                                            <Pie data={genusChartData} dataKey="count" nameKey="genus" />
-                                        </PieChart>
-                                    </ChartContainer>
-                                </CardContent>
-                                <CardFooter className="flex-col items-start gap-1.5 text-sm">
-                                    <div className="line-clamp-1 flex gap-2 font-medium">
-                                        Groupes fonctionnels non couverts : {(groupChartData || []).filter((value) => value.count === 0).map(value => value.group).join(', ')}
-                                    </div>
-                                    <div className="text-muted-foreground">
-                                        <Link className='flex items-center text-blue-600 dark:text-blue-500 hover:underline' href='/functional-groups'>
-                                            Plus d'informations
-                                        </Link>
-                                    </div>
-                                </CardFooter>
-                            </Card>
-                            */}
                         </div>
 
                         <div className="grid grid-cols-1 gap-4 @4xl/page:grid-cols-[2fr_1fr] px-4">
@@ -371,22 +285,22 @@ function ProjectPage() {
                                                 ))}
                                             </tr>
                                         </thead>
-                                        {Object.entries(groupedPlants || {})
-                                            .sort((a, b) => a[0].localeCompare(b[0]))
-                                            .map(([key, values], i) => (
+                                        {shownTypes
+                                            .sort((a, b) => a.localeCompare(b))
+                                            .map((type, i) => (
                                                 <>
                                                     <tbody className='table-auto'>
                                                         <tr>
                                                             <th className='text-md font-medium py-1 pl-2 bg-muted/10' colSpan={13}>
                                                                 <div className='flex items-center gap-2'>
-                                                                    {React.createElement(getPlantType(key as PlantTypeValue).icon)}
-                                                                    {getPlantType(key as PlantTypeValue).label}
+                                                                    {React.createElement(getPlantType(type as PlantTypeValue).icon)}
+                                                                    {getPlantType(type as PlantTypeValue).label}
                                                                 </div>
                                                             </th>
                                                         </tr>
                                                     </tbody>
 
-                                                    {values?.sort((a, b) => getFullPlantName(a).localeCompare(getFullPlantName(b))).map((plant, j) => (
+                                                    {groupedPlants[type as PlantTypeValue]?.sort((a, b) => getFullPlantName(a).localeCompare(getFullPlantName(b))).map((plant, j) => (
                                                         <tbody className='table-auto'>
                                                             <tr key={j}>
                                                                 <th className='w-1/4 text-right pr-2 pt-2'>
@@ -410,7 +324,7 @@ function ProjectPage() {
                                                                                 months.slice(0, plant.bloom[0] - 1).map(() => (
                                                                                     <td className='w-[6.25%] py-2' />
                                                                                 ))}
-                                                                            {plant.bloom && plant.bloom.map(month => (
+                                                                            {plant.bloom && plant.bloom.map(() => (
                                                                                 <td className={`w-[6.25%] py-2 bloom-month ${plant.bloom?.length === 1 && 'solo'}`}><div className='h-4 bg-accent-foreground'>&nbsp;</div></td>
                                                                             ))}
                                                                             {plant.bloom && plant.bloom.length !== 0 &&
@@ -458,6 +372,10 @@ function ProjectPage() {
                                                 <TabsTrigger value="genus">Genres</TabsTrigger>
                                                 <TabsTrigger value="families">Familles</TabsTrigger>
                                             </TabsList>
+
+                                            <Button variant="destructive" size="sm" className='cursor-pointer' onClick={() => clearCart()}>
+                                                Supprimer tout
+                                            </Button>
                                         </div>
                                         <TabsContent value="all" className="relative flex flex-col overflow-auto">
                                             <Table>
@@ -469,14 +387,13 @@ function ProjectPage() {
                                                         <TableHead>Famille</TableHead>
                                                         <TableHead>Gr. fonctionnel</TableHead>
                                                         <TableHead>Statut</TableHead>
-                                                        <TableHead className='text-right'>Supprimer</TableHead>
                                                     </TableRow>
                                                 </TableHeader>
                                                 <TableBody className="**:data-[slot=table-cell]:py-2.5">
-                                                    {Object.entries(groupedPlants || {})
-                                                        .sort((a, b) => a[0].localeCompare(b[0]))
-                                                        .map(([key, values], i) =>
-                                                            values?.sort((a, b) => getFullPlantName(a).localeCompare(getFullPlantName(b))).map((plant, j) => (
+                                                    {shownTypes
+                                                        .sort((a, b) => a.localeCompare(b))
+                                                        .map((type, i) =>
+                                                            groupedPlants[type as PlantTypeValue]?.sort((a, b) => getFullPlantName(a).localeCompare(getFullPlantName(b))).map((plant, j) => (
                                                                 <TableRow key={plant.code}>
                                                                     <TableCell className='font-medium'>
                                                                         <div className='flex-col'>
