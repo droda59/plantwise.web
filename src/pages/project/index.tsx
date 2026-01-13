@@ -22,11 +22,12 @@ import { IconLeaf, IconMinus, IconTrees } from '@tabler/icons-react';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { ArrowUpDownIcon, EllipsisVerticalIcon, ListFilterIcon } from 'lucide-react';
 import { cn, getFullPlantName } from '@/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
 
 interface ChartData {
     count: number,
@@ -118,6 +119,7 @@ function ProjectPage() {
     });
     const [groupChartData, setGroupChartData] = useState<GroupChartData[]>();
     const [genusChartData, setGenusChartData] = useState<GenusChartData[]>();
+    const [groupedGenus, setGroupedGenus] = useState<Partial<Record<string, ProjectPlant[]>>>({});
 
     useEffect(() => {
         if (plantList.length) {
@@ -151,6 +153,7 @@ function ProjectPage() {
             setGroupChartData(data);
 
             const groupedGenus = Object.groupBy(plantList, plant => plant.genus);
+            setGroupedGenus(groupedGenus);
             setGenusChartData(Object.entries(groupedGenus).map(([key, values]) => ({
                 genus: key, count: (values ?? []).reduce((a, b) => a + 1, 0), fill: getRandomColor()
             })));
@@ -429,68 +432,138 @@ function ProjectPage() {
                         <div className="grid grid-cols-1 gap-4 @4xl/page:grid-cols-[2fr_1fr] px-4">
                             <Card className="flex w-full flex-col gap-4">
                                 <CardHeader className="flex flex-row items-center justify-between">
-                                    <Tabs defaultValue="all">
-                                        <TabsList className="w-full @3xl/page:w-fit">
-                                            <TabsTrigger value="all">Végétaux</TabsTrigger>
-                                            <TabsTrigger value="genus">Genres</TabsTrigger>
-                                            <TabsTrigger value="families">Familles</TabsTrigger>
-                                        </TabsList>
-                                    </Tabs>
                                 </CardHeader>
                                 <CardContent>
-                                    <Table>
-                                        <TableHeader>
-                                            <TableRow>
-                                                <TableHead>Nom</TableHead>
-                                                <TableHead>Type</TableHead>
-                                                <TableHead>Genre</TableHead>
-                                                <TableHead>Famille</TableHead>
-                                                <TableHead>Gr. fonctionnel</TableHead>
-                                                <TableHead>Statut</TableHead>
-                                                <TableHead className='text-right'>Supprimer</TableHead>
-                                            </TableRow>
-                                        </TableHeader>
-                                        <TableBody className="**:data-[slot=table-cell]:py-2.5">
-                                            {Object.entries(groupedPlants || {})
-                                                .sort((a, b) => a[0].localeCompare(b[0]))
-                                                .map(([key, values], i) =>
-                                                    values?.sort((a, b) => getFullPlantName(a).localeCompare(getFullPlantName(b))).map((plant, j) => (
-                                                        <TableRow key={plant.code}>
-                                                            <TableCell className='font-medium'>
-                                                                <div className='flex-col'>
-                                                                    <Link href={`/plant/${plant.code}`} className='hover:underline block'>
-                                                                        <span className='italic'>{plant.species || plant.genus}</span>
-                                                                        {plant.cultivar && <span>&nbsp;'{plant.cultivar}'</span>}
-                                                                        {plant.note && <span>&nbsp;({plant.note})</span>}
-                                                                    </Link>
-                                                                    <span className='text-muted-foreground text-sm font-light'>{plant.commonName}</span>
-                                                                </div>
-                                                            </TableCell>
-                                                            <TableCell>
-                                                                <div className='flex items-center gap-2'>
-                                                                    {React.createElement(getPlantType(plant.type).icon, { height: 16 })}
-                                                                    {getPlantType(plant.type).label}
-                                                                </div>
-                                                            </TableCell>
-                                                            <TableCell className='italic'>{plant.genus}</TableCell>
-                                                            <TableCell className='italic'>{plant.family}</TableCell>
-                                                            <TableCell>{plant.functionalGroup}</TableCell>
-                                                            <TableCell>
-                                                                <div className={`flex items-center gap-2 ${plant.isNative && 'text-green-400'}`}>
-                                                                    {plant.isNative ? <IconLeaf className='text-green-400' height={16} /> : null}
-                                                                    {plant.isNative ? "Indigène" : "Exotique"}
-                                                                </div>
-                                                            </TableCell>
-                                                            <TableCell className='text-right'>
-                                                                <Button variant='destructive' className='px-1 py-1 cursor-pointer' onClick={() => removeFromProject(plant)}>
-                                                                    <IconMinus />
-                                                                </Button>
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    )
-                                                    ))}
-                                        </TableBody>
-                                    </Table>
+                                    <Tabs defaultValue="all">
+                                        <div className="flex items-center justify-between">
+                                            <Label htmlFor="view-selector" className="sr-only">
+                                                Vue
+                                            </Label>
+                                            <Select defaultValue="all">
+                                                <SelectTrigger
+                                                    className="flex w-fit @4xl/main:hidden"
+                                                    size="sm"
+                                                    id="view-selector"
+                                                >
+                                                    <SelectValue placeholder="Sélectionner une vue" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="all">Végétaux</SelectItem>
+                                                    <SelectItem value="genus">Genres</SelectItem>
+                                                    <SelectItem value="families">Familles</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                            <TabsList className="**:data-[slot=tabs-trigger]:bg-muted-foreground/30 hidden **:data-[slot=badge]:size-5 **:data-[slot=tabs-trigger]:rounded-xs flex">
+                                                <TabsTrigger value="all">Végétaux</TabsTrigger>
+                                                <TabsTrigger value="genus">Genres</TabsTrigger>
+                                                <TabsTrigger value="families">Familles</TabsTrigger>
+                                            </TabsList>
+                                        </div>
+                                        <TabsContent value="all" className="relative flex flex-col overflow-auto">
+                                            <Table>
+                                                <TableHeader>
+                                                    <TableRow>
+                                                        <TableHead>Nom</TableHead>
+                                                        <TableHead>Type</TableHead>
+                                                        <TableHead>Genre</TableHead>
+                                                        <TableHead>Famille</TableHead>
+                                                        <TableHead>Gr. fonctionnel</TableHead>
+                                                        <TableHead>Statut</TableHead>
+                                                        <TableHead className='text-right'>Supprimer</TableHead>
+                                                    </TableRow>
+                                                </TableHeader>
+                                                <TableBody className="**:data-[slot=table-cell]:py-2.5">
+                                                    {Object.entries(groupedPlants || {})
+                                                        .sort((a, b) => a[0].localeCompare(b[0]))
+                                                        .map(([key, values], i) =>
+                                                            values?.sort((a, b) => getFullPlantName(a).localeCompare(getFullPlantName(b))).map((plant, j) => (
+                                                                <TableRow key={plant.code}>
+                                                                    <TableCell className='font-medium'>
+                                                                        <div className='flex-col'>
+                                                                            <Link href={`/plant/${plant.code}`} className='hover:underline block'>
+                                                                                <span className='italic'>{plant.species || plant.genus}</span>
+                                                                                {plant.cultivar && <span>&nbsp;'{plant.cultivar}'</span>}
+                                                                                {plant.note && <span>&nbsp;({plant.note})</span>}
+                                                                            </Link>
+                                                                            <span className='text-muted-foreground text-sm font-light'>{plant.commonName}</span>
+                                                                        </div>
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        <div className='flex items-center gap-2'>
+                                                                            {React.createElement(getPlantType(plant.type).icon, { height: 16 })}
+                                                                            {getPlantType(plant.type).label}
+                                                                        </div>
+                                                                    </TableCell>
+                                                                    <TableCell className='italic'>
+                                                                        <Link className='hover:underline' href={`/genus/${plant.genus}`}>{plant.genus}</Link>
+                                                                    </TableCell>
+                                                                    <TableCell className='italic'>{plant.family}</TableCell>
+                                                                    <TableCell>{plant.functionalGroup}</TableCell>
+                                                                    <TableCell>
+                                                                        <div className={`flex items-center gap-2 ${plant.isNative && 'text-green-400'}`}>
+                                                                            {plant.isNative ? <IconLeaf className='text-green-400' height={16} /> : null}
+                                                                            {plant.isNative ? "Indigène" : "Exotique"}
+                                                                        </div>
+                                                                    </TableCell>
+                                                                    <TableCell className='text-right'>
+                                                                        <Button variant='destructive' className='px-1 py-1 cursor-pointer' onClick={() => removeFromProject(plant)}>
+                                                                            <IconMinus />
+                                                                        </Button>
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                            )))}
+                                                </TableBody>
+                                            </Table>
+                                        </TabsContent>
+
+                                        <TabsContent value="genus" className="relative flex flex-col overflow-auto">
+                                            <Table>
+                                                <TableHeader>
+                                                    <TableRow>
+                                                        <TableHead>Genre</TableHead>
+                                                        <TableHead>Famille</TableHead>
+                                                        <TableHead>Nombre</TableHead>
+                                                    </TableRow>
+                                                </TableHeader>
+                                                <TableBody className="**:data-[slot=table-cell]:py-2.5">
+                                                    {Object.entries(groupedGenus)
+                                                        .sort((a, b) => a[0].localeCompare(b[0]))
+                                                        .map(([key, values], i) =>
+                                                            <TableRow key={key}>
+                                                                <TableCell className='italic'>
+                                                                    <Link className='hover:underline' href={`/genus/${key}`}>{key}</Link>
+                                                                </TableCell>
+                                                                <TableCell className='italic'>{values && values[0].family}</TableCell>
+                                                                <TableCell>{values?.length}</TableCell>
+                                                            </TableRow>
+                                                        )}
+                                                </TableBody>
+                                            </Table>
+                                        </TabsContent>
+
+                                        <TabsContent value="family" className="relative flex flex-col overflow-auto">
+                                            <Table>
+                                                <TableHeader>
+                                                    <TableRow>
+                                                        <TableHead>Famille</TableHead>
+                                                        <TableHead>Nombre</TableHead>
+                                                    </TableRow>
+                                                </TableHeader>
+                                                <TableBody className="**:data-[slot=table-cell]:py-2.5">
+                                                    {Object.entries(groupedGenus)
+                                                        .sort((a, b) => a[0].localeCompare(b[0]))
+                                                        .map(([key, values], i) =>
+                                                            values?.sort((a, b) => getFullPlantName(a).localeCompare(getFullPlantName(b))).map((plant, j) => (
+                                                                <TableRow key={key}>
+                                                                    <TableCell className='italic'>{plant.family}</TableCell>
+                                                                    <TableCell>{plant.functionalGroup}</TableCell>
+                                                                </TableRow>
+                                                            )
+                                                            ))}
+                                                </TableBody>
+                                            </Table>
+                                        </TabsContent>
+                                    </Tabs>
                                 </CardContent>
                             </Card>
                         </div>
