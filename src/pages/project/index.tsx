@@ -25,6 +25,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { EllipsisVerticalIcon } from 'lucide-react';
+import { cn, getFullPlantName } from '@/lib/utils';
 
 interface ChartData {
     count: number,
@@ -78,10 +79,11 @@ const groupChartConfig = {
     ...FUNCTIONALGROUPS.map(g => ({
         [g.value]: {
             label: g.value,
-            color: `var(--color-${g.color || 'text-muted'})`,
+            color: g.colorHex,
         }
     })).reduce((acc, curr) => ({ ...acc, ...curr }), {}),
 } satisfies ChartConfig;
+console.log(groupChartConfig);
 
 function getRandomColor() {
     return '#' + Math.floor(Math.random() * 16777215).toString(16);
@@ -182,7 +184,7 @@ function ProjectPage() {
                                             <span className='text-muted font-light text-sm'>({values?.length})</span>
                                         </h2>
 
-                                        {values?.map((plant, j) => (
+                                        {values?.sort((a, b) => getFullPlantName(a).localeCompare(getFullPlantName(b))).map((plant, j) => (
                                             <div key={j} className='mt-2'>
                                                 <ShortPlantCard plant={plant} />
                                             </div>
@@ -366,40 +368,60 @@ function ProjectPage() {
                                                 ))}
                                             </tr>
                                         </thead>
-                                        <tbody className='table-auto'>
-                                            {plantList.map((plant, j) => (
-                                                <tr key={j}>
-                                                    <th className='w-1/4 text-xs text-right pr-2'>
-                                                        <Link href={`/plant/${plant.code}`} className='hover:underline'>
-                                                            <span className='italic'>{plant.species || plant.genus}</span>
-                                                            {plant.cultivar && <span>&nbsp;'{plant.cultivar}'</span>}
-                                                            {plant.note && <span>&nbsp;({plant.note})</span>}
-                                                        </Link>
-                                                    </th>
-                                                    {plant.bloom?.length === 0 ? (
-                                                        months.map((month, i) => (
-                                                            <td className='w-[6.25%] py-1'>&nbsp;</td>
-                                                        ))
-                                                    )
-                                                        : (
-                                                            <>
-                                                                {plant.bloom && plant.bloom.length !== 0 &&
-                                                                    months.slice(0, plant.bloom[0] - 1).map(() => (
-                                                                        <td className='w-[6.25%] py-2' />
-                                                                    ))}
-                                                                {plant.bloom && plant.bloom.map(month => (
-                                                                    <td className={`w-[6.25%] py-2 bloom-month ${plant.bloom?.length === 1 && 'solo'}`}><div className='h-4 bg-accent-foreground'>&nbsp;</div></td>
-                                                                ))}
-                                                                {plant.bloom && plant.bloom.length !== 0 &&
-                                                                    months.slice(plant.bloom[plant.bloom.length - 1]).map(() => (
-                                                                        <td className='w-[6.25%] py-2' />
-                                                                    ))}
-                                                            </>
-                                                        )}
-                                                </tr>
+                                        {Object.entries(groupedPlants || {})
+                                            .sort((a, b) => a[0].localeCompare(b[0]))
+                                            .map(([key, values], i) => (
+                                                <>
+                                                    <tbody className='table-auto'>
+                                                        <tr>
+                                                            <th className='text-md font-medium py-1 pl-2 bg-muted/10' colSpan={13}>
+                                                                <div className='flex items-center gap-2'>
+                                                                    {React.createElement(getPlantType(key as PlantTypeValue).icon)}
+                                                                    {getPlantType(key as PlantTypeValue).label}
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </tbody>
+
+                                                    {values?.sort((a, b) => getFullPlantName(a).localeCompare(getFullPlantName(b))).map((plant, j) => (
+                                                        <tbody className='table-auto'>
+                                                            <tr key={j}>
+                                                                <th className='w-1/4 text-right pr-2 pt-2'>
+                                                                    <div className='flex-col'>
+                                                                        <Link href={`/plant/${plant.code}`} className='hover:underline text-right text-sm/2 block'>
+                                                                            <span className='italic'>{plant.species || plant.genus}</span>
+                                                                            {plant.cultivar && <span>&nbsp;'{plant.cultivar}'</span>}
+                                                                            {plant.note && <span>&nbsp;({plant.note})</span>}
+                                                                        </Link>
+                                                                        <span className='text-muted-foreground text-xs/2 font-medium'>{plant.commonName}</span>
+                                                                    </div>
+                                                                </th>
+                                                                {plant.bloom?.length === 0 ? (
+                                                                    months.map((month, i) => (
+                                                                        <td className='w-[6.25%] py-1'>&nbsp;</td>
+                                                                    ))
+                                                                )
+                                                                    : (
+                                                                        <>
+                                                                            {plant.bloom && plant.bloom.length !== 0 &&
+                                                                                months.slice(0, plant.bloom[0] - 1).map(() => (
+                                                                                    <td className='w-[6.25%] py-2' />
+                                                                                ))}
+                                                                            {plant.bloom && plant.bloom.map(month => (
+                                                                                <td className={`w-[6.25%] py-2 bloom-month ${plant.bloom?.length === 1 && 'solo'}`}><div className='h-4 bg-accent-foreground'>&nbsp;</div></td>
+                                                                            ))}
+                                                                            {plant.bloom && plant.bloom.length !== 0 &&
+                                                                                months.slice(plant.bloom[plant.bloom.length - 1]).map(() => (
+                                                                                    <td className='w-[6.25%] py-2' />
+                                                                                ))}
+                                                                        </>
+                                                                    )}
+                                                            </tr>
+                                                        </tbody>
+                                                    ))}
+                                                </>
                                             ))}
-                                        </tbody>
-                                    </table>
+                                    </table >
                                 </CardContent>
                             </Card>
                         </div>
