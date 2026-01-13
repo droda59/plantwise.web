@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from "react";
 import { motion } from "framer-motion";
 
@@ -5,9 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plant } from "@/types/plant";
 import { getPlantType } from "@/types/plant-type";
 import { IconArrowsHorizontal, IconArrowsVertical, IconChevronDown, IconChevronUp, IconSunHigh, IconSunHighFilled, IconSunOff, IconWorld } from "@tabler/icons-react";
-import Link from "next/link";
 import { CodeChip } from "../../code-chip";
-import { speciesFirstWord } from "@/lib/utils"
 import { getFunctionalGroup } from "@/types/functional-groups";
 import { SizeChip } from "@/components/size-chip";
 import { Button } from "@/components/ui/button";
@@ -15,19 +15,11 @@ import { getSunConditionValue } from "@/types/sun-condition";
 import { FunctionalGroupBadge } from "@/components/badges/functional-group-badge";
 import { NativeBadge } from "@/components/badges/native-badge";
 import { TypeBadge } from "@/components/badges/type-badge";
+import { PlantLink } from "@/components/plant-link";
 
+type PlantInfoProps = { plant: Plant };
 
-type PlantInfo = { plant: Plant };
-
-const PlantLink = ({ plant, reduce = false }: { reduce?: boolean } & PlantInfo) => (
-    <Link href={`/plant/${plant.code}`}>
-        <span className='italic'>{plant.species ? reduce ? speciesFirstWord(plant.species) : plant.species : plant.genus}</span>
-        {plant.cultivar && <span>&nbsp;'{plant.cultivar}'</span>}
-        {plant.note && <span>&nbsp;({plant.note})</span>}
-    </Link>
-);
-
-const SunInfo = ({ plant }: PlantInfo) => (
+const SunInfo = ({ plant }: PlantInfoProps) => (
     <div className='flex items-center overflow-hidden [&>svg]:size-4 [&>svg]:shrink-0'>
         <span className="font-light">Soleil</span>&nbsp;
         {!plant.sunTolerance?.length && <span className="font-medium">Inconnu</span>}
@@ -37,7 +29,7 @@ const SunInfo = ({ plant }: PlantInfo) => (
     </div>
 );
 
-const ZoneInfo = ({ plant }: PlantInfo) => (
+const ZoneInfo = ({ plant }: PlantInfoProps) => (
     <div className='flex items-center overflow-hidden [&>svg]:size-4 [&>svg]:shrink-0'>
         <IconWorld />&nbsp;
         <span className="font-light">Zone</span>&nbsp;
@@ -45,7 +37,7 @@ const ZoneInfo = ({ plant }: PlantInfo) => (
     </div>
 );
 
-const HeightInfo = ({ plant }: PlantInfo) => (
+const HeightInfo = ({ plant }: PlantInfoProps) => (
     <div className='flex items-center overflow-hidden [&>svg]:size-4 [&>svg]:shrink-0'>
         <IconArrowsVertical />&nbsp;
         <span className="font-light">Haut.</span>&nbsp;
@@ -53,7 +45,7 @@ const HeightInfo = ({ plant }: PlantInfo) => (
     </div>
 );
 
-const SpreadInfo = ({ plant }: PlantInfo) => (
+const SpreadInfo = ({ plant }: PlantInfoProps) => (
     <div className='flex items-center overflow-hidden [&>svg]:size-4 [&>svg]:shrink-0'>
         <IconArrowsHorizontal />&nbsp;
         <span className="font-light">Larg.</span>&nbsp;
@@ -61,7 +53,7 @@ const SpreadInfo = ({ plant }: PlantInfo) => (
     </div>
 );
 
-export const PlantCard = ({ plant }: PlantInfo) => {
+export const PlantCard = ({ plant }: PlantInfoProps) => {
     const type = getPlantType(plant.type);
     const functionalGroup = getFunctionalGroup(plant.functionalGroup);
 

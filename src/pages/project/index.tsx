@@ -26,6 +26,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Label } from '@/components/ui/label';
 import { SectionTitle } from '@/components/section-title';
 import { Switch } from '@/components/ui/switch';
+import { PlantLink } from '@/components/plant-link';
 
 interface ChartData {
     count: number,
@@ -407,11 +408,7 @@ function ProjectPage() {
                                                             <tr key={`bloom-${plant.code}`} className='hover:bg-muted/20 transition-colors'>
                                                                 <th className='w-1/4 text-right pr-2 pt-2 border-y-1'>
                                                                     <div className='flex-col'>
-                                                                        <Link href={`/plant/${plant.code}`} className='hover:underline text-right text-sm/2 block'>
-                                                                            <span className='italic'>{plant.species || plant.genus}</span>
-                                                                            {plant.cultivar && <span>&nbsp;'{plant.cultivar}'</span>}
-                                                                            {plant.note && <span>&nbsp;({plant.note})</span>}
-                                                                        </Link>
+                                                                        <PlantLink plant={plant} className='hover:underline text-right text-sm/2 block' />
                                                                         <span className='text-muted-foreground text-xs/2 font-medium'>{plant.commonName}</span>
                                                                     </div>
                                                                 </th>
@@ -498,11 +495,7 @@ function ProjectPage() {
                                                                 <TableRow key={plant.code}>
                                                                     <TableCell className='font-medium'>
                                                                         <div className='flex-col'>
-                                                                            <Link href={`/plant/${plant.code}`} className='hover:underline block'>
-                                                                                <span className='italic'>{plant.species || plant.genus}</span>
-                                                                                {plant.cultivar && <span>&nbsp;'{plant.cultivar}'</span>}
-                                                                                {plant.note && <span>&nbsp;({plant.note})</span>}
-                                                                            </Link>
+                                                                            <PlantLink plant={plant} className='hover:underline block' />
                                                                             <span className='text-muted-foreground text-sm font-light'>{plant.commonName}</span>
                                                                         </div>
                                                                     </TableCell>

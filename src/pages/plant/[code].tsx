@@ -26,6 +26,7 @@ import { getSunConditionValue } from '@/types/sun-condition';
 import { getSoilHumidityValue, getSoilRichnessValue, getSoilStructureValue } from '@/types/soil-condition';
 import { VSeparator } from '@/components/vertical-separator';
 import { HoverInfo } from '@/components/hover-cards/hover-info';
+import { PlantName } from '@/components/plant-link';
 
 const Capitalized = ({ children }: { children: React.ReactNode }) => {
     if (typeof children === "string") {
@@ -127,11 +128,7 @@ export default function PlantPage() {
                                         <CodeChip plant={plant} />
                                         <div className="grow ml-4">
                                             <CardTitle className="text-3xl">
-                                                <h1>
-                                                    <span className='italic'>{plant.species || plant.genus}</span>
-                                                    {plant.cultivar && <span>&nbsp;'{plant.cultivar}'</span>}
-                                                    {plant.note && <span>&nbsp;({plant.note})</span>}
-                                                </h1>
+                                                <PlantName plant={plant} />
                                             </CardTitle>
                                             <CardDescription>
                                                 <h3>
