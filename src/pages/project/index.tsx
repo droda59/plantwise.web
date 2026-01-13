@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-
+import { motion } from "framer-motion";
 import {
     ChartConfig,
     ChartContainer,
@@ -19,7 +19,7 @@ import { Sidebar, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarInset
 import { IconClipboardList, IconLeaf, IconMinus, IconTrees } from '@tabler/icons-react';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableHeaderRow, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getFullPlantName } from '@/lib/utils';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -134,6 +134,9 @@ function ProjectPage() {
             const groupedTypes = Object.groupBy(plantList, plant => plant.type);
             setGroupedPlants(groupedTypes);
             setShownTypes(Object.keys(groupedTypes));
+        } else {
+            setGroupedPlants({});
+            setShownTypes([]);
         }
     }, [plantList]);
 
@@ -171,8 +174,8 @@ function ProjectPage() {
                         <SidebarMenu>
                             {PLANTTYPES
                                 .sort((a, b) => a.value.localeCompare(b.value))
-                                .map((type, i) => (
-                                    <SidebarMenuItem>
+                                .map((type) => (
+                                    <SidebarMenuItem key={`sidebar-type-${type.value}`}>
                                         <div className='flex items-center px-2 py-1'>
                                             <div className={`flex items-center gap-2 my-1 grow ${groupedPlants[type.value]?.length ? '' : 'text-muted'}`}>
                                                 {React.createElement(type.icon)}
@@ -190,7 +193,7 @@ function ProjectPage() {
             <SidebarInset>
                 <div className="@container/main gap-2 items-center px-6 overflow-auto block">
                     <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-                        <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs @xl/main:grid-cols-2 @5xl/main:grid-cols-2">
+                        <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs @xl/main:grid-cols-4 @5xl/main:grid-cols-4">
                             <Card className="@container/card">
                                 <CardHeader>
                                     <CardTitle className="text-2xl font-semibold tabular-nums">
@@ -264,6 +267,90 @@ function ProjectPage() {
                                     </div>
                                 </CardFooter>
                             </Card>
+
+                            <Card className="@container/card">
+                                <CardHeader>
+                                    <CardTitle className="text-2xl font-semibold tabular-nums">
+                                        Groupes fonctionnels
+                                    </CardTitle>
+                                    <CardAction>
+                                        <IconTrees />
+                                    </CardAction>
+                                </CardHeader>
+                                <CardContent className='grow'>
+                                    <ChartContainer config={groupChartConfig} className=''>
+                                        <BarChart data={groupChartData}>
+                                            <CartesianGrid vertical={false} />
+                                            <XAxis
+                                                dataKey="group"
+                                                tickLine={false}
+                                                tickMargin={10}
+                                                axisLine={false}
+                                            />
+                                            <ChartTooltip
+                                                cursor={false}
+                                                content={
+                                                    <ChartTooltipContent indicator='line' labelKey='title' nameKey='group' />
+                                                }
+                                                wrapperClassName='rounded-sm border border-border shadow-md'
+                                            />
+                                            <Bar dataKey="count" radius={4} />
+                                        </BarChart>
+                                    </ChartContainer>
+                                </CardContent>
+                                <CardFooter className="flex-col items-start gap-1.5 text-sm">
+                                    <div className="line-clamp-1 flex gap-2 font-medium">
+                                        Groupes fonctionnels non couverts : {(groupChartData || []).filter((value) => value.count === 0).map(value => value.group).join(', ')}
+                                    </div>
+                                    <div className="text-muted-foreground">
+                                        <Link className='flex items-center text-blue-600 dark:text-blue-500 hover:underline' href='/functional-groups'>
+                                            Plus d'informations
+                                        </Link>
+                                    </div>
+                                </CardFooter>
+                            </Card>
+
+                            <Card className="@container/card">
+                                <CardHeader>
+                                    <CardTitle className="text-2xl font-semibold tabular-nums">
+                                        Groupes fonctionnels
+                                    </CardTitle>
+                                    <CardAction>
+                                        <IconTrees />
+                                    </CardAction>
+                                </CardHeader>
+                                <CardContent className='grow'>
+                                    <ChartContainer config={groupChartConfig} className=''>
+                                        <BarChart data={groupChartData}>
+                                            <CartesianGrid vertical={false} />
+                                            <XAxis
+                                                dataKey="group"
+                                                tickLine={false}
+                                                tickMargin={10}
+                                                axisLine={false}
+                                            />
+                                            <ChartTooltip
+                                                cursor={false}
+                                                content={
+                                                    <ChartTooltipContent indicator='line' labelKey='title' nameKey='group' />
+                                                }
+                                                wrapperClassName='rounded-sm border border-border shadow-md'
+                                            />
+                                            <Bar dataKey="count" radius={4} />
+                                        </BarChart>
+                                    </ChartContainer>
+                                </CardContent>
+                                <CardFooter className="flex-col items-start gap-1.5 text-sm">
+                                    <div className="line-clamp-1 flex gap-2 font-medium">
+                                        Groupes fonctionnels non couverts : {(groupChartData || []).filter((value) => value.count === 0).map(value => value.group).join(', ')}
+                                    </div>
+                                    <div className="text-muted-foreground">
+                                        <Link className='flex items-center text-blue-600 dark:text-blue-500 hover:underline' href='/functional-groups'>
+                                            Plus d'informations
+                                        </Link>
+                                    </div>
+                                </CardFooter>
+                            </Card>
                         </div>
 
                         <div className="grid grid-cols-1 gap-4 @4xl/page:grid-cols-[2fr_1fr] px-4">
@@ -278,8 +365,8 @@ function ProjectPage() {
                                         <thead className='table-auto'>
                                             <tr>
                                                 <th>&nbsp;</th>
-                                                {months.map((month, i) => (
-                                                    <th key={`header-${month}`} className='px-1 text-foreground font-medium'>
+                                                {months.map(month => (
+                                                    <th key={`header-${month}`} className='px-1 text-foreground font-medium border-x-1'>
                                                         {monthLookup(month)}
                                                     </th>
                                                 ))}
@@ -287,23 +374,22 @@ function ProjectPage() {
                                         </thead>
                                         {shownTypes
                                             .sort((a, b) => a.localeCompare(b))
-                                            .map((type, i) => (
-                                                <>
-                                                    <tbody className='table-auto'>
-                                                        <tr>
-                                                            <th className='text-md font-medium py-1 pl-2 bg-muted/10' colSpan={13}>
-                                                                <div className='flex items-center gap-2'>
-                                                                    {React.createElement(getPlantType(type as PlantTypeValue).icon)}
-                                                                    {getPlantType(type as PlantTypeValue).label}
-                                                                </div>
-                                                            </th>
-                                                        </tr>
-                                                    </tbody>
+                                            .map(type => (
+                                                <tbody key={`bloom-type-${type}`}>
+                                                    <tr>
+                                                        <th className='text-md font-medium py-1 pl-2 bg-muted/10 border-y-1' colSpan={13}>
+                                                            <div className='flex items-center gap-2'>
+                                                                {React.createElement(getPlantType(type as PlantTypeValue).icon)}
+                                                                {getPlantType(type as PlantTypeValue).label}
+                                                            </div>
+                                                        </th>
+                                                    </tr>
 
-                                                    {groupedPlants[type as PlantTypeValue]?.sort((a, b) => getFullPlantName(a).localeCompare(getFullPlantName(b))).map((plant, j) => (
-                                                        <tbody className='table-auto'>
-                                                            <tr key={j}>
-                                                                <th className='w-1/4 text-right pr-2 pt-2'>
+                                                    {groupedPlants[type as PlantTypeValue]
+                                                        ?.sort((a, b) => getFullPlantName(a).localeCompare(getFullPlantName(b)))
+                                                        .map(plant => (
+                                                            <tr key={`bloom-${plant.code}`} className='hover:bg-muted/20 transition-colors'>
+                                                                <th className='w-1/4 text-right pr-2 pt-2 border-y-1'>
                                                                     <div className='flex-col'>
                                                                         <Link href={`/plant/${plant.code}`} className='hover:underline text-right text-sm/2 block'>
                                                                             <span className='italic'>{plant.species || plant.genus}</span>
@@ -314,29 +400,28 @@ function ProjectPage() {
                                                                     </div>
                                                                 </th>
                                                                 {plant.bloom?.length === 0 ? (
-                                                                    months.map((month, i) => (
-                                                                        <td className='w-[6.25%] py-1'>&nbsp;</td>
+                                                                    months.map(month => (
+                                                                        <td key={`bloom-plant-${plant.code}-${month}`} className='w-[6.25%] py-1 border-1'>&nbsp;</td>
                                                                     ))
                                                                 )
                                                                     : (
                                                                         <>
                                                                             {plant.bloom && plant.bloom.length !== 0 &&
-                                                                                months.slice(0, plant.bloom[0] - 1).map(() => (
-                                                                                    <td className='w-[6.25%] py-2' />
+                                                                                months.slice(0, plant.bloom[0] - 1).map(month => (
+                                                                                    <td key={`bloom-plant-${plant.code}-${month}`} className='w-[6.25%] py-2 border-1' />
                                                                                 ))}
-                                                                            {plant.bloom && plant.bloom.map(() => (
-                                                                                <td className={`w-[6.25%] py-2 bloom-month ${plant.bloom?.length === 1 && 'solo'}`}><div className='h-4 bg-accent-foreground'>&nbsp;</div></td>
+                                                                            {plant.bloom && plant.bloom.map(month => (
+                                                                                <td key={`bloom-plant-${plant.code}-${month}`} className={`w-[6.25%] py-2 bloom-month ${plant.bloom?.length === 1 && 'solo'} border-1`}><div className='h-4 bg-accent-foreground'>&nbsp;</div></td>
                                                                             ))}
                                                                             {plant.bloom && plant.bloom.length !== 0 &&
-                                                                                months.slice(plant.bloom[plant.bloom.length - 1]).map(() => (
-                                                                                    <td className='w-[6.25%] py-2' />
+                                                                                months.slice(plant.bloom[plant.bloom.length - 1]).map(month => (
+                                                                                    <td key={`bloom-plant-${plant.code}-${month}`} className='w-[6.25%] py-2 border-1' />
                                                                                 ))}
                                                                         </>
                                                                     )}
                                                             </tr>
-                                                        </tbody>
-                                                    ))}
-                                                </>
+                                                        ))}
+                                                </tbody>
                                             ))}
                                     </table >
                                 </CardContent>
@@ -380,14 +465,14 @@ function ProjectPage() {
                                         <TabsContent value="all" className="relative flex flex-col overflow-auto">
                                             <Table>
                                                 <TableHeader>
-                                                    <TableRow>
+                                                    <TableHeaderRow>
                                                         <TableHead>Nom</TableHead>
                                                         <TableHead>Type</TableHead>
                                                         <TableHead>Genre</TableHead>
                                                         <TableHead>Famille</TableHead>
                                                         <TableHead>Gr. fonctionnel</TableHead>
                                                         <TableHead>Statut</TableHead>
-                                                    </TableRow>
+                                                    </TableHeaderRow>
                                                 </TableHeader>
                                                 <TableBody className="**:data-[slot=table-cell]:py-2.5">
                                                     {shownTypes

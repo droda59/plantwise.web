@@ -257,9 +257,14 @@ body {
     display: none;
 }
 
-.bloom-calendar th,
-.bloom-calendar td {
-    border: 1px solid var(--border);
+.bloom-calendar tr th:last-of-type,
+.bloom-calendar tr td:last-of-type {
+    border-right: none;
+}
+
+.bloom-calendar tbody tr:last-of-type th,
+.bloom-calendar tbody tr:last-of-type td {
+    border-bottom: none;
 }
 
 .bloom-calendar td.bloom-month:nth-child(1 of .bloom-month)>div {
