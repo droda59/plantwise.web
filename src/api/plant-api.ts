@@ -1,4 +1,4 @@
-import { PlantFactory } from "@/lib/plantFactory";
+import { PlantFactory } from "@/lib/plant-factory";
 import { Filters } from "@/types/filters";
 import { Plant } from "@/types/plant";
 
