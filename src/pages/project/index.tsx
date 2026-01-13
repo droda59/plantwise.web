@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { motion } from "framer-motion";
 import {
     ChartConfig,
     ChartContainer,
@@ -41,9 +40,6 @@ const typeChartConfig: Record<string, typeof PLANTTYPES[number]> = {};
 PLANTTYPES.forEach(p => typeChartConfig[p.value] = p);
 
 const nativeChartConfig = {
-    title: {
-        label: 'Indigènes vs Exotiques',
-    },
     native: {
         label: 'Indigène',
         color: 'var(--color-green-400)'
@@ -60,9 +56,6 @@ interface GroupChartData extends ChartData {
 };
 
 const groupChartConfig = {
-    title: {
-        label: 'Groupes fonctionnels',
-    },
     ...FUNCTIONALGROUPS.map(g => ({
         [g.value]: {
             label: g.value,
