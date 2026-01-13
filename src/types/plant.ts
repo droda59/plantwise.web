@@ -1,6 +1,6 @@
 import { FunctionalGroupValue } from './functional-groups';
 import { HardinessZoneValue } from './hardiness-zone';
-import { PlantTypeValue } from './plantType';
+import { PlantTypeValue } from './plant-type';
 import { SoilHumidityValue, SoilRichnessValue, SoilStructureValue } from './soil-condition';
 import { SunConditionValue } from './sun-condition';
 

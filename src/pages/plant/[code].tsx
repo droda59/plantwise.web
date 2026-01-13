@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 import { createSearchParams, plantApiInstance } from '@/api/plant-api';
 import { Plant } from '@/types/plant';
-import { getPlantType, PlantType } from "@/types/plantType";
+import { getPlantType, PlantType } from "@/types/plant-type";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { IconArrowsHorizontal, IconArrowsVertical, IconExternalLink, IconLeaf, IconSlash, IconWorld } from "@tabler/icons-react";
 

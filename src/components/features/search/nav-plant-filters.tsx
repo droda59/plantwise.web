@@ -5,7 +5,7 @@ import { SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, Side
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DEFAULT_FILTERS, Filters, MONTHS } from "@/types/filters";
-import { PLANTTYPES } from "@/types/plantType";
+import { PLANTTYPES } from "@/types/plant-type";
 import { FunctionalGroup, FUNCTIONALGROUPS } from "@/types/functional-groups";
 import { FilterItemSelect } from "@/components/filter-item-select";
 import { FilterItemCheckbox } from "@/components/filter-item-checkbox";

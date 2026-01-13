@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { plantApiInstance } from '@/api/plant-api';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { PLANTTYPES } from '@/types/plantType';
+import { PLANTTYPES } from '@/types/plant-type';
 import { ZONES } from '@/types/hardiness-zone';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';

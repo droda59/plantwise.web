@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plant } from "@/types/plant";
-import { getPlantType } from "@/types/plantType";
+import { getPlantType } from "@/types/plant-type";
 import { IconArrowsHorizontal, IconArrowsVertical, IconChevronDown, IconChevronUp, IconSunHigh, IconSunHighFilled, IconSunOff, IconWorld } from "@tabler/icons-react";
 import Link from "next/link";
 import { CodeChip } from "../../code-chip";
